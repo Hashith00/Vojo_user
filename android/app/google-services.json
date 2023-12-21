@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "99212812249",
+    "project_id": "vojo-aa6b9",
+    "storage_bucket": "vojo-aa6b9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99212812249:android:c87b2bcf90db0a635903c8",
+        "android_client_info": {
+          "package_name": "com.mycompany.vojo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEmM6AFG4w_yzEBE7Sqtq1gfbU50uUvpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
