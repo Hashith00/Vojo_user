@@ -253,48 +253,48 @@ final CollectionReference _Collection = _firestore.collection('trips');
 final CollectionReference _CollectionTip = _firestore.collection('trips');
 
 
-class Response{
-  int? code;
-  String? message;
-  Response({this.code,this.message});
-}
+  class Response{
+    int? code;
+    String? message;
+    Response({this.code,this.message});
+  }
 
-Future<Response> updateEmployee({
-required String name,
-required String position,
-required String contactno,
-required String docId,
-}) async {
-Response response = Response();
-DocumentReference documentReferencer =
-_Collection.doc(docId);
+    Future<Response> updateEmployee({
+    required String name,
+    required String position,
+    required String contactno,
+    required String docId,
+    }) async {
+    Response response = Response();
+    DocumentReference documentReferencer =
+    _Collection.doc(docId);
 
-Map<String, dynamic> data = <String, dynamic>{
-"employee_name": name,
-"position": position,
-"contact_no" : contactno
-};
+    Map<String, dynamic> data = <String, dynamic>{
+    "employee_name": name,
+    "position": position,
+    "contact_no" : contactno
+    };
 
-await documentReferencer
-    .update(data)
-    .whenComplete(() {
-response.code = 200;
-response.message = "Sucessfully updated Employee";
-})
-    .catchError((e) {
-response.code = 500;
-response.message = e;
-});
+    await documentReferencer
+        .update(data)
+        .whenComplete(() {
+    response.code = 200;
+    response.message = "Sucessfully updated Employee";
+    })
+        .catchError((e) {
+    response.code = 500;
+    response.message = e;
+    });
 
-return response;
-}
+    return response;
+    }
 
 // Creating new trip record
   Future<Response> addTrip({
     required String uid,
     required String type,
-    required DateTime startDate,
-    required DateTime endDate,
+    required String startDate,
+    required String endDate,
     required String startLocation,
     required String endLocation,
     String intermidiateLocation = ""
@@ -319,10 +319,12 @@ return response;
         .whenComplete(() {
       response.code = 200;
       response.message = "Sucessfully added to the database";
+      print("Sucessfully added to the database");
     })
         .catchError((e) {
       response.code = 500;
-      response.message = e;
+      //response.message = e;
+      print("$e");
     });
 
     return response;

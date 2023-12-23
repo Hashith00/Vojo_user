@@ -6,6 +6,7 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
+import 'transpotation_mode/transport_mode.dart';
 
 import 'backend/firebase/firebase_config.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
@@ -13,7 +14,6 @@ import 'flutter_flow/flutter_flow_util.dart';
 import 'flutter_flow/internationalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'new_page/new_page.dart';
 import 'pick_location_page/pick_location_page.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
@@ -126,15 +126,16 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'landingPage': LandingPageWidget(),
       'profilePage': ProfilePageWidget(),
-      'newpage' : Newpage()
+
+
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/newpage': (context) => Newpage(),
-        '/picklocation' : (context) => PickLocationPage()
+        '/picklocation' : (context) => PickLocationPage(),
+        '/transport' : (context) => TransportModePage()
       },
       home: Scaffold(
         body: _currentPage ?? tabs[_currentPageName],

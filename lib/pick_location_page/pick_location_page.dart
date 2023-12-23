@@ -1,8 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vojo/backend/backend.dart';
-
+import 'package:flutter/widgets.dart';
 
 class PickLocationPage extends StatefulWidget {
   @override
@@ -15,31 +16,38 @@ class _PickLocationPageState extends State<PickLocationPage>
   DateTime _endDate = DateTime.now();
   TimeOfDay _startTime = TimeOfDay.now();
   late TabController _tabController;
+  var _startLocation = '';
+  var _endlocation = '';
+  var _intermidatelocation = '';
 
   // Setting variable fot the current user details
   var userData;
   var _auth = FirebaseAuth.instance;
   var user;
   var name = "";
+  var uid = '';
 
   // Get the current user
-   getCurrentUer() async{
-    try{
-
+  getCurrentUer() async {
+    try {
       user = _auth.currentUser;
       FirebaseFirestore _firestore = FirebaseFirestore.instance;
       CollectionReference users = _firestore.collection('users');
-
       DocumentSnapshot snapshot = await users.doc(user!.uid).get();
       userData = snapshot.data() as Map<String, dynamic>;
       setState(() {
         name = userData['display_name'];
+        uid = userData['uid'];
       });
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }
 
+  String splitString(string) {
+    final splitted = string.split(' ');
+    return (splitted[0]);
+  }
 
   @override
   void initState() {
@@ -98,7 +106,7 @@ class _PickLocationPageState extends State<PickLocationPage>
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-           Navigator.pop(context);
+            Navigator.pop(context);
           },
         ),
         actions: [
@@ -107,9 +115,9 @@ class _PickLocationPageState extends State<PickLocationPage>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                 Text(
+                Text(
                   '${name}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                   ),
@@ -271,6 +279,9 @@ class _PickLocationPageState extends State<PickLocationPage>
                               fillColor: Colors.white,
                               filled: true,
                             ),
+                            onChanged: (context) {
+                              _startLocation = context;
+                            },
                           ),
                           const SizedBox(height: 8.0),
                           TextFormField(
@@ -279,6 +290,9 @@ class _PickLocationPageState extends State<PickLocationPage>
                               fillColor: Colors.white,
                               filled: true,
                             ),
+                            onChanged: (context) {
+                              _intermidatelocation = context;
+                            },
                           ),
                           const SizedBox(height: 8.0),
                           TextFormField(
@@ -287,6 +301,9 @@ class _PickLocationPageState extends State<PickLocationPage>
                               fillColor: Colors.white,
                               filled: true,
                             ),
+                            onChanged: (context) {
+                              _endlocation = context;
+                            },
                           ),
                         ],
                       ),
@@ -298,16 +315,46 @@ class _PickLocationPageState extends State<PickLocationPage>
                   // Confirm Button
                   Center(
                     child: SizedBox(
-                      width: 200.0,
+                      width: 350.0,
+                      height: 50,
                       child: ElevatedButton(
                         onPressed: () {
-                          // Handle the "Confirm" button press here
-                          // You can perform any action or navigate to another screen
+                          if(_startDate.compareTo(DateTime.now()) == 1 &&
+                              _endDate.compareTo(DateTime.now()) == 1 &&
+                              _startLocation != "" &&
+                              _endlocation != "" && _intermidatelocation != ""){
+                            print(splitString(_startDate.toString()));
+                            print(splitString(_endDate.toString()));
+                            var res = addTrip(
+                                uid: uid,
+                                type: "two_way",
+                                startDate: splitString(_startDate.toString()),
+                                endDate: splitString(_endDate.toString()),
+                                startLocation: _startLocation,
+                                endLocation: _endlocation,
+                                intermidiateLocation: _intermidatelocation);
+                            print(res);
+                            Navigator.pushNamed(context, "/transport");
+                          }else{
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text('Enter correct details'),
+                                action: SnackBarAction(
+                                  label: 'Undo',
+                                  onPressed: () {
+                                    // Code to execute.
+                                  },
+
+                                ),
+                              ),
+                            );
+                          }
+
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).primaryColor,
+                          backgroundColor: Color(0xFF4B39EF),
                         ),
-                        child: const Text('Confirm'),
+                        child: const Text('Confirm', style: TextStyle(fontSize: 17),),
                       ),
                     ),
                   ),
@@ -450,6 +497,9 @@ class _PickLocationPageState extends State<PickLocationPage>
                               fillColor: Colors.white,
                               filled: true,
                             ),
+                            onChanged: (context) {
+                              _startLocation = context;
+                            },
                           ),
                           const SizedBox(height: 8.0),
                           TextFormField(
@@ -458,25 +508,67 @@ class _PickLocationPageState extends State<PickLocationPage>
                               fillColor: Colors.white,
                               filled: true,
                             ),
+                            onChanged: (context) {
+                              _endlocation = context;
+                            },
                           ),
                         ],
                       ),
                     ),
                   ),
                   const SizedBox(height: 16.0),
-                  Container(
-                    height: 100,
-                    width: 100,
-                    color: Colors.black,
-                    child: Text("Hello"),
-                  ),
 
                   // Confirm Button
                   Center(
-                    child: Container(
-                      child: Text("Hello"),
-                    )
+                    child: SizedBox(
+                      width: 350.0,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (_startDate.compareTo(DateTime.now()) == 1 &&
+                              _endDate.compareTo(DateTime.now()) == 1 &&
+                              _startLocation != "" &&
+                              _endlocation != "") {
+                            print(splitString(_startDate.toString()));
+                            print(splitString(_endDate.toString()));
+                            var res = addTrip(
+                                uid: uid,
+                                type: "one_way",
+                                startDate: splitString(_startDate.toString()),
+                                endDate: splitString(_endDate.toString()),
+                                startLocation: _startLocation,
+                                endLocation: _endlocation);
+                            print(res);
+                            // Navigator.pushNamed(context, "/transport");
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text('Enter correct details'),
+                                action: SnackBarAction(
+                                  label: 'Undo',
+                                  onPressed: () {
+                                    // Code to execute.
+                                  },
+
+                                ),
+                              ),
+
+                            );
+                            Navigator.pushNamed(context, "/transport");
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          // Change the color
+                          backgroundColor: Color(0xFF4B39EF),
+                        ),
+                        child: const Text(
+                          'Confirm',
+                          style: TextStyle(fontSize: 17),
+                        ),
+                      ),
+                    ),
                   ),
+                  SizedBox(height: 100,),
                 ],
               ),
             ),
