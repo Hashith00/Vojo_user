@@ -400,7 +400,7 @@ class _EditProfilePageWidgetState extends State<EditProfilePageWidget> {
                     'West Virginia',
                     'Wisconsin',
                     'Wyoming',
-                    'Colombo'
+                    'NYC'
                   ],
                   onChanged: (val) => setState(() => _model.stateValue = val),
                   width: double.infinity,
