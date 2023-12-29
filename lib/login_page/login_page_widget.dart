@@ -1,21 +1,16 @@
-import '/auth/base_auth_user_provider.dart';
 import '/auth/firebase_auth/auth_util.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'login_page_model.dart';
 export 'login_page_model.dart';
 
 class LoginPageWidget extends StatefulWidget {
-  const LoginPageWidget({Key? key}) : super(key: key);
+  const LoginPageWidget({super.key});
 
   @override
   _LoginPageWidgetState createState() => _LoginPageWidgetState();
@@ -43,22 +38,22 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
           curve: Curves.easeInOut,
           delay: 0.ms,
           duration: 300.ms,
-          begin: Offset(0.0, 140.0),
-          end: Offset(0.0, 0.0),
+          begin: const Offset(0.0, 140.0),
+          end: const Offset(0.0, 0.0),
         ),
         ScaleEffect(
           curve: Curves.easeInOut,
           delay: 0.ms,
           duration: 300.ms,
-          begin: Offset(0.9, 0.9),
-          end: Offset(1.0, 1.0),
+          begin: const Offset(0.9, 0.9),
+          end: const Offset(1.0, 1.0),
         ),
         TiltEffect(
           curve: Curves.easeInOut,
           delay: 0.ms,
           duration: 300.ms,
-          begin: Offset(-0.349, 0),
-          end: Offset(0, 0),
+          begin: const Offset(-0.349, 0),
+          end: const Offset(0, 0),
         ),
       ],
     ),
@@ -116,19 +111,19 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                       FlutterFlowTheme.of(context).primary,
                       FlutterFlowTheme.of(context).tertiary
                     ],
-                    stops: [0.0, 1.0],
-                    begin: AlignmentDirectional(0.87, -1.0),
-                    end: AlignmentDirectional(-0.87, 1.0),
+                    stops: const [0.0, 1.0],
+                    begin: const AlignmentDirectional(0.87, -1.0),
+                    end: const AlignmentDirectional(-0.87, 1.0),
                   ),
                 ),
-                alignment: AlignmentDirectional(0.00, -1.00),
+                alignment: const AlignmentDirectional(0.00, -1.00),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
                             0.0, 70.0, 0.0, 32.0),
                         child: Container(
                           width: 200.0,
@@ -136,7 +131,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16.0),
                           ),
-                          alignment: AlignmentDirectional(0.00, 0.00),
+                          alignment: const AlignmentDirectional(0.00, 0.00),
                           child: Text(
                             'VOJO',
                             style: FlutterFlowTheme.of(context)
@@ -149,17 +144,17 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
                             16.0, 16.0, 16.0, 16.0),
                         child: Container(
                           width: double.infinity,
-                          constraints: BoxConstraints(
+                          constraints: const BoxConstraints(
                             maxWidth: 570.0,
                           ),
                           decoration: BoxDecoration(
                             color: FlutterFlowTheme.of(context)
                                 .secondaryBackground,
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                 blurRadius: 4.0,
                                 color: Color(0x33000000),
@@ -169,7 +164,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                             borderRadius: BorderRadius.circular(12.0),
                           ),
                           child: Align(
-                            alignment: AlignmentDirectional(0.00, 0.00),
+                            alignment: const AlignmentDirectional(0.00, 0.00),
                             child: Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(
                                   32.0, 32.0, 32.0, 32.0),
@@ -184,7 +179,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                         .displaySmall,
                                   ),
                                   Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
                                         0.0, 12.0, 0.0, 24.0),
                                     child: Text(
                                       'Let\'s get started by filling out the form below.',
@@ -194,16 +189,16 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 0.0, 16.0),
-                                    child: Container(
+                                    child: SizedBox(
                                       width: double.infinity,
                                       child: TextFormField(
                                         controller:
                                             _model.emailAddressController,
                                         focusNode: _model.emailAddressFocusNode,
                                         autofocus: true,
-                                        autofillHints: [AutofillHints.email],
+                                        autofillHints: const [AutofillHints.email],
                                         obscureText: false,
                                         decoration: InputDecoration(
                                           labelText: 'Email',
@@ -267,15 +262,15 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 0.0, 16.0),
-                                    child: Container(
+                                    child: SizedBox(
                                       width: double.infinity,
                                       child: TextFormField(
                                         controller: _model.passwordController,
                                         focusNode: _model.passwordFocusNode,
                                         autofocus: true,
-                                        autofillHints: [AutofillHints.password],
+                                        autofillHints: const [AutofillHints.password],
                                         obscureText: !_model.passwordVisibility,
                                         decoration: InputDecoration(
                                           labelText: 'Password',
@@ -355,11 +350,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 0.0, 16.0),
                                     child: FFButtonWidget(
                                       onPressed: () async {
-                                        Function() _navigate = () {};
+                                        Function() navigate = () {};
                                         GoRouter.of(context).prepareAuthEvent();
 
                                         final user =
@@ -372,7 +367,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                           return;
                                         }
 
-                                        _navigate = () => context.goNamedAuth(
+                                        navigate = () => context.goNamedAuth(
                                             'landingPage', context.mounted);
                                         if (loggedIn == true) {
                                           ScaffoldMessenger.of(context)
@@ -387,7 +382,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                                 ),
                                               ),
                                               duration:
-                                                  Duration(milliseconds: 4000),
+                                                  const Duration(milliseconds: 4000),
                                               backgroundColor:
                                                   FlutterFlowTheme.of(context)
                                                       .secondary,
@@ -406,7 +401,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                                 ),
                                               ),
                                               duration:
-                                                  Duration(milliseconds: 6000),
+                                                  const Duration(milliseconds: 6000),
                                               backgroundColor:
                                                   FlutterFlowTheme.of(context)
                                                       .error,
@@ -414,16 +409,16 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                           );
                                         }
 
-                                        _navigate();
+                                        navigate();
                                       },
                                       text: 'LOGIN',
                                       options: FFButtonOptions(
                                         width: double.infinity,
                                         height: 44.0,
-                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                        padding: const EdgeInsetsDirectional.fromSTEB(
                                             0.0, 0.0, 0.0, 0.0),
                                         iconPadding:
-                                            EdgeInsetsDirectional.fromSTEB(
+                                            const EdgeInsetsDirectional.fromSTEB(
                                                 0.0, 0.0, 0.0, 0.0),
                                         color: FlutterFlowTheme.of(context)
                                             .primary,
@@ -434,7 +429,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                               color: Colors.white,
                                             ),
                                         elevation: 3.0,
-                                        borderSide: BorderSide(
+                                        borderSide: const BorderSide(
                                           color: Colors.transparent,
                                           width: 1.0,
                                         ),
@@ -444,7 +439,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                     ),
                                   ),
                                   Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
                                         0.0, 12.0, 0.0, 24.0),
                                     child: InkWell(
                                       splashColor: Colors.transparent,
@@ -472,7 +467,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
 
                                   // You will have to add an action on this rich text to go to your login page.
                                   Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
                                         0.0, 12.0, 0.0, 12.0),
                                     child: InkWell(
                                       splashColor: Colors.transparent,
@@ -487,7 +482,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget>
                                             .textScaleFactor,
                                         text: TextSpan(
                                           children: [
-                                            TextSpan(
+                                            const TextSpan(
                                               text: 'Don\'t have an account?  ',
                                               style: TextStyle(),
                                             ),

@@ -8,6 +8,7 @@ export '../base_auth_user_provider.dart';
 class VojoFirebaseUser extends BaseAuthUser {
   VojoFirebaseUser(this.user);
   User? user;
+  @override
   bool get loggedIn => user != null;
 
   @override

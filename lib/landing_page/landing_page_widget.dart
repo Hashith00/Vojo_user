@@ -3,16 +3,13 @@ import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'landing_page_model.dart';
 export 'landing_page_model.dart';
 
 class LandingPageWidget extends StatefulWidget {
-  const LandingPageWidget({Key? key}) : super(key: key);
+  const LandingPageWidget({super.key});
 
   @override
   _LandingPageWidgetState createState() => _LandingPageWidgetState();
@@ -59,7 +56,7 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                 'My Profile',
                 style: FlutterFlowTheme.of(context).headlineMedium,
               ),
-              actions: [],
+              actions: const [],
               centerTitle: false,
               elevation: 0.0,
             )
@@ -72,15 +69,15 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
           children: [
             Expanded(
               child: Align(
-                alignment: AlignmentDirectional(0.00, -1.00),
+                alignment: const AlignmentDirectional(0.00, -1.00),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
                       Align(
-                        alignment: AlignmentDirectional(0.00, -1.00),
+                        alignment: const AlignmentDirectional(0.00, -1.00),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
                               16.0, 16.0, 16.0, 0.0),
                           child: Wrap(
                             spacing: 16.0,
@@ -94,7 +91,7 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                             children: [
                               Container(
                                 width: double.infinity,
-                                constraints: BoxConstraints(
+                                constraints: const BoxConstraints(
                                   maxWidth: 390.0,
                                 ),
                                 decoration: BoxDecoration(
@@ -248,9 +245,9 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                         ),
                       ),
                       Align(
-                        alignment: AlignmentDirectional(-1.00, 0.00),
+                        alignment: const AlignmentDirectional(-1.00, 0.00),
                         child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
                               20.0, 30.0, 0.0, 0.0),
                           child: Text(
                             'Upcomming Journeys',
@@ -265,7 +262,7 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
                             20.0, 30.0, 20.0, 0.0),
                         child: Container(
                           width: double.infinity,
@@ -275,24 +272,24 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                 .secondaryBackground,
                             borderRadius: BorderRadius.circular(12.0),
                           ),
-                          child: hastrips? Column(): Container(
+                          child: hastrips? const Column(): Container(
                             decoration: BoxDecoration(
                                 border: Border.all(color: Colors.grey),
                               borderRadius: BorderRadius.circular(20)
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Haven't  any journeys?", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w400),),
-                                SizedBox(height: 50,),
-                                Container(alignment: Alignment.bottomRight, child: GestureDetector(onTap: (){Navigator.pushNamed(context, "/picklocation");}, child: Text("Let's Start",style: TextStyle(fontSize: 19, fontWeight: FontWeight.w400, decoration: TextDecoration.underline,) ),))
+                                const Text("Haven't  any journeys?", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w400),),
+                                const SizedBox(height: 50,),
+                                Container(alignment: Alignment.bottomRight, child: GestureDetector(onTap: (){Navigator.pushNamed(context, "/picklocation");}, child: const Text("Let's Start",style: TextStyle(fontSize: 19, fontWeight: FontWeight.w400, decoration: TextDecoration.underline,) ),))
                               ],
                             ),
                           )
                         ),
                       ),
-                    ].addToEnd(SizedBox(height: 72.0)),
+                    ].addToEnd(const SizedBox(height: 72.0)),
                   ),
                 ),
               ),

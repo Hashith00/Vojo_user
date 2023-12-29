@@ -1,11 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vojo/backend/backend.dart';
-import 'package:flutter/widgets.dart';
 
 class PickLocationPage extends StatefulWidget {
+  const PickLocationPage({super.key});
+
   @override
   _PickLocationPageState createState() => _PickLocationPageState();
 }
@@ -22,7 +22,7 @@ class _PickLocationPageState extends State<PickLocationPage>
 
   // Setting variable fot the current user details
   var userData;
-  var _auth = FirebaseAuth.instance;
+  final _auth = FirebaseAuth.instance;
   var user;
   var name = "";
   var uid = '';
@@ -31,8 +31,8 @@ class _PickLocationPageState extends State<PickLocationPage>
   getCurrentUer() async {
     try {
       user = _auth.currentUser;
-      FirebaseFirestore _firestore = FirebaseFirestore.instance;
-      CollectionReference users = _firestore.collection('users');
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      CollectionReference users = firestore.collection('users');
       DocumentSnapshot snapshot = await users.doc(user!.uid).get();
       userData = snapshot.data() as Map<String, dynamic>;
       setState(() {
@@ -116,7 +116,7 @@ class _PickLocationPageState extends State<PickLocationPage>
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Text(
-                  '${name}',
+                  name,
                   style: const TextStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
@@ -352,7 +352,7 @@ class _PickLocationPageState extends State<PickLocationPage>
 
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF4B39EF),
+                          backgroundColor: const Color(0xFF4B39EF),
                         ),
                         child: const Text('Confirm', style: TextStyle(fontSize: 17),),
                       ),
@@ -559,7 +559,7 @@ class _PickLocationPageState extends State<PickLocationPage>
                         },
                         style: ElevatedButton.styleFrom(
                           // Change the color
-                          backgroundColor: Color(0xFF4B39EF),
+                          backgroundColor: const Color(0xFF4B39EF),
                         ),
                         child: const Text(
                           'Confirm',
@@ -568,7 +568,7 @@ class _PickLocationPageState extends State<PickLocationPage>
                       ),
                     ),
                   ),
-                  SizedBox(height: 100,),
+                  const SizedBox(height: 100,),
                 ],
               ),
             ),

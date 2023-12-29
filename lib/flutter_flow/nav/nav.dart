@@ -1,20 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-import '/backend/backend.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
 import '/index.dart';
 import '/main.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
-import '/flutter_flow/lat_lng.dart';
-import '/flutter_flow/place.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'serialization_util.dart';
 
 export 'package:go_router/go_router.dart';
 export 'serialization_util.dart';
@@ -79,47 +73,47 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? NavBarPage() : LoginPageWidget(),
+          appStateNotifier.loggedIn ? const NavBarPage() : const LoginPageWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? NavBarPage() : LoginPageWidget(),
+              appStateNotifier.loggedIn ? const NavBarPage() : const LoginPageWidget(),
         ),
         FFRoute(
           name: 'LoginPage',
           path: '/loginPage',
-          builder: (context, params) => LoginPageWidget(),
+          builder: (context, params) => const LoginPageWidget(),
         ),
         FFRoute(
           name: 'landingPage',
           path: '/landingPage',
           builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'landingPage')
-              : LandingPageWidget(),
+              ? const NavBarPage(initialPage: 'landingPage')
+              : const LandingPageWidget(),
         ),
         FFRoute(
           name: 'SignUpPage',
           path: '/signUpPage',
-          builder: (context, params) => SignUpPageWidget(),
+          builder: (context, params) => const SignUpPageWidget(),
         ),
         FFRoute(
           name: 'EditProfilePage',
           path: '/editProfilePage',
-          builder: (context, params) => EditProfilePageWidget(),
+          builder: (context, params) => const EditProfilePageWidget(),
         ),
         FFRoute(
           name: 'profilePage',
           path: '/profilePage',
           builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'profilePage')
-              : ProfilePageWidget(),
+              ? const NavBarPage(initialPage: 'profilePage')
+              : const ProfilePageWidget(),
         ),
         FFRoute(
           name: 'forgetPassword',
           path: '/forgetPassword',
-          builder: (context, params) => ForgetPasswordWidget(),
+          builder: (context, params) => const ForgetPasswordWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -345,7 +339,7 @@ class TransitionInfo {
   final Duration duration;
   final Alignment? alignment;
 
-  static TransitionInfo appDefault() => TransitionInfo(hasTransition: false);
+  static TransitionInfo appDefault() => const TransitionInfo(hasTransition: false);
 }
 
 class RootPageContext {
