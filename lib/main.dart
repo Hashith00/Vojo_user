@@ -99,6 +99,7 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
+//Navigation Bar
 class NavBarPage extends StatefulWidget {
   NavBarPage({Key? key, this.initialPage, this.page}) : super(key: key);
 
@@ -126,16 +127,14 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'landingPage': LandingPageWidget(),
       'profilePage': ProfilePageWidget(),
-
-
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: {
-        '/picklocation' : (context) => PickLocationPage(),
-        '/transport' : (context) => TransportModePage()
+        '/picklocation': (context) => PickLocationPage(),
+        '/transport': (context) => TransportModePage()
       },
       home: Scaffold(
         body: _currentPage ?? tabs[_currentPageName],
