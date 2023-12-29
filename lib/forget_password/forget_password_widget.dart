@@ -5,13 +5,11 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'forget_password_model.dart';
 export 'forget_password_model.dart';
 
 class ForgetPasswordWidget extends StatefulWidget {
-  const ForgetPasswordWidget({Key? key}) : super(key: key);
+  const ForgetPasswordWidget({super.key});
 
   @override
   _ForgetPasswordWidgetState createState() => _ForgetPasswordWidgetState();
@@ -70,7 +68,7 @@ class _ForgetPasswordWidgetState extends State<ForgetPasswordWidget> {
           },
         ),
         title: Padding(
-          padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
+          padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
           child: Text(
             'Back',
             style: FlutterFlowTheme.of(context).displaySmall.override(
@@ -79,18 +77,18 @@ class _ForgetPasswordWidgetState extends State<ForgetPasswordWidget> {
                 ),
           ),
         ),
-        actions: [],
+        actions: const [],
         centerTitle: false,
         elevation: 0.0,
       ),
       body: Align(
-        alignment: AlignmentDirectional(0.00, -1.00),
+        alignment: const AlignmentDirectional(0.00, -1.00),
         child: Container(
           width: double.infinity,
-          constraints: BoxConstraints(
+          constraints: const BoxConstraints(
             maxWidth: 570.0,
           ),
-          decoration: BoxDecoration(),
+          decoration: const BoxDecoration(),
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,7 +100,7 @@ class _ForgetPasswordWidgetState extends State<ForgetPasswordWidget> {
                 tablet: false,
               ))
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 8.0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 8.0),
                   child: InkWell(
                     splashColor: Colors.transparent,
                     focusColor: Colors.transparent,
@@ -115,7 +113,7 @@ class _ForgetPasswordWidgetState extends State<ForgetPasswordWidget> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
                               0.0, 12.0, 0.0, 12.0),
                           child: Icon(
                             Icons.arrow_back_rounded,
@@ -124,7 +122,7 @@ class _ForgetPasswordWidgetState extends State<ForgetPasswordWidget> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
                               12.0, 0.0, 0.0, 0.0),
                           child: Text(
                             'Back',
@@ -136,27 +134,27 @@ class _ForgetPasswordWidgetState extends State<ForgetPasswordWidget> {
                   ),
                 ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
+                padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 0.0, 0.0),
                 child: Text(
                   'Forgot Password',
                   style: FlutterFlowTheme.of(context).headlineMedium,
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16.0, 4.0, 16.0, 4.0),
+                padding: const EdgeInsetsDirectional.fromSTEB(16.0, 4.0, 16.0, 4.0),
                 child: Text(
                   'We will send you an email with a link to reset your password, please enter the email associated with your account below.',
                   style: FlutterFlowTheme.of(context).labelMedium,
                 ),
               ),
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
-                child: Container(
+                padding: const EdgeInsetsDirectional.fromSTEB(16.0, 12.0, 16.0, 0.0),
+                child: SizedBox(
                   width: double.infinity,
                   child: TextFormField(
                     controller: _model.emailAddressController,
                     focusNode: _model.emailAddressFocusNode,
-                    autofillHints: [AutofillHints.email],
+                    autofillHints: const [AutofillHints.email],
                     obscureText: false,
                     decoration: InputDecoration(
                       labelText: 'Your email address...',
@@ -194,7 +192,7 @@ class _ForgetPasswordWidgetState extends State<ForgetPasswordWidget> {
                       filled: true,
                       fillColor:
                           FlutterFlowTheme.of(context).secondaryBackground,
-                      contentPadding: EdgeInsetsDirectional.fromSTEB(
+                      contentPadding: const EdgeInsetsDirectional.fromSTEB(
                           24.0, 24.0, 20.0, 24.0),
                     ),
                     style: FlutterFlowTheme.of(context).bodyMedium,
@@ -207,14 +205,14 @@ class _ForgetPasswordWidgetState extends State<ForgetPasswordWidget> {
                 ),
               ),
               Align(
-                alignment: AlignmentDirectional(0.00, 0.00),
+                alignment: const AlignmentDirectional(0.00, 0.00),
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
                   child: FFButtonWidget(
                     onPressed: () async {
                       if (_model.emailAddressController.text.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                             content: Text(
                               'Email required!',
                             ),
@@ -232,13 +230,13 @@ class _ForgetPasswordWidgetState extends State<ForgetPasswordWidget> {
                       width: 270.0,
                       height: 50.0,
                       padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                       iconPadding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                       color: FlutterFlowTheme.of(context).primary,
                       textStyle: FlutterFlowTheme.of(context).titleSmall,
                       elevation: 3.0,
-                      borderSide: BorderSide(
+                      borderSide: const BorderSide(
                         color: Colors.transparent,
                         width: 1.0,
                       ),
