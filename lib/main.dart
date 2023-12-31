@@ -7,8 +7,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
 import 'transpotation_mode/transport_mode.dart';
-import 'rider_list_page/rider_list_page.dart';
-import 'rider_details_page/rider_details_page.dart';
 
 import 'backend/firebase/firebase_config.dart';
 import 'flutter_flow/flutter_flow_theme.dart';
@@ -137,9 +135,7 @@ class _NavBarPageState extends State<NavBarPage> {
       debugShowCheckedModeBanner: false,
       routes: {
         '/picklocation' : (context) => PickLocationPage(),
-        '/transport' : (context) => TransportModePage(),
-        '/riderList' : (context) => RidersListPage(),
-        '/landing' : (context) => LandingPageWidget()
+        '/transport' : (context) => TransportModePage()
       },
       home: Scaffold(
         body: _currentPage ?? tabs[_currentPageName],
