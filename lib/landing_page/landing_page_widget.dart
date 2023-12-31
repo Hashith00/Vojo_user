@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:avatar_glow/avatar_glow.dart';
 
 import '/auth/firebase_auth/auth_util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -19,6 +22,7 @@ class LandingPageWidget extends StatefulWidget {
 }
 
 class _LandingPageWidgetState extends State<LandingPageWidget> {
+  final _auth = FirebaseAuth.instance;
   late LandingPageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -48,6 +52,8 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
     }
 
     bool hastrips = false;
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    var tripNote = "Book Your Ride";
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -115,9 +121,8 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 3.0, 0.0, 0.0),
+                                          padding: const EdgeInsetsDirectional
+                                              .fromSTEB(0.0, 3.0, 0.0, 0.0),
                                           child: InkWell(
                                             splashColor: Colors.transparent,
                                             focusColor: Colors.transparent,
@@ -141,9 +146,8 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  16.0, 16.0, 16.0, 16.0),
+                                          padding: const EdgeInsetsDirectional
+                                              .fromSTEB(16.0, 16.0, 16.0, 16.0),
                                           child: StreamBuilder<UsersRecord>(
                                             stream: UsersRecord.getDocument(
                                                 currentUserReference!),
@@ -176,11 +180,8 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                                     child: Padding(
                                                       padding:
                                                           const EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  4.0,
-                                                                  0.0,
-                                                                  4.0),
+                                                              .fromSTEB(0.0,
+                                                              4.0, 0.0, 4.0),
                                                       child: Column(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -192,10 +193,10 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                                             padding:
                                                                 const EdgeInsetsDirectional
                                                                     .fromSTEB(
-                                                                        0.0,
-                                                                        4.0,
-                                                                        0.0,
-                                                                        0.0),
+                                                                    0.0,
+                                                                    4.0,
+                                                                    0.0,
+                                                                    0.0),
                                                             child: Text(
                                                               'Welcome',
                                                               style: FlutterFlowTheme
@@ -264,34 +265,143 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            20.0, 30.0, 20.0, 0.0),
-                        child: Container(
-                          width: double.infinity,
-                          height: 130.0,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            borderRadius: BorderRadius.circular(12.0),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              StreamBuilder<QuerySnapshot>(
+                                stream: _firestore
+                                    .collection("temptrip")
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    // Use hasData instead of != null
+                                    final messages = snapshot.data!.docs;
+                                    List<Widget> rides = [];
+
+                                    for (var message in messages) {
+                                      final tripData = message.data() as Map<
+                                          String, dynamic>; // Explicit cast
+                                      //var messageText = messageData["end_date"];
+                                      //messagesList.add(Text('$messageText'));
+
+                                      final tripCard = AvatarGlow(
+                                        glowColor: Color(0xFF311B92),
+                                        child: Container(
+                                          child: Container(
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 8.0, horizontal: 16.0),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0),
+                                              border: Border.all(
+                                                color: const Color(0xFF311B92),
+                                                width: 2.0,
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5),
+                                                  spreadRadius: 2,
+                                                  blurRadius: 5,
+                                                  offset: const Offset(0, 3),
+                                                ),
+                                              ],
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                ListTile(
+                                                  title: Text(
+                                                    "${tripData["start_location"]} to  ${tripData["end_location"]}",
+                                                    style: const TextStyle(
+                                                      color: Colors.black,
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                  subtitle: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 8.0),
+                                                    child: Row(
+                                                      children: [
+                                                        const Icon(Icons.person,
+                                                            size: 16.0),
+                                                        const SizedBox(
+                                                            width: 8.0),
+                                                        Text(
+                                                            "Booked a  ${tripData["travelling_mode"]}"),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  trailing: Icon(Icons.abc),
+                                                  //onTap: onTap,
+                                                ),
+                                                const SizedBox(height: 4.0),
+                                                Container(
+                                                  margin:
+                                                      const EdgeInsets.symmetric(
+                                                          horizontal: 16.0),
+                                                  child: TextButton(
+                                                    onPressed: () {},
+                                                    style: TextButton.styleFrom(
+                                                      backgroundColor:
+                                                          const Color(0xFF311B92),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              12.0),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                8.0),
+                                                      ),
+                                                    ),
+                                                    child: const Text(
+                                                      'View',
+                                                      style: TextStyle(
+                                                          color: Colors.white),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 4.0),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                      //print(category);
+                                      if (tripData["status"] == "Confirmed" &&
+                                          (tripData['user_id'] ==
+                                              _auth.currentUser?.uid)) {
+                                        rides.add(tripCard);
+                                      }
+                                    }
+
+                                    return SingleChildScrollView(
+                                      child: Column(
+                                        children: rides,
+                                      ),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    // Handle the error case
+                                    return Text("Error: ${snapshot.error}");
+                                  } else {
+                                    return CircularProgressIndicator(); // Show a loading indicator
+                                  }
+                                },
+                              ),
+                            ],
                           ),
-                          child: hastrips? Column(): Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(20)
-                            ),
-                            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Haven't  any journeys?", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w400),),
-                                SizedBox(height: 50,),
-                                Container(alignment: Alignment.bottomRight, child: GestureDetector(onTap: (){Navigator.pushNamed(context, "/picklocation");}, child: Text("Let's Start",style: TextStyle(fontSize: 19, fontWeight: FontWeight.w400, decoration: TextDecoration.underline,) ),))
-                              ],
-                            ),
-                          )
                         ),
                       ),
+                      CreateJourney(hasjourney: tripNote),
+
                     ].addToEnd(SizedBox(height: 72.0)),
                   ),
                 ),
@@ -300,6 +410,57 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class CreateJourney extends StatelessWidget {
+  var hasjourney;
+  CreateJourney({super.key, required this.hasjourney});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(20.0, 30.0, 20.0, 0.0),
+      child: Container(
+          width: double.infinity,
+          height: 130.0,
+          decoration: BoxDecoration(
+            color: FlutterFlowTheme.of(context).secondaryBackground,
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(20)),
+            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${hasjourney}",
+                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w400),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                Container(
+                    alignment: Alignment.bottomRight,
+                    child: GestureDetector(
+                      onTap: () {
+
+                        Navigator.pushNamed(context, "/picklocation");
+                      },
+                      child: Text("Let's Start",
+                          style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.w400,
+                            decoration: TextDecoration.underline,
+                          )),
+                    )),
+              ],
+            ),
+          )),
     );
   }
 }

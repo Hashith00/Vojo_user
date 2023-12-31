@@ -250,15 +250,16 @@ Future updateUserDocument({String? email}) async {
 // Creating Firebase instances
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _Collection = _firestore.collection('trips');
-final CollectionReference _CollectionTip = _firestore.collection('trips');
+final CollectionReference _CollectionTip = _firestore.collection('temptrip');
 
-
+// create Response Class to store formatted response
   class Response{
     int? code;
     String? message;
     Response({this.code,this.message});
   }
 
+  // Update Employee details
     Future<Response> updateEmployee({
     required String name,
     required String position,
@@ -289,8 +290,63 @@ final CollectionReference _CollectionTip = _firestore.collection('trips');
     return response;
     }
 
+
+// Update Trip details where trip is ready to show in the riders app
+Future<Response> UpdateTripStatus({
+  required String docId,
+}) async {
+  Response response = Response();
+  DocumentReference documentReferencer =
+  _CollectionTip.doc(docId);
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "status": "Confirmed",
+  };
+
+  await documentReferencer
+      .update(data)
+      .whenComplete(() {
+    response.code = 200;
+    response.message = "Sucessfully updated Trip";
+  })
+      .catchError((e) {
+    response.code = 500;
+    response.message = e;
+  });
+
+  return response;
+}
+
+
+// Add Travelling Mode
+updateTravellingMode({
+  required String travallingMode,
+  required String docId,
+}) async {
+  Response response = Response();
+  DocumentReference documentReferencer =
+  _CollectionTip.doc(docId);
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "travelling_mode": travallingMode,
+  };
+
+  await documentReferencer
+      .update(data)
+      .whenComplete(() {
+    response.code = 200;
+    response.message = "Sucessfully updated Trip Travelling Mode";
+  })
+      .catchError((e) {
+    response.code = 500;
+    response.message = e;
+  });
+
+  return response.message;
+}
+
 // Creating new trip record
-  Future<Response> addTrip({
+addTrip({
     required String uid,
     required String type,
     required String startDate,
@@ -326,7 +382,8 @@ final CollectionReference _CollectionTip = _firestore.collection('trips');
       //response.message = e;
       print("$e");
     });
+    String documentId = documentReferencer.id;
 
-    return response;
+    return documentId ;
   }
 
