@@ -387,3 +387,107 @@ addTrip({
     return documentId ;
   }
 
+// Deleting A trip
+Future<Response> deleteTrip({
+required String docId,
+}) async {
+Response response = Response();
+DocumentReference documentReferencer =
+_CollectionTip.doc(docId);
+
+await documentReferencer
+    .delete()
+    .whenComplete((){
+response.code = 200;
+response.message = "Sucessfully Deleted Employee";
+})
+    .catchError((e) {
+response.code = 500;
+response.message = e;
+});
+
+return response;
+}
+
+getTripDetails({required String docId})async{
+  CollectionReference trips = _firestore.collection('temptrip');
+  DocumentSnapshot snapshot = await trips.doc(docId).get();
+  var userData = snapshot.data() as Map<String, dynamic>;
+
+  return userData;
+
+}
+
+updateTripStartDate({required String docId, required String date})async{
+  DocumentReference documentReferencer =
+  _CollectionTip.doc(docId);
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "start_date": date,
+  };
+
+  Response response = Response();
+
+  var res = await documentReferencer.update(data).then((value) => {
+    response.code = 200,
+    response.message = "Update the Staring Date"
+  });
+
+  return response;
+
+}
+
+updateTripEndDate({required String docId, required String date})async{
+  DocumentReference documentReferencer =
+  _CollectionTip.doc(docId);
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "end_date": date,
+  };
+
+  Response response = Response();
+
+  var res = await documentReferencer.update(data).then((value) => {
+    response.code = 200,
+    response.message = "Update the ending Date"
+  });
+
+  return response;
+
+}
+updateTripStartLocation({required String docId, required String startLocation})async{
+  DocumentReference documentReferencer =
+  _CollectionTip.doc(docId);
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "start_location": startLocation,
+  };
+
+  Response response = Response();
+
+  var res = await documentReferencer.update(data).then((value) => {
+    response.code = 200,
+    response.message = "Update the start location"
+  });
+
+  return response;
+
+}
+updateTripEndLocation({required String docId, required String endLocation})async{
+  DocumentReference documentReferencer =
+  _CollectionTip.doc(docId);
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "end_location": endLocation,
+  };
+
+  Response response = Response();
+
+  var res = await documentReferencer.update(data).then((value) => {
+    response.code = 200,
+    response.message = "Update the end location"
+  });
+
+  return response;
+
+}

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:vojo/EditTrip_page/EditTrip_page.dart';
 
 import '/auth/firebase_auth/auth_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'landing_page_model.dart';
 export 'landing_page_model.dart';
 
@@ -287,91 +289,129 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                           String, dynamic>; // Explicit cast
                                       //var messageText = messageData["end_date"];
                                       //messagesList.add(Text('$messageText'));
+                                      String docId = message.id;
 
-                                      final tripCard = AvatarGlow(
-                                        glowColor: Color(0xFF311B92),
+                                      final tripCard = Container(
                                         child: Container(
-                                          child: Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                vertical: 8.0, horizontal: 16.0),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(12.0),
-                                              border: Border.all(
-                                                color: const Color(0xFF311B92),
-                                                width: 2.0,
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 16.0),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            border: Border.all(
+                                              color: const Color(0xFF311B92),
+                                              width: 2.0,
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 2,
+                                                blurRadius: 5,
+                                                offset: const Offset(0, 3),
                                               ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.grey
-                                                      .withOpacity(0.5),
-                                                  spreadRadius: 2,
-                                                  blurRadius: 5,
-                                                  offset: const Offset(0, 3),
-                                                ),
-                                              ],
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.stretch,
-                                              children: [
-                                                ListTile(
-                                                  title: Text(
-                                                    "${tripData["start_location"]} to  ${tripData["end_location"]}",
-                                                    style: const TextStyle(
-                                                      color: Colors.black,
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
+                                            ],
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              ListTile(
+                                                title: Text(
+                                                  "${tripData["start_location"]} to  ${tripData["end_location"]}",
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
-                                                  subtitle: Padding(
+                                                ),
+                                                subtitle: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(Icons.person,
+                                                          size: 16.0),
+                                                      const SizedBox(
+                                                          width: 8.0),
+                                                      Text(
+                                                          "Booked a  ${tripData["travelling_mode"]}"),
+                                                    ],
+                                                  ),
+                                                ),
+                                                trailing: AvatarGlow(
+                                                    glowColor: Color(0xFF311B92),
+                                                    child: Icon(Icons.circle, color:Color(0x1A311B92) ,)),
+                                                //onTap: onTap,
+                                              ),
+                                              const SizedBox(height: 4.0),
+                                              Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16.0),
+                                                child: TextButton(
+                                                  onPressed: () {
+                                                    Navigator.push(context, MaterialPageRoute(
+                                                      builder: (context) =>  EditTrip(id: docId,),
+                                                    ),);
+
+
+                                                  },
+                                                  style: TextButton.styleFrom(
+                                                    backgroundColor:
+                                                        const Color(0xFF311B92),
                                                     padding:
-                                                        const EdgeInsets.only(
-                                                            top: 8.0),
-                                                    child: Row(
-                                                      children: [
-                                                        const Icon(Icons.person,
-                                                            size: 16.0),
-                                                        const SizedBox(
-                                                            width: 8.0),
-                                                        Text(
-                                                            "Booked a  ${tripData["travelling_mode"]}"),
-                                                      ],
+                                                        const EdgeInsets.all(
+                                                            12.0),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8.0),
                                                     ),
                                                   ),
-                                                  trailing: Icon(Icons.abc),
-                                                  //onTap: onTap,
+                                                  child: const Text(
+                                                    'Edit Booking',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
                                                 ),
-                                                const SizedBox(height: 4.0),
-                                                Container(
-                                                  margin:
-                                                      const EdgeInsets.symmetric(
-                                                          horizontal: 16.0),
-                                                  child: TextButton(
-                                                    onPressed: () {},
-                                                    style: TextButton.styleFrom(
-                                                      backgroundColor:
-                                                          const Color(0xFF311B92),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              12.0),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                8.0),
+                                              ),
+                                              const SizedBox(height: 1.0),
+                                              Container(
+                                                margin:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 16.0),
+                                                child: TextButton(
+                                                  onPressed: ()async {
+                                                    deleteTrip(docId: docId);
+                                                  },
+                                                  style: TextButton.styleFrom(
+                                                    backgroundColor: Color(0xFFFFFFFF),
+                                                    padding:
+                                                    const EdgeInsets.all(
+                                                        12.0),
+                                                      side: BorderSide(
+                                                        color: Color(0xFF311B92), // your color here
+                                                        width: 1,
                                                       ),
-                                                    ),
-                                                    child: const Text(
-                                                      'View',
-                                                      style: TextStyle(
-                                                          color: Colors.white),
+                                                    shape:
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
                                                     ),
                                                   ),
+                                                  child: const Text(
+                                                    'Remove Booking',
+                                                    style: TextStyle(
+                                                        color: Color(0xFF311B92)),
+                                                  ),
                                                 ),
-                                                const SizedBox(height: 4.0),
-                                              ],
-                                            ),
+                                              ),
+                                              const SizedBox(height: 6.0),
+                                            ],
                                           ),
                                         ),
                                       );
@@ -463,4 +503,32 @@ class CreateJourney extends StatelessWidget {
           )),
     );
   }
+}
+
+showAlertDialogBox(BuildContext context) {
+
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("My title"),
+    content: Text("This is my message."),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
