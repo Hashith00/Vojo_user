@@ -341,19 +341,25 @@ class _EditTripState extends State<EditTrip> {
                       ],
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(top: 50),
-                    height: 50,
-                    width: 350,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.blue
+                  GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (context) =>  LandingPageWidget(),
+                      ),);
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(top: 50),
+                      height: 50,
+                      width: 350,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.blue
+                      ),
+                      child: Center(child: Text("save", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),),),
                     ),
-                    child: Center(child: Text("save", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),),),
                   ),
                   GestureDetector(
                     onTap: (){
-
                       Navigator.push(context, MaterialPageRoute(
                         builder: (context) =>  LandingPageWidget(),
                       ),);
