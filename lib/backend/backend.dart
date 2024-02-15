@@ -251,6 +251,7 @@ Future updateUserDocument({String? email}) async {
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _Collection = _firestore.collection('trips');
 final CollectionReference _CollectionTip = _firestore.collection('temptrip');
+final CollectionReference _CollectionBooking = _firestore.collection("bookings");
 
 // create Response Class to store formatted response
   class Response{
@@ -490,4 +491,45 @@ updateTripEndLocation({required String docId, required String endLocation})async
 
   return response;
 
+}
+
+// BackEnd for booking Hotels
+CreateBooking({
+  required String uid,
+  required DateTime startDate,
+  required DateTime endDate,
+  required String hotelName,
+  required String hotelUserId,
+  required int numberOfRooms
+}) async {
+
+  Response response = Response();
+  DocumentReference documentReferencer =
+  _CollectionBooking.doc();
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "user_id": uid,
+    "start_date" : startDate,
+    "end_date" : endDate,
+    "hotel" : hotelName,
+    'NumberOfRooms' : numberOfRooms,
+    "HotelUserId" : hotelUserId,
+   
+  };
+
+  var result = await documentReferencer
+      .set(data)
+      .whenComplete(() {
+    response.code = 200;
+    response.message = "Sucessfully Created the Booking";
+    print("Sucessfully creted the booking");
+  })
+      .catchError((e) {
+    response.code = 500;
+    //response.message = e;
+    print("$e");
+  });
+  String documentId = documentReferencer.id;
+
+  return response ;
 }

@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vojo/backend/backend.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vojo/transpotation_mode/transport_mode.dart';
 
 class PickLocationPage extends StatefulWidget {
   @override
@@ -343,7 +344,8 @@ class _PickLocationPageState extends State<PickLocationPage>
                                 endLocation: _endlocation,
                                 intermidiateLocation: _intermidatelocation);
                             print(res);
-                            Navigator.pushNamed(context, "/transport");
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => TransportModePage()));
+                           // Navigator.pushNamed(context, "/transport");
                             final SharedPreferences prefs = await SharedPreferences.getInstance();
                             await prefs.setString('docId', res);
                           }else{
@@ -552,7 +554,8 @@ class _PickLocationPageState extends State<PickLocationPage>
                             print(res);
                             final SharedPreferences prefs = await SharedPreferences.getInstance();
                             await prefs.setString('docId', res);
-                            Navigator.pushNamed(context, "/transport");
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => TransportModePage()));
+                           // Navigator.pushNamed(context, "/transport");
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
