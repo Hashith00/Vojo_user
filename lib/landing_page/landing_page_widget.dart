@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:vojo/EditTrip_page/EditTrip_page.dart';
+import 'package:vojo/PickHotelOrRoderPage/PickHotelOrRiderPage.dart';
 
 import '/auth/firebase_auth/auth_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -488,8 +489,12 @@ class CreateJourney extends StatelessWidget {
                     alignment: Alignment.bottomRight,
                     child: GestureDetector(
                       onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PickHotelOrRider()),
+                        );
 
-                        Navigator.pushNamed(context, "/picklocation");
+                       // Navigator.pushNamed(context, "/picklocation");
                       },
                       child: Text("Let's Start",
                           style: TextStyle(
