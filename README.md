@@ -6,6 +6,7 @@ A new Flutter project.
 
 ### Contributors
 - Malith Pramoditha
+- Hashith Sithuruwan
 
 FlutterFlow projects are built to run on the Flutter _stable_ release.
  ## Importent
