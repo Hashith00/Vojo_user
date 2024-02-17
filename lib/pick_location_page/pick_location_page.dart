@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:vojo/backend/backend.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vojo/transpotation_mode/transport_mode.dart';
 
 class PickLocationPage extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class PickLocationPage extends StatefulWidget {
 
 class _PickLocationPageState extends State<PickLocationPage>
     with SingleTickerProviderStateMixin {
+
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now();
   TimeOfDay _startTime = TimeOfDay.now();
@@ -38,7 +41,9 @@ class _PickLocationPageState extends State<PickLocationPage>
       setState(() {
         name = userData['display_name'];
         uid = userData['uid'];
+        print(uid);
       });
+
     } catch (e) {
       print(e);
     }
@@ -47,6 +52,7 @@ class _PickLocationPageState extends State<PickLocationPage>
   String splitString(string) {
     final splitted = string.split(' ');
     return (splitted[0]);
+
   }
 
   @override
@@ -54,6 +60,8 @@ class _PickLocationPageState extends State<PickLocationPage>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     getCurrentUer();
+    print(_auth.currentUser?.uid);
+
   }
 
   Future<void> _selectStartDate(BuildContext context) async {
@@ -87,6 +95,7 @@ class _PickLocationPageState extends State<PickLocationPage>
   }
 
   Future<void> _selectStartTime(BuildContext context) async {
+
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: _startTime,
@@ -318,15 +327,16 @@ class _PickLocationPageState extends State<PickLocationPage>
                       width: 350.0,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: ()async {
                           if(_startDate.compareTo(DateTime.now()) == 1 &&
                               _endDate.compareTo(DateTime.now()) == 1 &&
                               _startLocation != "" &&
                               _endlocation != "" && _intermidatelocation != ""){
                             print(splitString(_startDate.toString()));
                             print(splitString(_endDate.toString()));
-                            var res = addTrip(
-                                uid: uid,
+                            print((_auth.currentUser?.uid).toString());
+                            var res = await addTrip(
+                                uid: (_auth.currentUser?.uid).toString(),
                                 type: "two_way",
                                 startDate: splitString(_startDate.toString()),
                                 endDate: splitString(_endDate.toString()),
@@ -334,7 +344,10 @@ class _PickLocationPageState extends State<PickLocationPage>
                                 endLocation: _endlocation,
                                 intermidiateLocation: _intermidatelocation);
                             print(res);
-                            Navigator.pushNamed(context, "/transport");
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => TransportModePage()));
+                           // Navigator.pushNamed(context, "/transport");
+                            final SharedPreferences prefs = await SharedPreferences.getInstance();
+                            await prefs.setString('docId', res);
                           }else{
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -524,22 +537,25 @@ class _PickLocationPageState extends State<PickLocationPage>
                       width: 350.0,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async{
                           if (_startDate.compareTo(DateTime.now()) == 1 &&
                               _endDate.compareTo(DateTime.now()) == 1 &&
                               _startLocation != "" &&
                               _endlocation != "") {
                             print(splitString(_startDate.toString()));
                             print(splitString(_endDate.toString()));
-                            var res = addTrip(
-                                uid: uid,
+                            var res = await addTrip(
+                                uid: (_auth.currentUser?.uid).toString(),
                                 type: "one_way",
                                 startDate: splitString(_startDate.toString()),
                                 endDate: splitString(_endDate.toString()),
                                 startLocation: _startLocation,
                                 endLocation: _endlocation);
                             print(res);
-                            // Navigator.pushNamed(context, "/transport");
+                            final SharedPreferences prefs = await SharedPreferences.getInstance();
+                            await prefs.setString('docId', res);
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => TransportModePage()));
+                           // Navigator.pushNamed(context, "/transport");
                           } else {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
@@ -554,7 +570,7 @@ class _PickLocationPageState extends State<PickLocationPage>
                               ),
 
                             );
-                            Navigator.pushNamed(context, "/transport");
+                            //Navigator.pushNamed(context, "/transport");
                           }
                         },
                         style: ElevatedButton.styleFrom(

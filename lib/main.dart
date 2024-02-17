@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:vojo/rider_list_page/rider_list_page.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
 import 'transpotation_mode/transport_mode.dart';
@@ -135,7 +136,9 @@ class _NavBarPageState extends State<NavBarPage> {
       debugShowCheckedModeBanner: false,
       routes: {
         '/picklocation' : (context) => PickLocationPage(),
-        '/transport' : (context) => TransportModePage()
+        '/transport' : (context) => TransportModePage(),
+        '/riderList' : (context) => RidersListPage(),
+        '/landing' : (context) => LandingPageWidget(),
       },
       home: Scaffold(
         body: _currentPage ?? tabs[_currentPageName],

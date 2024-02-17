@@ -1,4 +1,12 @@
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:avatar_glow/avatar_glow.dart';
+import 'package:vojo/EditTrip_page/EditTrip_page.dart';
+import 'package:vojo/PickHotelOrRoderPage/PickHotelOrRiderPage.dart';
+
+
 import '/auth/firebase_auth/auth_util.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -7,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'landing_page_model.dart';
 export 'landing_page_model.dart';
 
@@ -18,6 +27,7 @@ class LandingPageWidget extends StatefulWidget {
 }
 
 class _LandingPageWidgetState extends State<LandingPageWidget> {
+  final _auth = FirebaseAuth.instance;
   late LandingPageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
@@ -47,6 +57,8 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
     }
 
     bool hastrips = false;
+    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    var tripNote = "Book Your Ride";
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
@@ -258,6 +270,7 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                           ),
                         ),
                       ),
+
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(
                             20.0, 30.0, 20.0, 0.0),
@@ -309,7 +322,183 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                       ],
                                     ),
                                   )),
+
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              StreamBuilder<QuerySnapshot>(
+                                stream: _firestore
+                                    .collection("temptrip")
+                                    .snapshots(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasData) {
+                                    // Use hasData instead of != null
+                                    final messages = snapshot.data!.docs;
+                                    List<Widget> rides = [];
+
+                                    for (var message in messages) {
+                                      final tripData = message.data() as Map<
+                                          String, dynamic>; // Explicit cast
+                                      //var messageText = messageData["end_date"];
+                                      //messagesList.add(Text('$messageText'));
+                                      String docId = message.id;
+
+                                      final tripCard = Container(
+                                        child: Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              vertical: 8.0, horizontal: 16.0),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            border: Border.all(
+                                              color: const Color(0xFF311B92),
+                                              width: 2.0,
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 2,
+                                                blurRadius: 5,
+                                                offset: const Offset(0, 3),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.stretch,
+                                            children: [
+                                              ListTile(
+                                                title: Text(
+                                                  "${tripData["start_location"]} to  ${tripData["end_location"]}",
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                subtitle: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          top: 8.0),
+                                                  child: Row(
+                                                    children: [
+                                                      const Icon(Icons.person,
+                                                          size: 16.0),
+                                                      const SizedBox(
+                                                          width: 8.0),
+                                                      Text(
+                                                          "Booked a  ${tripData["travelling_mode"]}"),
+                                                    ],
+                                                  ),
+                                                ),
+                                                trailing: AvatarGlow(
+                                                    glowColor: Color(0xFF311B92),
+                                                    child: Icon(Icons.circle, color:Color(0x1A311B92) ,)),
+                                                //onTap: onTap,
+                                              ),
+                                              const SizedBox(height: 4.0),
+                                              Container(
+                                                margin:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16.0),
+                                                child: TextButton(
+                                                  onPressed: () {
+                                                    Navigator.push(context, MaterialPageRoute(
+                                                      builder: (context) =>  EditTrip(id: docId,),
+                                                    ),);
+
+
+                                                  },
+                                                  style: TextButton.styleFrom(
+                                                    backgroundColor:
+                                                        const Color(0xFF311B92),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            12.0),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8.0),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    'Edit Booking',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 1.0),
+                                              Container(
+                                                margin:
+                                                const EdgeInsets.symmetric(
+                                                    horizontal: 16.0),
+                                                child: TextButton(
+                                                  onPressed: ()async {
+                                                    deleteTrip(docId: docId);
+                                                  },
+                                                  style: TextButton.styleFrom(
+                                                    backgroundColor: Color(0xFFFFFFFF),
+                                                    padding:
+                                                    const EdgeInsets.all(
+                                                        12.0),
+                                                      side: BorderSide(
+                                                        color: Color(0xFF311B92), // your color here
+                                                        width: 1,
+                                                      ),
+                                                    shape:
+                                                    RoundedRectangleBorder(
+                                                      borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                    ),
+                                                  ),
+                                                  child: const Text(
+                                                    'Remove Booking',
+                                                    style: TextStyle(
+                                                        color: Color(0xFF311B92)),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(height: 6.0),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                      //print(category);
+                                      if (tripData["status"] == "Confirmed" &&
+                                          (tripData['user_id'] ==
+                                              _auth.currentUser?.uid)) {
+                                        rides.add(tripCard);
+                                      }
+                                    }
+
+                                    return SingleChildScrollView(
+                                      child: Column(
+                                        children: rides,
+                                      ),
+                                    );
+                                  } else if (snapshot.hasError) {
+                                    // Handle the error case
+                                    return Text("Error: ${snapshot.error}");
+                                  } else {
+                                    return CircularProgressIndicator(); // Show a loading indicator
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+
                       ),
+                      CreateJourney(hasjourney: tripNote),
+
                     ].addToEnd(SizedBox(height: 72.0)),
                   ),
                 ),
@@ -320,4 +509,87 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
       ),
     );
   }
+}
+
+class CreateJourney extends StatelessWidget {
+  var hasjourney;
+  CreateJourney({super.key, required this.hasjourney});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(20.0, 30.0, 20.0, 0.0),
+      child: Container(
+          width: double.infinity,
+          height: 130.0,
+          decoration: BoxDecoration(
+            color: FlutterFlowTheme.of(context).secondaryBackground,
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(20)),
+            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "${hasjourney}",
+                  style: TextStyle(fontSize: 19, fontWeight: FontWeight.w400),
+                ),
+                SizedBox(
+                  height: 50,
+                ),
+                Container(
+                    alignment: Alignment.bottomRight,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PickHotelOrRider()),
+                        );
+
+                       // Navigator.pushNamed(context, "/picklocation");
+                      },
+                      child: Text("Let's Start",
+                          style: TextStyle(
+                            fontSize: 19,
+                            fontWeight: FontWeight.w400,
+                            decoration: TextDecoration.underline,
+                          )),
+                    )),
+              ],
+            ),
+          )),
+    );
+  }
+}
+
+showAlertDialogBox(BuildContext context) {
+
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("My title"),
+    content: Text("This is my message."),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }

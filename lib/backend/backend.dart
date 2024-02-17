@@ -250,15 +250,17 @@ Future updateUserDocument({String? email}) async {
 // Creating Firebase instances
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _Collection = _firestore.collection('trips');
-final CollectionReference _CollectionTip = _firestore.collection('trips');
+final CollectionReference _CollectionTip = _firestore.collection('temptrip');
+final CollectionReference _CollectionBooking = _firestore.collection("bookings");
 
-
+// create Response Class to store formatted response
   class Response{
     int? code;
     String? message;
     Response({this.code,this.message});
   }
 
+  // Update Employee details
     Future<Response> updateEmployee({
     required String name,
     required String position,
@@ -289,8 +291,63 @@ final CollectionReference _CollectionTip = _firestore.collection('trips');
     return response;
     }
 
+
+// Update Trip details where trip is ready to show in the riders app
+Future<Response> UpdateTripStatus({
+  required String docId,
+}) async {
+  Response response = Response();
+  DocumentReference documentReferencer =
+  _CollectionTip.doc(docId);
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "status": "Confirmed",
+  };
+
+  await documentReferencer
+      .update(data)
+      .whenComplete(() {
+    response.code = 200;
+    response.message = "Sucessfully updated Trip";
+  })
+      .catchError((e) {
+    response.code = 500;
+    response.message = e;
+  });
+
+  return response;
+}
+
+
+// Add Travelling Mode
+updateTravellingMode({
+  required String travallingMode,
+  required String docId,
+}) async {
+  Response response = Response();
+  DocumentReference documentReferencer =
+  _CollectionTip.doc(docId);
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "travelling_mode": travallingMode,
+  };
+
+  await documentReferencer
+      .update(data)
+      .whenComplete(() {
+    response.code = 200;
+    response.message = "Sucessfully updated Trip Travelling Mode";
+  })
+      .catchError((e) {
+    response.code = 500;
+    response.message = e;
+  });
+
+  return response.message;
+}
+
 // Creating new trip record
-  Future<Response> addTrip({
+addTrip({
     required String uid,
     required String type,
     required String startDate,
@@ -326,7 +383,153 @@ final CollectionReference _CollectionTip = _firestore.collection('trips');
       //response.message = e;
       print("$e");
     });
+    String documentId = documentReferencer.id;
 
-    return response;
+    return documentId ;
   }
 
+// Deleting A trip
+Future<Response> deleteTrip({
+required String docId,
+}) async {
+Response response = Response();
+DocumentReference documentReferencer =
+_CollectionTip.doc(docId);
+
+await documentReferencer
+    .delete()
+    .whenComplete((){
+response.code = 200;
+response.message = "Sucessfully Deleted Employee";
+})
+    .catchError((e) {
+response.code = 500;
+response.message = e;
+});
+
+return response;
+}
+
+getTripDetails({required String docId})async{
+  CollectionReference trips = _firestore.collection('temptrip');
+  DocumentSnapshot snapshot = await trips.doc(docId).get();
+  var userData = snapshot.data() as Map<String, dynamic>;
+
+  return userData;
+
+}
+
+updateTripStartDate({required String docId, required String date})async{
+  DocumentReference documentReferencer =
+  _CollectionTip.doc(docId);
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "start_date": date,
+  };
+
+  Response response = Response();
+
+  var res = await documentReferencer.update(data).then((value) => {
+    response.code = 200,
+    response.message = "Update the Staring Date"
+  });
+
+  return response;
+
+}
+
+updateTripEndDate({required String docId, required String date})async{
+  DocumentReference documentReferencer =
+  _CollectionTip.doc(docId);
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "end_date": date,
+  };
+
+  Response response = Response();
+
+  var res = await documentReferencer.update(data).then((value) => {
+    response.code = 200,
+    response.message = "Update the ending Date"
+  });
+
+  return response;
+
+}
+updateTripStartLocation({required String docId, required String startLocation})async{
+  DocumentReference documentReferencer =
+  _CollectionTip.doc(docId);
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "start_location": startLocation,
+  };
+
+  Response response = Response();
+
+  var res = await documentReferencer.update(data).then((value) => {
+    response.code = 200,
+    response.message = "Update the start location"
+  });
+
+  return response;
+
+}
+updateTripEndLocation({required String docId, required String endLocation})async{
+  DocumentReference documentReferencer =
+  _CollectionTip.doc(docId);
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "end_location": endLocation,
+  };
+
+  Response response = Response();
+
+  var res = await documentReferencer.update(data).then((value) => {
+    response.code = 200,
+    response.message = "Update the end location"
+  });
+
+  return response;
+
+}
+
+// BackEnd for booking Hotels
+CreateBooking({
+  required String uid,
+  required DateTime startDate,
+  required DateTime endDate,
+  required String hotelName,
+  required String hotelUserId,
+  required int numberOfRooms
+}) async {
+
+  Response response = Response();
+  DocumentReference documentReferencer =
+  _CollectionBooking.doc();
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "user_id": uid,
+    "start_date" : startDate,
+    "end_date" : endDate,
+    "hotel" : hotelName,
+    'NumberOfRooms' : numberOfRooms,
+    "HotelUserId" : hotelUserId,
+   
+  };
+
+  var result = await documentReferencer
+      .set(data)
+      .whenComplete(() {
+    response.code = 200;
+    response.message = "Sucessfully Created the Booking";
+    print("Sucessfully creted the booking");
+  })
+      .catchError((e) {
+    response.code = 500;
+    //response.message = e;
+    print("$e");
+  });
+  String documentId = documentReferencer.id;
+
+  return response ;
+}

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vojo/backend/backend.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+var selectedMode;
 class TransportModePage extends StatefulWidget {
   const TransportModePage({super.key});
 
@@ -10,40 +13,18 @@ class TransportModePage extends StatefulWidget {
 class _TransportModePageState extends State<TransportModePage> {
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xFF311B92),
         title: const Text('Select your transport'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Handle the back button press here
+            Navigator.pop(context);
           },
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                const Text(
-                  'John Doe',
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(width: 8.0),
-                CircleAvatar(
-                  backgroundColor: Theme.of(context).primaryColor,
-                  child: const Icon(
-                    Icons.person,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+
         elevation: 5.0,
       ),
       body: Column(
@@ -69,21 +50,27 @@ class _TransportModePageState extends State<TransportModePage> {
               children: [
                 GestureDetector(
                   child: buildButton('Bicycle', 'assets/images/cycle.png'),
-                  onTap: () {
+                  onTap: () async{
 
                   },
                 ),
                 GestureDetector(
                   child: buildButton('Bike', 'assets/images/bike.png'),
-                  onTap: () {},
+                  onTap: () {
+
+                  },
                 ),
                 GestureDetector(
                   child: buildButton('Car', 'assets/images/car.png'),
-                  onTap: () {},
+                  onTap: () {
+
+                  },
                 ),
                 GestureDetector(
                   child: buildButton('Van', 'assets/images/van.png'),
-                  onTap: () {},
+                  onTap: () {
+
+                  },
                 ),
               ],
             ),
@@ -95,8 +82,46 @@ class _TransportModePageState extends State<TransportModePage> {
 
   Widget buildButton(String buttonText, String imagePath) {
     return ElevatedButton(
-      onPressed: () {
-        // Handle button press
+      onPressed: ()async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        final String? action = prefs.getString('docId');
+
+
+        final SharedPreferences prefsin = await SharedPreferences.getInstance();
+        await prefsin.setString('transportMode', buttonText);
+        String docId = "";
+        if(action != null){
+          docId = action;
+        }
+        print(action);
+        switch(buttonText) {
+          case "Bicycle":
+            setState(() {
+              selectedMode = "push_bike";
+            });
+            break; // The switch statement must be told to exit, or it will execute every case.
+          case "Bike":
+            setState(() {
+              selectedMode = "moter_bike";
+            });
+            break;
+          case "Car":
+            setState(() {
+              selectedMode = "car";
+            });
+            break;
+          case "Van":
+            setState(() {
+              selectedMode = "van";
+            });
+            break;
+          default:
+            print('choose a different number!');
+        }
+        print(selectedMode);
+        var responce  = await updateTravellingMode(travallingMode: selectedMode, docId: docId);
+        print(responce);
+        Navigator.pushNamed(context, '/riderList');
       },
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.black,
