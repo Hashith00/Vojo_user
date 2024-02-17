@@ -1,7 +1,9 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:vojo/EditTrip_page/EditTrip_page.dart';
 import 'package:vojo/PickHotelOrRoderPage/PickHotelOrRiderPage.dart';
+
 
 import '/auth/firebase_auth/auth_util.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -268,6 +270,59 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                           ),
                         ),
                       ),
+
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            20.0, 30.0, 20.0, 0.0),
+                        child: Container(
+                            width: double.infinity,
+                            height: 150.0,
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            child: hastrips
+                                ? Column()
+                                : Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 25, vertical: 15),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Haven't  any journeys?",
+                                          style: TextStyle(
+                                              fontSize: 19,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                        SizedBox(
+                                          height: 50,
+                                        ),
+                                        Container(
+                                            alignment: Alignment.bottomRight,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.pushNamed(
+                                                    context, "/picklocation");
+                                              },
+                                              child: Text("Let's Start",
+                                                  style: TextStyle(
+                                                    fontSize: 19,
+                                                    fontWeight: FontWeight.w400,
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                  )),
+                                            ))
+                                      ],
+                                    ),
+                                  )),
+
                       Container(
                         margin: EdgeInsets.all(10),
                         child: SingleChildScrollView(
@@ -440,6 +495,7 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                             ],
                           ),
                         ),
+
                       ),
                       CreateJourney(hasjourney: tripNote),
 
