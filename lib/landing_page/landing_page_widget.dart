@@ -1,4 +1,3 @@
-
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -115,9 +114,8 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 3.0, 0.0, 0.0),
+                                          padding: const EdgeInsetsDirectional
+                                              .fromSTEB(0.0, 3.0, 0.0, 0.0),
                                           child: InkWell(
                                             splashColor: Colors.transparent,
                                             focusColor: Colors.transparent,
@@ -141,9 +139,8 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       children: [
                                         Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  16.0, 16.0, 16.0, 16.0),
+                                          padding: const EdgeInsetsDirectional
+                                              .fromSTEB(16.0, 16.0, 16.0, 16.0),
                                           child: StreamBuilder<UsersRecord>(
                                             stream: UsersRecord.getDocument(
                                                 currentUserReference!),
@@ -176,11 +173,8 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                                     child: Padding(
                                                       padding:
                                                           const EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  4.0,
-                                                                  0.0,
-                                                                  4.0),
+                                                              .fromSTEB(0.0,
+                                                              4.0, 0.0, 4.0),
                                                       child: Column(
                                                         mainAxisSize:
                                                             MainAxisSize.max,
@@ -192,10 +186,10 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                                             padding:
                                                                 const EdgeInsetsDirectional
                                                                     .fromSTEB(
-                                                                        0.0,
-                                                                        4.0,
-                                                                        0.0,
-                                                                        0.0),
+                                                                    0.0,
+                                                                    4.0,
+                                                                    0.0,
+                                                                    0.0),
                                                             child: Text(
                                                               'Welcome',
                                                               style: FlutterFlowTheme
@@ -268,29 +262,53 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                         padding: EdgeInsetsDirectional.fromSTEB(
                             20.0, 30.0, 20.0, 0.0),
                         child: Container(
-                          width: double.infinity,
-                          height: 130.0,
-                          decoration: BoxDecoration(
-                            color: FlutterFlowTheme.of(context)
-                                .secondaryBackground,
-                            borderRadius: BorderRadius.circular(12.0),
-                          ),
-                          child: hastrips? Column(): Container(
+                            width: double.infinity,
+                            height: 150.0,
                             decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey),
-                              borderRadius: BorderRadius.circular(20)
+                              color: FlutterFlowTheme.of(context)
+                                  .secondaryBackground,
+                              borderRadius: BorderRadius.circular(12.0),
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Haven't  any journeys?", style: TextStyle(fontSize: 19, fontWeight: FontWeight.w400),),
-                                SizedBox(height: 50,),
-                                Container(alignment: Alignment.bottomRight, child: GestureDetector(onTap: (){Navigator.pushNamed(context, "/picklocation");}, child: Text("Let's Start",style: TextStyle(fontSize: 19, fontWeight: FontWeight.w400, decoration: TextDecoration.underline,) ),))
-                              ],
-                            ),
-                          )
-                        ),
+                            child: hastrips
+                                ? Column()
+                                : Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.grey),
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 25, vertical: 15),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Haven't  any journeys?",
+                                          style: TextStyle(
+                                              fontSize: 19,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                        SizedBox(
+                                          height: 50,
+                                        ),
+                                        Container(
+                                            alignment: Alignment.bottomRight,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                Navigator.pushNamed(
+                                                    context, "/picklocation");
+                                              },
+                                              child: Text("Let's Start",
+                                                  style: TextStyle(
+                                                    fontSize: 19,
+                                                    fontWeight: FontWeight.w400,
+                                                    decoration: TextDecoration
+                                                        .underline,
+                                                  )),
+                                            ))
+                                      ],
+                                    ),
+                                  )),
                       ),
                     ].addToEnd(SizedBox(height: 72.0)),
                   ),
