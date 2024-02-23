@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:vojo/MyJourneyPage/MyJourneyPage.dart';
 import 'package:vojo/rider_list_page/rider_list_page.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
@@ -18,6 +19,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'pick_location_page/pick_location_page.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -127,6 +129,7 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'landingPage': LandingPageWidget(),
       'profilePage': ProfilePageWidget(),
+      'myJourneyPage' : MyJourneyPage()
 
 
     };
@@ -168,6 +171,11 @@ class _NavBarPageState extends State<NavBarPage> {
             GButton(
               icon: Icons.person,
               text: 'Profile',
+              iconSize: 24.0,
+            ),
+            GButton(
+              icon: Icons.travel_explore,
+              text: 'My journey',
               iconSize: 24.0,
             )
           ],

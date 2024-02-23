@@ -220,7 +220,7 @@ class _RidersBookingPageState extends State<RidersBookingPage> {
                   height: 50.0,
                   child: ElevatedButton(
                     onPressed: () async {
-                      var responce = await UpdateTripStatus(docId: docid);
+                      var responce = await UpdateTripStatustoNotConfiremed(docId: docid);
                       print(responce);
                       Navigator.pushNamed(context, "/landing");
 
