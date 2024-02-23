@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -31,6 +32,7 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
   List<LatLng> polylineCoordinates = [];
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> getLocation() async {
     late LatLng newlocation;
@@ -183,7 +185,10 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
                                       ],
                                     ),
                                   );
-                                  bookingWidgets.add(bookingWidget); // Add the container to the list
+                                  if(_auth.currentUser!.uid == bookingData["user_id"]){
+                                    bookingWidgets.add(bookingWidget);
+                                  }
+                                  // Add the container to the list
                                 }
                                 return SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
