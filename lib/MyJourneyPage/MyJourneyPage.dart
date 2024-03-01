@@ -20,7 +20,8 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
   static const LatLng initialPos = LatLng(-25.35042, -49.18715);
   static const LatLng finalPoint = LatLng(37.33429383, -122.06600055);
   static const LatLng KandyPoint = LatLng(7.2915, 80.63051);
-  static late LatLng userpos = LatLng(7.0854, 79.99405);
+  static late LatLng userpos;
+  static late List<LatLng> requiredPossition = [];
 
   // making map is not visible when start
   late bool locationadd = false;
@@ -33,14 +34,24 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  var currentUser;
 
   Future<void> getLocation() async {
     late LatLng newlocation;
     GeoCode geoCode = GeoCode(apiKey: "135158425259448e15921900x20274");
+    for(String a in locations){
+      try{
+        Coordinates usercoordinate = await geoCode.forwardGeocoding(address: locations[1]);
+        late LatLng pos = LatLng((usercoordinate.latitude)!.toDouble(), (usercoordinate.longitude)!.toDouble());
+        requiredPossition.add(pos);
+      }catch(e){
+        print(e);
+      }
+    }
 
     try {
       Coordinates coordinates = await geoCode.forwardGeocoding(
-          address: "Gampaha");
+          address: locations[1]);
 
       setState(() {
         userpos = LatLng((coordinates.latitude)!.toDouble(), (coordinates.longitude)!.toDouble());
@@ -55,6 +66,26 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
       locationadd = true;
     });
 
+  }
+  late Set<Marker> myMarkers ;
+  Set<Marker> generateMarkers(List<LatLng> requiredPositions) {
+    // Initialize a set for markers
+    Set<Marker> markers = {};
+
+    // Dynamically add markers based on requiredPositions
+    for (LatLng position in requiredPositions) {
+      markers.add(
+        Marker(
+          markerId: MarkerId(position.toString()), // Unique ID for each marker
+          icon: BitmapDescriptor.defaultMarker,
+          position: position,
+        ),
+      );
+    }
+
+
+
+    return markers;
   }
 
   void setCoustomMarkerIcon(){
@@ -89,13 +120,48 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
     //print(polylineCoordinates.length);
   }
 
+  Widget getTravelModePicture({ required String travelMode})  {
+    switch(travelMode){
+      case "car":
+        return Container(height: 100, width: 100, child: Image.asset("assets/images/car.png"));
+        
+      case "bike":
+        return Container(height: 50, width: 50, child: Image.asset("assets/images/bike.png"));
+
+      case "van":
+        return Container(height: 50, width: 50, child: Image.asset("assets/images/van.png"));
+
+      case "tuk":
+        return Container(height: 50, width: 50, child: Image.asset("assets/images/tuk.png"));
+
+      default:
+        return Container(height: 50, width: 50, child: Image.asset("assets/images/car.png"));
+    }
+    return Text("");
+  }
+  List<String> locations = [];
+
+  Future<void> getLocationData()async {
+    final trips =  await _firestore.collection("temptrip").get();
+    for(var trip in trips.docs){
+      if(trip.data()["user_id"] == _auth.currentUser!.uid){
+        locations.add("${trip.data()["start_location"]}");
+        locations.add("${trip.data()["end_location"]}");
+      }
+    }
+    for(String a in locations){
+      print(a);
+    }
+  }
+
   // Initialized the state
   @override
   void initState() {
     super.initState();
     getPolyline();
     setCoustomMarkerIcon();
-    getLocation();
+    getLocationData().then((value) => getLocation()).then((value) => generateMarkers(requiredPossition));
+    //getLocation();
 
 
   }
@@ -116,20 +182,11 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
                       Container(
                         child: GoogleMap(
                           initialCameraPosition: CameraPosition(
-                            target: userpos,
-                            zoom: 9,
+                            target: requiredPossition[0],
+                            zoom: 8,
                           ),
                           zoomControlsEnabled: true,
-                          markers: {
-                            Marker(
-                                markerId: MarkerId('initialPos'),
-                                icon: BitmapDescriptor.defaultMarker,
-                                position: userpos),
-                            Marker(
-                                markerId: MarkerId('finalPoint'),
-                                icon: BitmapDescriptor.defaultMarker,
-                                position: KandyPoint),
-                          },
+                          markers: generateMarkers(requiredPossition),
                           polylines: {
                             Polyline(
                               polylineId: PolylineId('route'),
@@ -207,15 +264,15 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
                           SizedBox(height: 20,),
                           Text("Your Rides", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),),
                           StreamBuilder<QuerySnapshot>(
-                            stream: _firestore.collection("bookings").snapshots(),
+                            stream: _firestore.collection("temptrip").snapshots(),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 final bookings = snapshot.data!.docs;
                                 List<Widget> bookingWidgets = []; // List to store booking widgets
                                 for (var booking in bookings) {
                                   final bookingData = booking.data() as Map<String, dynamic>;
-                                  String dateAndTime = (DateTime.parse(bookingData["start_date"].toDate().toString())).toString();
-                                  List<String> dateSplitted = dateAndTime.split(" ");
+                                  //String dateAndTime = (DateTime.parse(bookingData["start_date"].toDate().toString())).toString();
+                                  //List<String> dateSplitted = dateAndTime.split(" ");
                                   final bookingWidget = Container(
                                     padding: EdgeInsets.all(8),
                                     height: 210,
@@ -228,17 +285,20 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Image(image: NetworkImage("https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aG90ZWxzfGVufDB8fDB8fHww")),
+                                        getTravelModePicture(travelMode: "${bookingData["travelling_mode"]}"),
                                         SizedBox(height: 5,),
-                                        Text("${bookingData["hotel"]}"),
+                                        Text("${bookingData["start_location"]} to ${bookingData["end_location"]}" ),
                                         SizedBox(height: 3,),
-                                        Text("${dateSplitted[0]}"),
+                                        Text("${bookingData["start_date"]}"),
                                         Text("to"),
-                                        Text("${dateSplitted[0]}"),
+                                        Text("${bookingData["end_date"]}"),
                                       ],
                                     ),
                                   );
-                                  bookingWidgets.add(bookingWidget); // Add the container to the list
+                                  if(_auth.currentUser!.uid == bookingData["user_id"] && bookingData["status"] == "Confirmed"){
+                                    bookingWidgets.add(bookingWidget);
+                                  }
+                                   // Add the container to the list
                                 }
                                 return SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,

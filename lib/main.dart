@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:vojo/MyJourneyPage/MyJourneyPage.dart';
 import 'package:vojo/rider_list_page/rider_list_page.dart';
+import 'package:vojo/stripPage/newStripe.dart';
+import 'package:vojo/stripPage/transactionPage.dart';
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
 import 'transpotation_mode/transport_mode.dart';
@@ -17,11 +20,18 @@ import 'flutter_flow/internationalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'pick_location_page/pick_location_page.dart';
+
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = "pk_test_51OSCmFCem4pjyRAzDzsny1yS8fm8RQRjqQDNryrarztSx6kxpvty3SZMx3jaWcCE54pyo4Zmtv3DWMfzNa65V5HH00p1wiVzRu";
+  Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
+  Stripe.urlScheme = 'flutterstripe';
+  await Stripe.instance.applySettings();
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
   await initFirebase();
@@ -129,7 +139,8 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'landingPage': LandingPageWidget(),
       'profilePage': ProfilePageWidget(),
-      'myJourneyPage' : MyJourneyPage()
+      'myJourneyPage' : MyJourneyPage(),
+      'PaymentPage' : newStripePage(),
 
 
     };
@@ -176,6 +187,11 @@ class _NavBarPageState extends State<NavBarPage> {
             GButton(
               icon: Icons.travel_explore,
               text: 'My journey',
+              iconSize: 24.0,
+            ),
+            GButton(
+              icon: Icons.money,
+              text: 'Payments',
               iconSize: 24.0,
             )
           ],
