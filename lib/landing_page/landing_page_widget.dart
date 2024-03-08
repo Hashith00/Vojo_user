@@ -257,7 +257,7 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               20.0, 30.0, 0.0, 0.0),
                           child: Text(
-                            'Upcomming Journeys',
+                            'Pending Rides ',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -417,7 +417,7 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                         ),
                                       );
                                       //print(category);
-                                      if (tripData["status"] == "Confirmed" &&
+                                      if (tripData["status"] == "NotConfirmed" &&
                                           (tripData['user_id'] ==
                                               _auth.currentUser?.uid)) {
                                         rides.add(tripCard);

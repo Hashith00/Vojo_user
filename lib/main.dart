@@ -1,10 +1,16 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:vojo/HotelPaymentPage/HotelPayment.dart';
+import 'package:vojo/MyJourneyPage/MyJourneyPage.dart';
+import 'package:vojo/StateManagment/StateManagment.dart';
 import 'package:vojo/rider_list_page/rider_list_page.dart';
+import 'package:vojo/stripPage/newStripe.dart';
+
 import 'auth/firebase_auth/firebase_user_provider.dart';
 import 'auth/firebase_auth/auth_util.dart';
 import 'transpotation_mode/transport_mode.dart';
@@ -16,10 +22,18 @@ import 'flutter_flow/internationalization.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'pick_location_page/pick_location_page.dart';
+
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = "pk_test_51OSCmFCem4pjyRAzDzsny1yS8fm8RQRjqQDNryrarztSx6kxpvty3SZMx3jaWcCE54pyo4Zmtv3DWMfzNa65V5HH00p1wiVzRu";
+  Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
+  Stripe.urlScheme = 'flutterstripe';
+  await Stripe.instance.applySettings();
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
   await initFirebase();
@@ -127,50 +141,67 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'landingPage': LandingPageWidget(),
       'profilePage': ProfilePageWidget(),
+      'myJourneyPage' : MyJourneyPage(),
+      'PaymentPage' : HotelPayment(),
 
 
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: {
-        '/picklocation' : (context) => PickLocationPage(),
-        '/transport' : (context) => TransportModePage(),
-        '/riderList' : (context) => RidersListPage(),
-        '/landing' : (context) => LandingPageWidget(),
-      },
-      home: Scaffold(
-        body: _currentPage ?? tabs[_currentPageName],
-        bottomNavigationBar: GNav(
-          selectedIndex: currentIndex,
-          onTabChange: (i) => setState(() {
-            _currentPage = null;
-            _currentPageName = tabs.keys.toList()[i];
-          }),
-          backgroundColor: Colors.white,
-          color: Color(0x8A000000),
-          activeColor: FlutterFlowTheme.of(context).primary,
-          tabBackgroundColor: Color(0x00000000),
-          tabBorderRadius: 100.0,
-          tabMargin: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-          padding: EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 15.0),
-          gap: 0.0,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          duration: Duration(milliseconds: 500),
-          haptic: false,
-          tabs: [
-            GButton(
-              icon: currentIndex == 0 ? Icons.home_filled : Icons.home,
-              text: 'Home',
-              iconSize: 24.0,
-            ),
-            GButton(
-              icon: Icons.person,
-              text: 'Profile',
-              iconSize: 24.0,
-            )
-          ],
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => HotelDetailsProvider())
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        routes: {
+          '/picklocation' : (context) => PickLocationPage(),
+          '/transport' : (context) => TransportModePage(),
+          '/riderList' : (context) => RidersListPage(),
+          '/landing' : (context) => LandingPageWidget(),
+        },
+        home: Scaffold(
+          body: _currentPage ?? tabs[_currentPageName],
+          bottomNavigationBar: GNav(
+            selectedIndex: currentIndex,
+            onTabChange: (i) => setState(() {
+              _currentPage = null;
+              _currentPageName = tabs.keys.toList()[i];
+            }),
+            backgroundColor: Colors.white,
+            color: Color(0x8A000000),
+            activeColor: FlutterFlowTheme.of(context).primary,
+            tabBackgroundColor: Color(0x00000000),
+            tabBorderRadius: 100.0,
+            tabMargin: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+            padding: EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 15.0),
+            gap: 0.0,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            duration: Duration(milliseconds: 500),
+            haptic: false,
+            tabs: [
+              GButton(
+                icon: currentIndex == 0 ? Icons.home_filled : Icons.home,
+                text: 'Home',
+                iconSize: 24.0,
+              ),
+              GButton(
+                icon: Icons.person,
+                text: 'Profile',
+                iconSize: 24.0,
+              ),
+              GButton(
+                icon: Icons.travel_explore,
+                text: 'My journey',
+                iconSize: 24.0,
+              ),
+              GButton(
+                icon: Icons.money,
+                text: 'Payments',
+                iconSize: 24.0,
+              )
+            ],
+          ),
         ),
       ),
     );

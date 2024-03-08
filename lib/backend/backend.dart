@@ -293,7 +293,7 @@ final CollectionReference _CollectionBooking = _firestore.collection("bookings")
 
 
 // Update Trip details where trip is ready to show in the riders app
-Future<Response> UpdateTripStatus({
+Future<Response> UpdateTripStatustoNotConfiremed({
   required String docId,
 }) async {
   Response response = Response();
@@ -301,7 +301,7 @@ Future<Response> UpdateTripStatus({
   _CollectionTip.doc(docId);
 
   Map<String, dynamic> data = <String, dynamic>{
-    "status": "Confirmed",
+    "status": "NotConfirmed",
   };
 
   await documentReferencer
