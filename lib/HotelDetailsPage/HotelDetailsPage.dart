@@ -95,9 +95,16 @@ class _HoteldetailspageState extends State<Hoteldetailspage> {
                   ),
                   SizedBox(height: 20,),
                   GestureDetector(
-                    onTap: ()async{
-                       Response res = await CreateBooking(uid: _auth.currentUser!.uid, startDate: widget.startDate, endDate: widget.endDate, hotelName: hotelDeatils['hotelName'], hotelUserId: hotelDeatils['hotelUserId'], numberOfRooms: 5);
-                      print(res.code);
+                    onTap: (){
+
+                      Provider.of<HotelDetailsProvider>(context, listen: false).changeUserId(UserId: _auth.currentUser!.uid);
+                      Provider.of<HotelDetailsProvider>(context, listen: false).changeStartDate(StartDate: widget.startDate);
+                      Provider.of<HotelDetailsProvider>(context, listen: false).changeEndDate(EndDate: widget.endDate);
+                      Provider.of<HotelDetailsProvider>(context, listen: false).changeHotelName(HotelName: hotelDeatils['hotelName']);
+                      Provider.of<HotelDetailsProvider>(context, listen: false).changeHotelUserId(HotelUserId: hotelDeatils['hotelUserId']);
+                      Provider.of<HotelDetailsProvider>(context, listen: false).changeHotelRooms(NumberOfRooms: numberOfRooms);
+
+
                        context.read<HotelDetailsProvider>().changePrice(HotelPrice: price*100);
                       Navigator.push(context, MaterialPageRoute(builder: (context) => HotelPayment()));
                     },

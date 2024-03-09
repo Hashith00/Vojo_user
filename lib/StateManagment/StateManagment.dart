@@ -1,14 +1,53 @@
 import 'package:flutter/material.dart';
 
-class HotelDetailsProvider extends ChangeNotifier{
-  late int Price;
 
-  HotelDetailsProvider({this.Price = 100});
+class HotelDetailsProvider extends ChangeNotifier{
+  static final DateTime _defaultDateTime = DateTime.now();
+  late int Price;
+  late String userId;
+  late DateTime startDate;
+  late DateTime endDate;
+  late String hotelName;
+  late String hotelUserId;
+  late int numberOfRooms;
+
+  HotelDetailsProvider({this.Price = 100, this.userId = "", this.hotelUserId = "", this.hotelName ="", this.numberOfRooms = 1});
 
   void changePrice({required int HotelPrice}){
     Price = HotelPrice;
     notifyListeners();
   }
+
+  void changeStartDate({required DateTime StartDate}){
+    startDate = StartDate;
+    notifyListeners();
+  }
+
+  void changeEndDate({required DateTime EndDate}){
+    endDate = EndDate;
+    notifyListeners();
+  }
+
+  void changeUserId({required String UserId}){
+    userId = UserId;
+    notifyListeners();
+  }
+
+  void changeHotelUserId({required String HotelUserId}){
+    hotelUserId = HotelUserId;
+    notifyListeners();
+  }
+
+  void changeHotelName({required String HotelName}){
+    hotelName = HotelName;
+    notifyListeners();
+  }
+
+  void changeHotelRooms({required int NumberOfRooms}){
+    numberOfRooms = NumberOfRooms;
+    notifyListeners();
+  }
+
 
 }
 
