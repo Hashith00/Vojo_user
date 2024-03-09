@@ -102,6 +102,7 @@ dependencies:
   dio: ^5.4.0
   geocoding: 2.1.1
   geocode: 1.0.3
+  loading_indicator: ^3.1.1
 
 
 

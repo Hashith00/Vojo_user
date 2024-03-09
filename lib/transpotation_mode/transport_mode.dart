@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vojo/StateManagment/StateManagment.dart';
 import 'package:vojo/backend/backend.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 var selectedMode;
 class TransportModePage extends StatefulWidget {
@@ -14,68 +16,73 @@ class _TransportModePageState extends State<TransportModePage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF311B92),
-        title: const Text('Select your transport'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => RiderDetailsProvider())
+      ],
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF311B92),
+          title: const Text('Select your transport'),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
 
-        elevation: 5.0,
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 50.0),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              'Select your transport type',
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
+          elevation: 5.0,
+        ),
+        body: Column(
+          children: [
+            const SizedBox(height: 50.0),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Select your transport type',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          const SizedBox(height: 16.0),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: 2,
-              mainAxisSpacing: 16.0,
-              crossAxisSpacing: 16.0,
-              padding: const EdgeInsets.all(16.0),
-              children: [
-                GestureDetector(
-                  child: buildButton('Bicycle', 'assets/images/cycle.png'),
-                  onTap: () async{
+            const SizedBox(height: 16.0),
+            Expanded(
+              child: GridView.count(
+                crossAxisCount: 2,
+                mainAxisSpacing: 16.0,
+                crossAxisSpacing: 16.0,
+                padding: const EdgeInsets.all(16.0),
+                children: [
+                  GestureDetector(
+                    child: buildButton('Bicycle', 'assets/images/cycle.png'),
+                    onTap: () async{
 
-                  },
-                ),
-                GestureDetector(
-                  child: buildButton('Bike', 'assets/images/bike.png'),
-                  onTap: () {
+                    },
+                  ),
+                  GestureDetector(
+                    child: buildButton('Bike', 'assets/images/bike.png'),
+                    onTap: () {
 
-                  },
-                ),
-                GestureDetector(
-                  child: buildButton('Car', 'assets/images/car.png'),
-                  onTap: () {
+                    },
+                  ),
+                  GestureDetector(
+                    child: buildButton('Car', 'assets/images/car.png'),
+                    onTap: () {
 
-                  },
-                ),
-                GestureDetector(
-                  child: buildButton('Van', 'assets/images/van.png'),
-                  onTap: () {
+                    },
+                  ),
+                  GestureDetector(
+                    child: buildButton('Van', 'assets/images/van.png'),
+                    onTap: () {
 
-                  },
-                ),
-              ],
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -119,8 +126,9 @@ class _TransportModePageState extends State<TransportModePage> {
             print('choose a different number!');
         }
         print(selectedMode);
-        var responce  = await updateTravellingMode(travallingMode: selectedMode, docId: docId);
-        print(responce);
+        Provider.of<RiderDetailsProvider>(context, listen: false).changeVehicle(selectedVehicle: selectedMode);
+        //var responce  = await updateTravellingMode(travallingMode: selectedMode, docId: docId);
+        //print(responce);
         Navigator.pushNamed(context, '/riderList');
       },
       style: ElevatedButton.styleFrom(

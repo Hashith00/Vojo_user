@@ -29,7 +29,7 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
   // Add custom Icon - Not working
   BitmapDescriptor initailLocationIcon = BitmapDescriptor.defaultMarker;
 
-  // Adding polyline corrdinates
+  // Adding polyline coordinates
   List<LatLng> polylineCoordinates = [];
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -295,7 +295,7 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
                                       ],
                                     ),
                                   );
-                                  if(_auth.currentUser!.uid == bookingData["user_id"] && bookingData["status"] == "Confirmed"){
+                                  if(_auth.currentUser!.uid == bookingData["user_id"] && bookingData["is_confirmed"] == true){
                                     bookingWidgets.add(bookingWidget);
                                   }
                                    // Add the container to the list
