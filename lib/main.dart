@@ -150,7 +150,9 @@ class _NavBarPageState extends State<NavBarPage> {
 
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => HotelDetailsProvider())
+        ChangeNotifierProvider(create: (context) => HotelDetailsProvider()),
+        ChangeNotifierProvider(create: (context) => RiderDetailsProvider()),
+
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

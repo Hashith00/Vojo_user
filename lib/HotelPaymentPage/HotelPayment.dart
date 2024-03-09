@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vojo/HotelPaymentPage/HotelPaymentModel.dart';
+import 'package:vojo/PaymentErrorPage/PaymentErrorPage.dart';
 import 'package:vojo/StateManagment/StateManagment.dart';
 import 'package:vojo/index.dart';
 
@@ -43,7 +44,7 @@ class _HotelPaymentState extends State<HotelPayment> {
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
                       else{
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => LandingPageWidget()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentErrorPage()));
                       }
                       print(nn);
 

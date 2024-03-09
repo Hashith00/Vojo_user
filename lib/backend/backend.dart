@@ -293,7 +293,7 @@ final CollectionReference _CollectionBooking = _firestore.collection("bookings")
 
 
 // Update Trip details where trip is ready to show in the riders app
-Future<Response> UpdateTripStatustoNotConfiremed({
+Future<Response> UpdateTripStatustoConfiremed({
   required String docId,
 }) async {
   Response response = Response();
@@ -301,7 +301,7 @@ Future<Response> UpdateTripStatustoNotConfiremed({
   _CollectionTip.doc(docId);
 
   Map<String, dynamic> data = <String, dynamic>{
-    "status": "NotConfirmed",
+    "is_confirmed": true,
   };
 
   await documentReferencer
@@ -354,7 +354,9 @@ addTrip({
     required String endDate,
     required String startLocation,
     required String endLocation,
-    String intermidiateLocation = ""
+    String intermidiateLocation = "",
+    String riderId = "",
+    String travellingMode = ""
   }) async {
 
     Response response = Response();
@@ -363,20 +365,23 @@ addTrip({
 
     Map<String, dynamic> data = <String, dynamic>{
       "user_id": uid,
-      "trip_typr": type,
+      "trip_type": type,
       "start_date" : startDate,
       "end_date" : endDate,
       "start_location" : startLocation,
       "end_location" : endLocation,
-      "intermediate_location" : intermidiateLocation
+      "intermediate_location" : intermidiateLocation,
+      "Rider_id" : riderId,
+      "is_confirmed" : false,
+      "travelling_Mode" : travellingMode
     };
 
     var result = await documentReferencer
         .set(data)
         .whenComplete(() {
       response.code = 200;
-      response.message = "Sucessfully added to the database";
-      print("Sucessfully added to the database");
+      response.message = "Sucessfully added to the Trip";
+      print("Sucessfully added to the Trip");
     })
         .catchError((e) {
       response.code = 500;

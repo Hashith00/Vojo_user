@@ -417,7 +417,7 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                         ),
                                       );
                                       //print(category);
-                                      if (tripData["status"] == "NotConfirmed" &&
+                                      if (tripData["is_confirmed"] == false &&
                                           (tripData['user_id'] ==
                                               _auth.currentUser?.uid)) {
                                         rides.add(tripCard);
