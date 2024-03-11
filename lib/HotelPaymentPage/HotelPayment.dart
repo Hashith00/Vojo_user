@@ -4,6 +4,7 @@ import 'package:vojo/HotelPaymentPage/HotelPaymentModel.dart';
 import 'package:vojo/PaymentErrorPage/PaymentErrorPage.dart';
 import 'package:vojo/StateManagment/StateManagment.dart';
 import 'package:vojo/index.dart';
+import 'package:vojo/backend/backend.dart';
 
 class HotelPayment extends StatefulWidget {
   const HotelPayment({super.key});
@@ -30,6 +31,8 @@ class _HotelPaymentState extends State<HotelPayment> {
                     onTap: ()async{
                       bool nn =await HotelPaymentModle.MakeStrpePayment(Provider.of<HotelDetailsProvider>(context, listen: false).Price);
                       if(nn){
+                        var res = await CreateBooking(uid: Provider.of<HotelDetailsProvider>(context, listen: false).userId, startDate: Provider.of<HotelDetailsProvider>(context, listen: false).startDate, endDate: Provider.of<HotelDetailsProvider>(context, listen: false).endDate, hotelName: Provider.of<HotelDetailsProvider>(context, listen: false).hotelName, hotelUserId: Provider.of<HotelDetailsProvider>(context, listen: false).hotelUserId, numberOfRooms: Provider.of<HotelDetailsProvider>(context, listen: false).numberOfRooms);
+                        print(res.code);
                         Navigator.push(context, MaterialPageRoute(builder: (context) => LandingPageWidget()));
                         final snackBar = SnackBar(
                             content: const Text('Payment is Successful!'),
