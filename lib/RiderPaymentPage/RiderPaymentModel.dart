@@ -1,10 +1,18 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geocode/geocode.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:dio/dio.dart';
 import 'package:vojo/stripPage/newStripe.dart';
+
+
+
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final CollectionReference _CollectionTrips = _firestore.collection("trips");
+
+
 
 class RiderPaymentModel{
 
@@ -68,4 +76,6 @@ class RiderPaymentModel{
      bool ispayment =  await newPayment.makePayment(cost.toInt());
      return ispayment;
    }
+
+
 }
