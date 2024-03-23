@@ -14,6 +14,14 @@ class HotelPayment extends StatefulWidget {
 }
 
 class _HotelPaymentState extends State<HotelPayment> {
+  late double price;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -31,7 +39,7 @@ class _HotelPaymentState extends State<HotelPayment> {
                     onTap: ()async{
                       bool nn =await HotelPaymentModle.MakeStrpePayment(Provider.of<HotelDetailsProvider>(context, listen: false).Price);
                       if(nn){
-                        var res = await CreateBooking(uid: Provider.of<HotelDetailsProvider>(context, listen: false).userId, startDate: Provider.of<HotelDetailsProvider>(context, listen: false).startDate, endDate: Provider.of<HotelDetailsProvider>(context, listen: false).endDate, hotelName: Provider.of<HotelDetailsProvider>(context, listen: false).hotelName, hotelUserId: Provider.of<HotelDetailsProvider>(context, listen: false).hotelUserId, numberOfRooms: Provider.of<HotelDetailsProvider>(context, listen: false).numberOfRooms);
+                        var res = await CreateBooking(uid: Provider.of<HotelDetailsProvider>(context, listen: false).userId, startDate: Provider.of<HotelDetailsProvider>(context, listen: false).startDate, endDate: Provider.of<HotelDetailsProvider>(context, listen: false).endDate, hotelName: Provider.of<HotelDetailsProvider>(context, listen: false).hotelName, hotelUserId: Provider.of<HotelDetailsProvider>(context, listen: false).hotelUserId, numberOfRooms: Provider.of<HotelDetailsProvider>(context, listen: false).numberOfRooms, price: (Provider.of<HotelDetailsProvider>(context, listen: false).Price)/100);
                         print(res.code);
                         Navigator.push(context, MaterialPageRoute(builder: (context) => LandingPageWidget()));
                         final snackBar = SnackBar(

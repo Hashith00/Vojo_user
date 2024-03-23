@@ -356,7 +356,10 @@ addTrip({
     required String endLocation,
     String intermidiateLocation = "",
     String riderId = "",
-    String travellingMode = ""
+    String travellingMode = "",
+  required double cost,
+  required double distance,
+
   }) async {
 
     Response response = Response();
@@ -373,7 +376,9 @@ addTrip({
       "intermediate_location" : intermidiateLocation,
       "Rider_id" : riderId,
       "is_confirmed" : false,
-      "travelling_Mode" : travellingMode
+      "travelling_Mode" : travellingMode,
+      "cost" : cost,
+      "distance" : distance
     };
 
     var result = await documentReferencer
@@ -505,7 +510,8 @@ CreateBooking({
   required DateTime endDate,
   required String hotelName,
   required String hotelUserId,
-  required int numberOfRooms
+  required int numberOfRooms,
+  required double price,
 }) async {
 
   Response response = Response();
@@ -519,6 +525,8 @@ CreateBooking({
     "hotel" : hotelName,
     'NumberOfRooms' : numberOfRooms,
     "HotelUserId" : hotelUserId,
+    "price" : price
+
    
   };
 
@@ -526,7 +534,7 @@ CreateBooking({
       .set(data)
       .whenComplete(() {
     response.code = 200;
-    response.message = "Sucessfully Created the Booking";
+    response.message = documentReferencer.id;
     print("Sucessfully creted the booking");
   })
       .catchError((e) {

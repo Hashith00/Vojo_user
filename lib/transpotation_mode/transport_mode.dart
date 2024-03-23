@@ -3,6 +3,7 @@ import 'package:vojo/StateManagment/StateManagment.dart';
 import 'package:vojo/backend/backend.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:vojo/rider_list_page/rider_list_page.dart';
 
 var selectedMode;
 class TransportModePage extends StatefulWidget {
@@ -55,25 +56,25 @@ class _TransportModePageState extends State<TransportModePage> {
                 padding: const EdgeInsets.all(16.0),
                 children: [
                   GestureDetector(
-                    child: buildButton('Bicycle', 'assets/images/cycle.png'),
+                    child: buildButton('bicycle', 'assets/images/cycle.png'),
                     onTap: () async{
 
                     },
                   ),
                   GestureDetector(
-                    child: buildButton('Bike', 'assets/images/bike.png'),
+                    child: buildButton('bike', 'assets/images/bike.png'),
                     onTap: () {
 
                     },
                   ),
                   GestureDetector(
-                    child: buildButton('Car', 'assets/images/car.png'),
+                    child: buildButton('car', 'assets/images/car.png'),
                     onTap: () {
 
                     },
                   ),
                   GestureDetector(
-                    child: buildButton('Van', 'assets/images/van.png'),
+                    child: buildButton('van', 'assets/images/van.png'),
                     onTap: () {
 
                     },
@@ -102,22 +103,22 @@ class _TransportModePageState extends State<TransportModePage> {
         }
         print(action);
         switch(buttonText) {
-          case "Bicycle":
+          case "bicycle":
             setState(() {
               selectedMode = "push_bike";
             });
             break; // The switch statement must be told to exit, or it will execute every case.
-          case "Bike":
+          case "bike":
             setState(() {
               selectedMode = "moter_bike";
             });
             break;
-          case "Car":
+          case "car":
             setState(() {
               selectedMode = "car";
             });
             break;
-          case "Van":
+          case "van":
             setState(() {
               selectedMode = "van";
             });
@@ -129,7 +130,8 @@ class _TransportModePageState extends State<TransportModePage> {
         Provider.of<RiderDetailsProvider>(context, listen: false).changeVehicle(selectedVehicle: selectedMode);
         //var responce  = await updateTravellingMode(travallingMode: selectedMode, docId: docId);
         //print(responce);
-        Navigator.pushNamed(context, '/riderList');
+        Navigator.push(context, MaterialPageRoute(builder: (context) => RidersListPage()));
+
       },
       style: ElevatedButton.styleFrom(
         foregroundColor: Colors.black,

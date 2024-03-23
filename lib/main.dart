@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:vojo/ChatPage/ChatPage.dart';
 import 'package:vojo/HotelPaymentPage/HotelPayment.dart';
 import 'package:vojo/MyJourneyPage/MyJourneyPage.dart';
 import 'package:vojo/StateManagment/StateManagment.dart';
@@ -142,8 +143,7 @@ class _NavBarPageState extends State<NavBarPage> {
       'landingPage': LandingPageWidget(),
       'profilePage': ProfilePageWidget(),
       'myJourneyPage' : MyJourneyPage(),
-      'PaymentPage' : HotelPayment(),
-
+      'PaymentPage' : ChatPage(),
 
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
@@ -198,8 +198,8 @@ class _NavBarPageState extends State<NavBarPage> {
                 iconSize: 24.0,
               ),
               GButton(
-                icon: Icons.money,
-                text: 'Payments',
+                icon: Icons.message,
+                text: 'Chat',
                 iconSize: 24.0,
               )
             ],
