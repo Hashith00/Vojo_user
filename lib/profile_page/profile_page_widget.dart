@@ -133,7 +133,7 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget>
                               child: CachedNetworkImage(
                                 fadeInDuration: Duration(milliseconds: 500),
                                 fadeOutDuration: Duration(milliseconds: 500),
-                                imageUrl: currentUserPhoto,
+                                imageUrl: "https://images.unsplash.com/photo-1434394354979-a235cd36269d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fG1vdW50YWluc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60",
                                 width: 100.0,
                                 height: 100.0,
                                 fit: BoxFit.cover,
