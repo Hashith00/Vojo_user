@@ -37,12 +37,12 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
   var currentUser;
 
   Future<void> getLocation() async {
-    late LatLng newlocation;
-    GeoCode geoCode = GeoCode(apiKey: "135158425259448e15921900x20274");
+    GeoCode geoCode = GeoCode(apiKey: "391946589145416636710x64221");
     for(String a in locations){
       try{
         Coordinates usercoordinate = await geoCode.forwardGeocoding(address: locations[1]);
         late LatLng pos = LatLng((usercoordinate.latitude)!.toDouble(), (usercoordinate.longitude)!.toDouble());
+        print(pos.longitude);
         requiredPossition.add(pos);
       }catch(e){
         print(e);
@@ -67,6 +67,8 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
     });
 
   }
+
+  // Add the markers into the map
   late Set<Marker> myMarkers ;
   Set<Marker> generateMarkers(List<LatLng> requiredPositions) {
     // Initialize a set for markers
@@ -181,15 +183,24 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
                       child: locationadd ?
                       Container(
                         child: GoogleMap(
-                          initialCameraPosition: CameraPosition(
-                            target: requiredPossition[0],
-                            zoom: 8,
+                          initialCameraPosition: const CameraPosition(
+                            target: initialPos,
+                            zoom: 9,
                           ),
                           zoomControlsEnabled: true,
-                          markers: generateMarkers(requiredPossition),
+                          markers: {
+                            Marker(
+                                markerId: const MarkerId('initialPos'),
+                                icon: initailLocationIcon,
+                                position: initialPos),
+                            Marker(
+                                markerId: const MarkerId('finalPoint'),
+                                icon: initailLocationIcon,
+                                position: KandyPoint),
+                          },
                           polylines: {
                             Polyline(
-                              polylineId: PolylineId('route'),
+                              polylineId: const PolylineId('route'),
                               points: polylineCoordinates,
                               color: Colors.blue, // Specify the polyline color
                               width: 5, // Specify the polyline width
@@ -201,6 +212,7 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
                         child: Text("Loading"),
                       )
                   ),
+                  Container(child: Text("$locationadd"),),
                   const SizedBox(height: 20,),
                    Container(
                      margin: EdgeInsets.only(left: 10),
