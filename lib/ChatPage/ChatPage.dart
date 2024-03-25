@@ -110,7 +110,7 @@ class _ChatPageState extends State<ChatPage> {
                   children: [
                     Container(
                       height: 80,
-                      width: 370,
+                      width: 330,
                       margin: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       child: TextFormField(
                         autofocus: true,
