@@ -99,10 +99,20 @@ dependencies:
   flutter_polyline_points: ^1.0.0
   google_maps_flutter: ^2.5.3
   geolocator: ^10.1.1
-  dio: ^5.4.0
+  dio: ^4.0.4
   geocoding: 2.1.1
   geocode: 1.0.3
   loading_indicator: ^3.1.1
+  google_map_polyline_new: ^0.3.0+2
+  fake_cloud_firestore: ^2.4.1+1
+  mockito: ^5.4.4
+  google_maps_widget: ^1.0.5+1
+  google_places_flutter: ^2.0.6
+  flutter_google_places_sdk: ^0.3.2+9
+  modal_progress_hud_nsn: ^0.5.1
+  gmaps_by_road_distance_calculator: ^2.0.5
+
+
 
 dependency_overrides:
   stripe_android: "9.5.0+1"

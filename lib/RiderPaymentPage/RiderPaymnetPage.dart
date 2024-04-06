@@ -6,6 +6,7 @@ import 'package:vojo/StateManagment/StateManagment.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:vojo/index.dart';
 import 'package:vojo/backend/backend.dart';
+import 'package:dio/dio.dart';
 
 class RiderPaymentPage extends StatefulWidget {
   const RiderPaymentPage({super.key});
@@ -15,18 +16,36 @@ class RiderPaymentPage extends StatefulWidget {
 }
 
 class _RiderPaymentPageState extends State<RiderPaymentPage> {
-   double distance = 0.0;
-   double cost = 0;
+   var distanceInKM ;
+   var distance;
+   int cost = 0 ;
+   var durationTime;
    bool isCostCalculated = false;
 
 
   getDetails()async{
-    double dis = await RiderPaymentModel.calculateDistance(StartLocation: Provider.of<RiderDetailsProvider>(context, listen: false).startLocation, EndLocation: Provider.of<RiderDetailsProvider>(context, listen: false).endLocation);
-    setState(() {
-      if(dis != 0.0)  distance = dis;
-          cost = RiderPaymentModel.calculateCost(TransportationMode: "car", distance: distance);
-          isCostCalculated = true;
-    });
+    try {
+      var response = await Dio().get('https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLongitude}&origins=${Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLongitude}&key=AIzaSyC8XOXvvxImxyxY6dFnOKIMTlbOM3X58Yw');
+      Map<String, dynamic> responseData = response.data;
+
+
+      String distanceText = responseData['rows'][0]['elements'][0]['distance']['text'];
+      String duration = responseData['rows'][0]['elements'][0]['duration']['text'];
+      var distance2 = responseData['rows'][0]['elements'][0]['duration']['value'];
+      print(distanceText);
+      print(duration);
+
+      setState(() {
+        distanceInKM = distanceText;
+        durationTime = duration;
+        distance = distance2 / 1000;
+        cost = (distance * 10).toInt();
+        isCostCalculated = true;
+      });
+
+    } catch (e) {
+      print(e);
+    }
 
   }
 
@@ -34,6 +53,8 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
   void initState() {
     super.initState();
     getDetails();
+    setState(() {
+    });
 
   }
   
@@ -61,15 +82,15 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
                     child: isCostCalculated ? Column(
                       children: [
                         const SizedBox(height: 30,),
-                        Text("Total Distance : $distance"),
+                        Text("Total Distance : $distanceInKM"),
                         const SizedBox(height: 30,),
-                        Text("Total Cost : $cost"),
+                        Text("Total Cost : $cost LKR"),
                         const SizedBox(height: 30,),
                         GestureDetector(
                           onTap: ()async{
                             bool nn =await RiderPaymentModel.MakeStripePayment(cost*100);
                             if(nn){
-                              var responce = await addTrip(uid: Provider.of<RiderDetailsProvider>(context, listen: false).userId, type: Provider.of<RiderDetailsProvider>(context, listen: false).mode, startDate: Provider.of<RiderDetailsProvider>(context, listen: false).startDate, endDate: Provider.of<RiderDetailsProvider>(context, listen: false).endDate, startLocation: Provider.of<RiderDetailsProvider>(context, listen: false).startLocation, endLocation: Provider.of<RiderDetailsProvider>(context, listen: false).endLocation, riderId: Provider.of<RiderDetailsProvider>(context, listen: false).riderId, travellingMode:Provider.of<RiderDetailsProvider>(context, listen: false).vehicle , cost: cost, distance: distance);
+                              var responce = await addTrip(uid: Provider.of<RiderDetailsProvider>(context, listen: false).userId, type: Provider.of<RiderDetailsProvider>(context, listen: false).mode, startDate: Provider.of<RiderDetailsProvider>(context, listen: false).startDate, endDate: Provider.of<RiderDetailsProvider>(context, listen: false).endDate, startLocation: Provider.of<RiderDetailsProvider>(context, listen: false).startLocation, endLocation: Provider.of<RiderDetailsProvider>(context, listen: false).endLocation, riderId: Provider.of<RiderDetailsProvider>(context, listen: false).riderId, travellingMode:Provider.of<RiderDetailsProvider>(context, listen: false).vehicle , cost: cost, distance: distance, startLocationLatitude: Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLatitude, startLocationLongitude: Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLongitude, endLocationLatitude: Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLatitude, endLocationLongitude: Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLongitude, duration: durationTime);
                               print(responce);
                               Navigator.push(context, MaterialPageRoute(builder: (context) => LandingPageWidget()));
                               final snackBar = SnackBar(

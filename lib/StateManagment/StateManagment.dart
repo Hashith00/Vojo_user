@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geocode/geocode.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 
 class HotelDetailsProvider extends ChangeNotifier{
@@ -10,6 +12,7 @@ class HotelDetailsProvider extends ChangeNotifier{
   late String hotelName;
   late String hotelUserId;
   late int numberOfRooms;
+
 
   HotelDetailsProvider({this.Price = 100, this.userId = "", this.hotelUserId = "", this.hotelName ="", this.numberOfRooms = 1});
 
@@ -61,8 +64,16 @@ class RiderDetailsProvider extends ChangeNotifier{
   late String userId;
   late String riderId;
   late String vehicle;
+  double? startLocationLatitude;
+  double? startLocationLongitude;
+  double? endLocationLatitude;
+  double? endLocationLongitude;
+  double? intermediateLocationLatitude;
+  double? intermediateLocationLongitude;
 
-  RiderDetailsProvider({this.startLocation = "", this.endLocation = "", this.intermediateLocation = "", this.endDate = "", this.startDate = "", this.mode ="", this.vehicle = ""});
+
+
+  RiderDetailsProvider({this.startLocation = "", this.endLocation = "", this.intermediateLocation = "", this.endDate = "", this.startDate = "", this.mode ="", this.vehicle = "" });
 
   void changeStartLocation({required String start}){
     startLocation = start;
@@ -106,6 +117,36 @@ class RiderDetailsProvider extends ChangeNotifier{
 
   void changeVehicle({required String selectedVehicle}){
     vehicle = selectedVehicle;
+    notifyListeners();
+  }
+
+  void changeStartLocationLat({required double StartCor}){
+    startLocationLatitude = StartCor;
+    notifyListeners();
+  }
+
+  void changeStartLocationLng({required double StartCor}){
+    startLocationLongitude = StartCor;
+    notifyListeners();
+  }
+
+  void changeEndLocationLat({required double EndCor}){
+    endLocationLatitude = EndCor;
+    notifyListeners();
+  }
+
+  void changeEndLocationLng({required double EndCor}){
+    endLocationLongitude = EndCor;
+    notifyListeners();
+  }
+
+  void changeIntermediateLocationLat({required double InterCor}){
+    intermediateLocationLatitude = InterCor;
+    notifyListeners();
+  }
+
+  void changeIntermediateLocationLng({required double InterCor}){
+    intermediateLocationLongitude = InterCor;
     notifyListeners();
   }
 }

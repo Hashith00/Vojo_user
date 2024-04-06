@@ -357,8 +357,16 @@ addTrip({
     String intermidiateLocation = "",
     String riderId = "",
     String travellingMode = "",
-  required double cost,
+  required int cost,
   required double distance,
+  double? startLocationLatitude,
+  double? startLocationLongitude,
+  double? endLocationLatitude,
+  double? endLocationLongitude,
+  double? intermediateLocationLatitude,
+  double? intermediateLocationLongitude,
+  String? duration
+
 
   }) async {
 
@@ -378,7 +386,15 @@ addTrip({
       "is_confirmed" : false,
       "travelling_Mode" : travellingMode,
       "cost" : cost,
-      "distance" : distance
+      "distance" : distance,
+      "startLocationLatitude" : startLocationLatitude,
+      "startLocationLongitude" : startLocationLongitude,
+      "endLocationLatitude" : endLocationLatitude,
+      "endLocationLongitude" : endLocationLongitude,
+      "intermediateLocationLatitude" : intermediateLocationLatitude,
+      "intermediateLocationLongitude" : intermediateLocationLongitude,
+      "duration" : duration
+
     };
 
     var result = await documentReferencer
@@ -545,4 +561,79 @@ CreateBooking({
   String documentId = documentReferencer.id;
 
   return response ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Testing Functions
+Future<Response> updateEmployeeTesting({
+  required String name,
+  required String position,
+  required String contactno,
+  required String docId,
+  DocumentReference? documentReferencer
+
+}) async {
+  Response response = Response();
+
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "employee_name": name,
+    "position": position,
+    "contact_no" : contactno
+  };
+
+  await documentReferencer!
+      .update(data)
+      .whenComplete(() {
+    response.code = 200;
+    response.message = "Sucessfully updated Employee";
+  })
+      .catchError((e) {
+    response.code = 500;
+    response.message = e;
+  });
+
+  return response;
+}
+
+
+// Add Travelling Mode
+Future<Response> updateTravellingModeTest({
+  required String travallingMode,
+  required String docId,
+  DocumentReference? documentReferencer
+}) async {
+  Response response = Response();
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "travelling_mode": travallingMode,
+  };
+
+  await documentReferencer!
+      .update(data)
+      .whenComplete(() {
+    response.code = 200;
+    response.message = "Sucessfully updated Trip Travelling Mode";
+  })
+      .catchError((e) {
+    response.code = 500;
+    response.message = e;
+  });
+
+  return response;
 }
