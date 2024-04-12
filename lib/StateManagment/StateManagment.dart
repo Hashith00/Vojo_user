@@ -12,7 +12,8 @@ class HotelDetailsProvider extends ChangeNotifier{
   late String hotelName;
   late String hotelUserId;
   late int numberOfRooms;
-
+  double? hotelLatitude;
+  double? hotelLongitude;
 
   HotelDetailsProvider({this.Price = 100, this.userId = "", this.hotelUserId = "", this.hotelName ="", this.numberOfRooms = 1});
 
@@ -48,6 +49,16 @@ class HotelDetailsProvider extends ChangeNotifier{
 
   void changeHotelRooms({required int NumberOfRooms}){
     numberOfRooms = NumberOfRooms;
+    notifyListeners();
+  }
+
+  void changeHotelLatitude({required double latitude}){
+    hotelLatitude = latitude;
+    notifyListeners();
+  }
+
+  void changeHotelLongitude({required double longitude}){
+    hotelLongitude= longitude;
     notifyListeners();
   }
 
@@ -149,4 +160,29 @@ class RiderDetailsProvider extends ChangeNotifier{
     intermediateLocationLongitude = InterCor;
     notifyListeners();
   }
+}
+
+
+class TempDetailsProvider extends ChangeNotifier{
+  late String startLocation;
+  double? lat;
+  double? long;
+
+  TempDetailsProvider({this.startLocation = ""});
+
+  void ChageLocation({required String location}){
+    startLocation = location;
+    notifyListeners();
+  }
+
+  void ChageLat({required double latitide}){
+    lat = latitide;
+    notifyListeners();
+  }
+
+  void Chagelng({required double longitude}){
+    long = longitude;
+    notifyListeners();
+  }
+
 }

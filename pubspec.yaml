@@ -111,6 +111,11 @@ dependencies:
   flutter_google_places_sdk: ^0.3.2+9
   modal_progress_hud_nsn: ^0.5.1
   gmaps_by_road_distance_calculator: ^2.0.5
+  map_location_picker: ^0.0.1
+  web_socket_channel: ^2.4.0
+  flutter_local_notifications: ^17.0.0
+  skeletonizer: ^1.0.1
+
 
 
 
@@ -155,6 +160,7 @@ flutter:
     - assets/images/car.png
     - assets/images/van.png
     - assets/images/cargif.gif
+    - assets/images/logo.png
     - assets/images/
     - assets/videos/
     - assets/audios/

@@ -436,6 +436,28 @@ response.message = e;
 return response;
 }
 
+Future<Response> deleteBooking({
+  required String docId,
+}) async {
+  Response response = Response();
+  DocumentReference documentReferencer =
+  _CollectionBooking.doc(docId);
+
+  await documentReferencer
+      .delete()
+      .whenComplete((){
+    response.code = 200;
+    response.message = "Sucessfully Deleted Employee";
+  })
+      .catchError((e) {
+    response.code = 500;
+    response.message = e;
+  });
+
+  return response;
+}
+
+
 getTripDetails({required String docId})async{
   CollectionReference trips = _firestore.collection('temptrip');
   DocumentSnapshot snapshot = await trips.doc(docId).get();
@@ -528,6 +550,8 @@ CreateBooking({
   required String hotelUserId,
   required int numberOfRooms,
   required double price,
+  double? locationLat,
+  double? locationLng
 }) async {
 
   Response response = Response();
@@ -541,7 +565,9 @@ CreateBooking({
     "hotel" : hotelName,
     'NumberOfRooms' : numberOfRooms,
     "HotelUserId" : hotelUserId,
-    "price" : price
+    "price" : price,
+    "hotelLat" : locationLat,
+    "hotelLng" : locationLng
 
    
   };

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:vojo/LocationSearchPage/LocationSearchPage.dart';
 import 'package:vojo/StateManagment/StateManagment.dart';
 import 'package:vojo/backend/backend.dart';
 import 'package:flutter/widgets.dart';
@@ -81,6 +82,11 @@ class _PickLocationPageState extends State<PickLocationPage>
     _tabController = TabController(length: 2, vsync: this);
     getCurrentUer();
     print(_auth.currentUser?.uid);
+    _startLocationContollerForReturnTrip = TextEditingController();
+    _intermidatelocationControllerForReturnTrip = TextEditingController();
+    _endlocationControllerForReturnTrip = TextEditingController();
+    _startLocationContollerForOnewayTrip = TextEditingController();
+    _endlocationControllerForOnewayTrip = TextEditingController();
 
   }
 
@@ -129,9 +135,15 @@ class _PickLocationPageState extends State<PickLocationPage>
   }
 
   bool _saving = false;
+  late TextEditingController _startLocationContollerForReturnTrip;
+  late TextEditingController _intermidatelocationControllerForReturnTrip;
+  late TextEditingController _endlocationControllerForReturnTrip;
+  late TextEditingController _startLocationContollerForOnewayTrip;
+  late TextEditingController _endlocationControllerForOnewayTrip;
 
   @override
   Widget build(BuildContext context) {
+
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => RiderDetailsProvider())
@@ -313,35 +325,61 @@ class _PickLocationPageState extends State<PickLocationPage>
                               ),
                               const SizedBox(height: 8.0),
                               TextFormField(
+                                onTap: ()async{
+                                  final result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>LocationSearchPage()));
+                                  setState(() {
+                                    _startLocationContollerForReturnTrip.text = result;
+                                    _startLocation = result;
+
+                                  });
+                                },
+                                controller: _startLocationContollerForReturnTrip,
                                 decoration: const InputDecoration(
                                   labelText: 'Start Destination',
                                   fillColor: Colors.white,
                                   filled: true,
                                 ),
                                 onChanged: (context) {
-                                  _startLocation = context;
+
                                 },
                               ),
                               const SizedBox(height: 8.0),
                               TextFormField(
+                                onTap: ()async{
+                                  final result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>LocationSearchPage()));
+                                  setState(() {
+                                    _intermidatelocationControllerForReturnTrip.text = result;
+                                    _intermidatelocation = result;
+
+                                  });
+                                },
+                                controller: _intermidatelocationControllerForReturnTrip,
                                 decoration: const InputDecoration(
                                   labelText: 'Intermediate Destination',
                                   fillColor: Colors.white,
                                   filled: true,
                                 ),
                                 onChanged: (context) {
-                                  _intermidatelocation = context;
+
                                 },
                               ),
                               const SizedBox(height: 8.0),
                               TextFormField(
+                                onTap: ()async{
+                                  final result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>LocationSearchPage()));
+                                  setState(() {
+                                    _endlocationControllerForReturnTrip.text = result;
+                                    _endlocation = result;
+
+                                  });
+                                },
+                                controller: _endlocationControllerForReturnTrip,
                                 decoration: const InputDecoration(
                                   labelText: 'End Destination',
                                   fillColor: Colors.white,
                                   filled: true,
                                 ),
                                 onChanged: (context) {
-                                  _endlocation = context;
                                 },
                               ),
                             ],
@@ -555,24 +593,41 @@ class _PickLocationPageState extends State<PickLocationPage>
                               ),
                               const SizedBox(height: 8.0),
                               TextFormField(
+                                onTap: ()async{
+                                  final result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>LocationSearchPage()));
+                                  setState(() {
+                                    _startLocationContollerForOnewayTrip.text = result;
+                                    _startLocation = result;
+
+                                  });
+                                },
+                                controller: _startLocationContollerForOnewayTrip,
                                 decoration: const InputDecoration(
                                   labelText: 'Start Destination',
                                   fillColor: Colors.white,
                                   filled: true,
                                 ),
                                 onChanged: (context) {
-                                  _startLocation = context;
+
                                 },
                               ),
                               const SizedBox(height: 8.0),
                               TextFormField(
+                                onTap: ()async{
+                                  final result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>LocationSearchPage()));
+                                  setState(() {
+                                    _endlocationControllerForOnewayTrip.text = result;
+                                    _endlocation = result;
+
+                                  });
+                                },
+                                controller: _endlocationControllerForOnewayTrip,
                                 decoration: const InputDecoration(
                                   labelText: 'End Destination',
                                   fillColor: Colors.white,
                                   filled: true,
                                 ),
                                 onChanged: (context) {
-                                  _endlocation = context;
                                 },
                               ),
                             ],

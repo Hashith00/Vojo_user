@@ -6,12 +6,17 @@ import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:vojo/ChatPage/ChatPage.dart';
+import 'package:vojo/CurretLocation/CurrentLocation.dart';
 import 'package:vojo/HotelPaymentPage/HotelPayment.dart';
+import 'package:vojo/LocationSearchPage/LocationSearchPage.dart';
 import 'package:vojo/MyJourneyPage/GoogleMapsWeidget.dart';
 import 'package:vojo/MyJourneyPage/MyJourneyPage.dart';
 import 'package:vojo/MyJourneyPage/SearchTilePage.dart';
 import 'package:vojo/MyJourneyPage/temp.dart';
+import 'package:vojo/NotificationService/NotificationService.dart';
+import 'package:vojo/PlacesSuggetionPage/PlacesSuggetionPage.dart';
 import 'package:vojo/StateManagment/StateManagment.dart';
+import 'package:vojo/TestLocation/TestLocations.dart';
 import 'package:vojo/rider_list_page/rider_list_page.dart';
 import 'package:vojo/stripPage/newStripe.dart';
 
@@ -41,6 +46,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
   await initFirebase();
+  //await LocalNotifications.init();
 
   runApp(MyApp());
 }
@@ -146,7 +152,7 @@ class _NavBarPageState extends State<NavBarPage> {
       'landingPage': LandingPageWidget(),
       'profilePage': ProfilePageWidget(),
       'myJourneyPage' : MyJourneyPage(),
-      'PaymentPage' : ChatPage(),
+      'PaymentPage' : PlacesSuggestionPage(),
 
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
@@ -196,13 +202,13 @@ class _NavBarPageState extends State<NavBarPage> {
                 iconSize: 24.0,
               ),
               GButton(
-                icon: Icons.travel_explore,
-                text: 'My journey',
+                icon: Icons.bookmark_add,
+                text: 'Journey',
                 iconSize: 24.0,
               ),
               GButton(
-                icon: Icons.message,
-                text: 'Chat',
+                icon: Icons.location_on,
+                text: 'Places',
                 iconSize: 24.0,
               )
             ],

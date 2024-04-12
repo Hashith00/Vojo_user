@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vojo/HotelDetailsPage/HotelDetailsPage.dart';
-import 'package:vojo/rider_details_page/rider_details_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HotelListPage extends StatefulWidget {
