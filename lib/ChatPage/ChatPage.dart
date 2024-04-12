@@ -35,8 +35,23 @@ class _ChatPageState extends State<ChatPage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          title: Row(
+            children: [
+              FloatingActionButton.small(onPressed: (){
+                Navigator.pop(context);
+              },
+                  child: Icon(Icons.arrow_back, color: Colors.black,),
+                backgroundColor: Colors.white70,
+              ),
+              Text("Back")
+            ],
+          ),
+        ),
         body: SafeArea(
           child: Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,

@@ -28,8 +28,8 @@ class _PickHotelOrRiderState extends State<PickHotelOrRider> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => PickLocationPage()));
                   },
                   child: Container(
-                    height: 200,
-                    width: 200,
+                    height: 180,
+                    width: 180,
                     padding: EdgeInsets.all(20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
@@ -39,8 +39,8 @@ class _PickHotelOrRiderState extends State<PickHotelOrRider> {
                       children: [
                         Container(
                           margin: EdgeInsets.only(bottom: 20),
-                          height: 100,
-                            width: 100,
+                          height: 80,
+                            width: 80,
                             child: Image(image: AssetImage('assets/images/cycle.png'))),
                         Text("Book a Rider", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),)
                       ],
@@ -52,8 +52,8 @@ class _PickHotelOrRiderState extends State<PickHotelOrRider> {
                     Navigator.push(context, MaterialPageRoute(builder: (context) => HotelDateSelectingPage()));
                   },
                   child: Container(
-                    height: 200,
-                    width: 200,
+                    height: 180,
+                    width: 180,
                     padding: EdgeInsets.all(20),
                     margin: EdgeInsets.only(left: 10),
                     decoration: BoxDecoration(
@@ -64,8 +64,8 @@ class _PickHotelOrRiderState extends State<PickHotelOrRider> {
                       children: [
                         Container(
                             margin: EdgeInsets.only(bottom: 20),
-                            height: 100,
-                            width: 100,
+                            height: 80,
+                            width: 80,
                             child: Image(image: AssetImage('assets/images/car.png'))),
                         Text("Book a Hotel", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),)
                       ],

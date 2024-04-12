@@ -103,6 +103,8 @@ class _HoteldetailspageState extends State<Hoteldetailspage> {
                       Provider.of<HotelDetailsProvider>(context, listen: false).changeHotelName(HotelName: hotelDeatils['hotelName']);
                       Provider.of<HotelDetailsProvider>(context, listen: false).changeHotelUserId(HotelUserId: hotelDeatils['hotelUserId']);
                       Provider.of<HotelDetailsProvider>(context, listen: false).changeHotelRooms(NumberOfRooms: numberOfRooms);
+                      Provider.of<HotelDetailsProvider>(context, listen: false).changeHotelLatitude(latitude: hotelDeatils['locationLat']);
+                      Provider.of<HotelDetailsProvider>(context, listen: false).changeHotelLongitude(longitude: hotelDeatils['locationLng']);
 
 
                        context.read<HotelDetailsProvider>().changePrice(HotelPrice: price*100);

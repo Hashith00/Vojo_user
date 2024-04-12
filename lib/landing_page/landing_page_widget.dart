@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:vojo/Conatants/Constans.dart';
 import 'package:vojo/EditTrip_page/EditTrip_page.dart';
 import 'package:vojo/PickHotelOrRoderPage/PickHotelOrRiderPage.dart';
 
@@ -60,23 +61,7 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-      appBar: MediaQuery.sizeOf(context).width <= 991.0
-          ? AppBar(
-              backgroundColor: Color(0xFF311B92),
-              automaticallyImplyLeading: false,
-              title: Text(
-                'My Profile',
-                style: TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              actions: [],
-              centerTitle: false,
-              elevation: 0.0,
-            )
-          : null,
+
       body: SafeArea(
         top: true,
         child: Row(
@@ -127,8 +112,24 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                   children: [
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
+                                       Row(
+                                         children: [
+                                           Container(
+                                             padding: const EdgeInsetsDirectional
+                                                 .fromSTEB(0.0, 3.0, 0.0, 0.0),
+                                             height: 40,
+                                             width: 40,
+                                             decoration: BoxDecoration(
+                                               borderRadius: BorderRadius.circular(10),
+                                             ),
+                                             child: Image.asset("assets/images/logo.png"),
+                                           ),
+                                           SizedBox(width: 10,),
+                                           Center(child: Text("VOJO", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, fontFamily: primaryFontFamilty),),)
+                                         ],
+                                       ),
                                         Padding(
                                           padding: const EdgeInsetsDirectional
                                               .fromSTEB(0.0, 3.0, 0.0, 0.0),
