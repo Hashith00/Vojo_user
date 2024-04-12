@@ -61,6 +61,7 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+
       body: SafeArea(
         top: true,
         child: Row(
@@ -74,6 +75,9 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     children: [
+                      SizedBox(
+                        height: 20,
+                      ),
                       Align(
                         alignment: AlignmentDirectional(0.00, -1.00),
                         child: Padding(
@@ -99,8 +103,7 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                       .secondaryBackground,
                                   borderRadius: BorderRadius.circular(12.0),
                                   border: Border.all(
-                                    color:
-                                        FlutterFlowTheme.of(context).alternate,
+                                    color: Color(0xFF311B92),
                                     width: 1.0,
                                   ),
                                 ),
@@ -231,12 +234,6 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                             },
                                           ),
                                         ),
-                                        Divider(
-                                          height: 2.0,
-                                          thickness: 1.0,
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
-                                        ),
                                       ],
                                     ),
                                   ],
@@ -246,27 +243,37 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                           ),
                         ),
                       ),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.network(
-                          'https://images.unsplash.com/photo-1678496479367-28592d3620a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxNHx8Y2FsbWluZyUyMG5hdHVyZXxlbnwwfHx8fDE3MDA2NTk5ODZ8MA&ixlib=rb-4.0.3&q=80&w=1080',
-                          width: 390.0,
-                          height: 200.0,
-                          fit: BoxFit.cover,
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.0, vertical: 10.0),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: Image.network(
+                            'https://images.unsplash.com/photo-1678496479367-28592d3620a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxNHx8Y2FsbWluZyUyMG5hdHVyZXxlbnwwfHx8fDE3MDA2NTk5ODZ8MA&ixlib=rb-4.0.3&q=80&w=1080',
+                            width: 390.0,
+                            height: 200.0,
+                            fit: BoxFit.cover,
+                          ),
                         ),
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                       Align(
                         alignment: AlignmentDirectional(-1.00, 0.00),
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
-                              20.0, 30.0, 0.0, 0.0),
+                              20.0, 10.0, 0.0, 0.0),
                           child: Text(
                             'Pending Rides ',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
                                   fontFamily: 'Readex Pro',
-                                  fontSize: 20.0,
+                                  fontSize: 22.0,
                                   fontWeight: FontWeight.w500,
                                 ),
                           ),
@@ -346,8 +353,12 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                                   ),
                                                 ),
                                                 trailing: AvatarGlow(
-                                                    glowColor: Color(0xFF311B92),
-                                                    child: Icon(Icons.circle, color:Color(0x1A311B92) ,)),
+                                                    glowColor:
+                                                        Color(0xFF311B92),
+                                                    child: Icon(
+                                                      Icons.circle,
+                                                      color: Color(0x1A311B92),
+                                                    )),
                                                 //onTap: onTap,
                                               ),
                                               const SizedBox(height: 4.0),
@@ -357,11 +368,15 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                                         horizontal: 16.0),
                                                 child: TextButton(
                                                   onPressed: () {
-                                                    Navigator.push(context, MaterialPageRoute(
-                                                      builder: (context) =>  EditTrip(id: docId,),
-                                                    ),);
-
-
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            EditTrip(
+                                                          id: docId,
+                                                        ),
+                                                      ),
+                                                    );
                                                   },
                                                   style: TextButton.styleFrom(
                                                     backgroundColor:
@@ -386,32 +401,35 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                               const SizedBox(height: 1.0),
                                               Container(
                                                 margin:
-                                                const EdgeInsets.symmetric(
-                                                    horizontal: 16.0),
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16.0),
                                                 child: TextButton(
-                                                  onPressed: ()async {
+                                                  onPressed: () async {
                                                     deleteTrip(docId: docId);
                                                   },
                                                   style: TextButton.styleFrom(
-                                                    backgroundColor: Color(0xFFFFFFFF),
+                                                    backgroundColor:
+                                                        Color(0xFFFFFFFF),
                                                     padding:
-                                                    const EdgeInsets.all(
-                                                        12.0),
-                                                      side: BorderSide(
-                                                        color: Color(0xFF311B92), // your color here
-                                                        width: 1,
-                                                      ),
+                                                        const EdgeInsets.all(
+                                                            12.0),
+                                                    side: BorderSide(
+                                                      color: Color(
+                                                          0xFF311B92), // your color here
+                                                      width: 1,
+                                                    ),
                                                     shape:
-                                                    RoundedRectangleBorder(
+                                                        RoundedRectangleBorder(
                                                       borderRadius:
-                                                      BorderRadius.circular(
-                                                          8.0),
+                                                          BorderRadius.circular(
+                                                              8.0),
                                                     ),
                                                   ),
                                                   child: const Text(
                                                     'Remove Booking',
                                                     style: TextStyle(
-                                                        color: Color(0xFF311B92)),
+                                                        color:
+                                                            Color(0xFF311B92)),
                                                   ),
                                                 ),
                                               ),
@@ -446,7 +464,6 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                         ),
                       ),
                       CreateJourney(hasjourney: tripNote),
-
                     ].addToEnd(SizedBox(height: 72.0)),
                   ),
                 ),
@@ -466,56 +483,61 @@ class CreateJourney extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(20.0, 30.0, 20.0, 0.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       child: Container(
-          width: double.infinity,
-          height: 130.0,
-          decoration: BoxDecoration(
-            color: FlutterFlowTheme.of(context).secondaryBackground,
-            borderRadius: BorderRadius.circular(12.0),
-          ),
+        decoration: BoxDecoration(
+          color: FlutterFlowTheme.of(context).secondaryBackground,
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: IntrinsicHeight(
           child: Container(
             decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(20)),
+              border: Border.all(color: Color(0xFF311B92)),
+              borderRadius: BorderRadius.circular(20),
+            ),
             padding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   "${hasjourney}",
                   style: TextStyle(fontSize: 19, fontWeight: FontWeight.w400),
                 ),
                 SizedBox(
-                  height: 50,
+                  height: 20,
                 ),
-                Container(
-                    alignment: Alignment.bottomRight,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => PickHotelOrRider()),
-                        );
-
-                       // Navigator.pushNamed(context, "/picklocation");
-                      },
-                      child: Text("Let's Start",
-                          style: TextStyle(
-                            fontSize: 19,
-                            fontWeight: FontWeight.w400,
-                            decoration: TextDecoration.underline,
-                          )),
-                    )),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PickHotelOrRider()),
+                      );
+                    },
+                    child: Text(
+                      "Let's Start",
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: FontWeight.bold,
+                        decoration: TextDecoration.underline,
+                        color: Color(0xFF311B92),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }
 
 showAlertDialogBox(BuildContext context) {
-
   // set up the button
   Widget okButton = TextButton(
     child: Text("OK"),

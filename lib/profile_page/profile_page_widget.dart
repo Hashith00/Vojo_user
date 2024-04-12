@@ -135,7 +135,8 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget>
                               child: CachedNetworkImage(
                                 fadeInDuration: Duration(milliseconds: 500),
                                 fadeOutDuration: Duration(milliseconds: 500),
-                                imageUrl: "https://images.unsplash.com/photo-1434394354979-a235cd36269d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fG1vdW50YWluc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60",
+                                imageUrl:
+                                    "https://images.unsplash.com/photo-1434394354979-a235cd36269d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fG1vdW50YWluc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60",
                                 width: 100.0,
                                 height: 100.0,
                                 fit: BoxFit.cover,
@@ -411,13 +412,15 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget>
                   },
                   text: 'Log Out',
                   options: FFButtonOptions(
-                    width: 150.0,
+                    width: MediaQuery.of(context).size.width * 0.6,
                     height: 44.0,
                     padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                     iconPadding:
                         EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                    color: FlutterFlowTheme.of(context).primaryBackground,
-                    textStyle: FlutterFlowTheme.of(context).bodyMedium,
+                    color: Color(0xFF311B92),
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                    ),
                     elevation: 0.0,
                     borderSide: BorderSide(
                       color: FlutterFlowTheme.of(context).lineColor,

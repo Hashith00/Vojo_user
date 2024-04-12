@@ -5,6 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_web_plugins/url_strategy.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rxdart/rxdart.dart';
+
 import 'package:vojo/ChatPage/ChatPage.dart';
 import 'package:vojo/CurretLocation/CurrentLocation.dart';
 import 'package:vojo/HotelPaymentPage/HotelPayment.dart';
@@ -36,10 +37,10 @@ import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Stripe.publishableKey = "pk_test_51OSCmFCem4pjyRAzDzsny1yS8fm8RQRjqQDNryrarztSx6kxpvty3SZMx3jaWcCE54pyo4Zmtv3DWMfzNa65V5HH00p1wiVzRu";
+  Stripe.publishableKey =
+      "pk_test_51OSCmFCem4pjyRAzDzsny1yS8fm8RQRjqQDNryrarztSx6kxpvty3SZMx3jaWcCE54pyo4Zmtv3DWMfzNa65V5HH00p1wiVzRu";
   Stripe.merchantIdentifier = 'merchant.flutter.stripe.test';
   Stripe.urlScheme = 'flutterstripe';
   await Stripe.instance.applySettings();
@@ -161,15 +162,14 @@ class _NavBarPageState extends State<NavBarPage> {
       providers: [
         ChangeNotifierProvider(create: (context) => HotelDetailsProvider()),
         ChangeNotifierProvider(create: (context) => RiderDetailsProvider()),
-
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         routes: {
-          '/picklocation' : (context) => PickLocationPage(),
-          '/transport' : (context) => TransportModePage(),
-          '/riderList' : (context) => RidersListPage(),
-          '/landing' : (context) => LandingPageWidget(),
+          '/picklocation': (context) => PickLocationPage(),
+          '/transport': (context) => TransportModePage(),
+          '/riderList': (context) => RidersListPage(),
+          '/landing': (context) => LandingPageWidget(),
         },
         home: Scaffold(
           body: _currentPage ?? tabs[_currentPageName],
@@ -207,8 +207,10 @@ class _NavBarPageState extends State<NavBarPage> {
                 iconSize: 24.0,
               ),
               GButton(
+
                 icon: Icons.location_on,
                 text: 'Places',
+
                 iconSize: 24.0,
               )
             ],
