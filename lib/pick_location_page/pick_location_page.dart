@@ -150,6 +150,7 @@ class _PickLocationPageState extends State<PickLocationPage>
       ],
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(0xFF311B92),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {

@@ -142,7 +142,7 @@ class _RidersBookingPageState extends State<RidersBookingPage> {
                   buildBoxLong('Brand', '${widget.vehicleDeatils["brand"]}'),
                   buildBoxLong('Color', '${widget.vehicleDeatils["color"]}'),
                   buildBoxLong('Vehicle Number', '${widget.vehicleDeatils["vehicle_no"]}'),
-                  buildBoxLong('Maximum Passengers', '${widget.vehicleDeatils["max_passenger"]}'),
+                  buildBoxLong('Passengers', '${widget.vehicleDeatils["max_passenger"]}'),
                 ],
               ),
               const SizedBox(height: 16.0),
@@ -198,13 +198,13 @@ class _RidersBookingPageState extends State<RidersBookingPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 30.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   SizedBox(
-                    width: 180.0,
-                    height: 50.0,
+                    width: 150.0,
+                    height: 40.0,
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pop(context);
@@ -223,8 +223,8 @@ class _RidersBookingPageState extends State<RidersBookingPage> {
                     ),
                   ),
                   SizedBox(
-                    width: 180.0,
-                    height: 50.0,
+                    width: 150.0,
+                    height: 40.0,
                     child: ElevatedButton(
                       onPressed: () async {
                         Provider.of<RiderDetailsProvider>(context, listen: false).chageRiderId(selectedRiderId: widget.vehicleDeatils["rider_id"]);
