@@ -238,7 +238,7 @@ class RiderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => SingleTripMapPage(startLat: bookingData["startLocationLatitude"], startLng: bookingData["startLocationLongitude"], endLat: bookingData["endLocationLatitude"], endLng: bookingData["endLocationLongitude"], distance: bookingData["distance"],cost: bookingData["cost"],duration: bookingData["duration"],)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => SingleTripMapPage(startLat: bookingData["startLocationLatitude"], startLng: bookingData["startLocationLongitude"], endLat: bookingData["endLocationLatitude"], endLng: bookingData["endLocationLongitude"], distance: bookingData["distance"],cost: bookingData["cost"],duration: bookingData["duration"])));
       },
       child: Container(
         padding: EdgeInsets.all(10),
@@ -303,7 +303,7 @@ class HotelBookingCard extends StatelessWidget {
     return GestureDetector(
       onTap: (){
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) => SingleHotelDetailsPage(latitude: bookingData["hotelLat"], longitude: bookingData["hotelLng"], hotelName: bookingData["hotel"], hotelDocId: booking.id)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => SingleHotelDetailsPage(latitude: bookingData["hotelLat"], longitude: bookingData["hotelLng"], hotelName: bookingData["hotel"], hotelDocId: booking.id, hotelId: bookingData["HotelUserId"], startingDate: bookingData["start_date"], endingDate: bookingData['end_date'],)));
       },
       child: Container(
         padding: EdgeInsets.all(10),
