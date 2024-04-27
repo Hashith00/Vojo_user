@@ -467,6 +467,14 @@ getTripDetails({required String docId})async{
 
 }
 
+getHotelDetails({required String hotelId})async{
+  CollectionReference trips = _firestore.collection('hotels');
+  DocumentSnapshot snapshot = await trips.doc(hotelId).get();
+  var userData = snapshot.data() as Map<String, dynamic>;
+
+  return userData;
+}
+
 updateTripStartDate({required String docId, required String date})async{
   DocumentReference documentReferencer =
   _CollectionTip.doc(docId);
