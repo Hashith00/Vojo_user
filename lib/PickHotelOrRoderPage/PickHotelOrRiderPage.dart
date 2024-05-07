@@ -63,10 +63,9 @@ class _PickHotelOrRiderState extends State<PickHotelOrRider> {
                     child: Column(
                       children: [
                         Container(
-                            margin: EdgeInsets.only(bottom: 20),
-                            height: 80,
-                            width: 80,
-                            child: Image(image: AssetImage('assets/images/car.png'))),
+                            height: 100,
+                            width: 100,
+                            child: Image(image: AssetImage('assets/images/hotel.png'))),
                         Text("Book a Hotel", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),)
                       ],
                     ),

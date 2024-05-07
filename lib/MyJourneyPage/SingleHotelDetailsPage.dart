@@ -13,7 +13,8 @@ class SingleHotelDetailsPage extends StatefulWidget {
   final String hotelId;
   final Timestamp startingDate;
   final Timestamp endingDate;
-  const SingleHotelDetailsPage({super.key, required this.latitude, required this.longitude, required this.hotelName, required this.hotelDocId, required this.hotelId, required this.startingDate, required this.endingDate});
+  final String photoUrl;
+  const SingleHotelDetailsPage({super.key, required this.latitude, required this.longitude, required this.hotelName, required this.hotelDocId, required this.hotelId, required this.startingDate, required this.endingDate, required this.photoUrl});
 
   @override
   State<SingleHotelDetailsPage> createState() => _SingleHotelDetailsPageState();
@@ -45,7 +46,7 @@ class _SingleHotelDetailsPageState extends State<SingleHotelDetailsPage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   image: DecorationImage(
-                    image: NetworkImage("https://img.freepik.com/free-photo/luxury-classic-modern-bedroom-suite-hotel_105762-1787.jpg"),
+                    image: NetworkImage("${widget.photoUrl}"),
                     fit: BoxFit.fill,
                     colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.4),
