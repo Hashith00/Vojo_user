@@ -4,7 +4,7 @@
 Vojo User is an all-in-one platform designed for travelers to conveniently access three main services: finding cabs, booking hotels, and discovering places of interest in their destination. This project is built using Flutter, ensuring compatibility with both Android and iOS devices.
 
 ## Features
-- **Cab Services:** Users can easily find and book cabs for transportation within their destination city.
+- **Rides :** Users can easily find and book cabs for transportation within their destination city.
 - **Hotel Booking:** Seamless hotel booking functionality allows travelers to reserve accommodations hassle-free.
 - **Places of Interest:** Discover and explore nearby attractions, restaurants, landmarks, and more.
 
