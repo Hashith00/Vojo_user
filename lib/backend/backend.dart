@@ -415,26 +415,29 @@ addTrip({
   }
 
 // Deleting A trip
-Future<Response> deleteTrip({
-required String docId,
-}) async {
-Response response = Response();
-DocumentReference documentReferencer =
-_CollectionTip.doc(docId);
+  Future<Response> RequestDeleteTrip({required String docId}) async {
+  Response response = Response();
+  DocumentReference documentReferencer =
+  _CollectionTip.doc(docId);
 
-await documentReferencer
-    .delete()
-    .whenComplete((){
-response.code = 200;
-response.message = "Sucessfully Deleted Employee";
-})
-    .catchError((e) {
-response.code = 500;
-response.message = e;
-});
 
-return response;
-}
+  Map<String, dynamic> data = <String, dynamic>{
+    "Remove_Trip_by_Admin": false,
+  };
+
+  await documentReferencer
+      .update(data)
+      .whenComplete(() {
+    response.code = 200;
+    response.message = "Sucessfully Added Pending deletion for the Trip ";
+  })
+      .catchError((e) {
+    response.code = 500;
+    response.message = e;
+  });
+
+  return response;
+  }
 
 Future<Response> deleteBooking({
   required String docId,
@@ -558,6 +561,8 @@ CreateBooking({
   required String hotelUserId,
   required int numberOfRooms,
   required double price,
+  required String hotelPhotoUrl,
+  String? hotelLocation,
   double? locationLat,
   double? locationLng
 }) async {
@@ -575,7 +580,9 @@ CreateBooking({
     "HotelUserId" : hotelUserId,
     "price" : price,
     "hotelLat" : locationLat,
-    "hotelLng" : locationLng
+    "hotelLng" : locationLng,
+    "hotelPhotoUrl" : hotelPhotoUrl,
+    "hotelLocation" : hotelLocation
 
    
   };

@@ -5,7 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HotelDetailsProvider extends ChangeNotifier{
   static final DateTime _defaultDateTime = DateTime.now();
-  late int Price;
+  late double Price;
   late String userId;
   late DateTime startDate;
   late DateTime endDate;
@@ -14,10 +14,12 @@ class HotelDetailsProvider extends ChangeNotifier{
   late int numberOfRooms;
   double? hotelLatitude;
   double? hotelLongitude;
+  String? hotelUrl;
+  String? hotelLocation;
 
   HotelDetailsProvider({this.Price = 100, this.userId = "", this.hotelUserId = "", this.hotelName ="", this.numberOfRooms = 1});
 
-  void changePrice({required int HotelPrice}){
+  void changePrice({required double HotelPrice}){
     Price = HotelPrice;
     notifyListeners();
   }
@@ -59,6 +61,16 @@ class HotelDetailsProvider extends ChangeNotifier{
 
   void changeHotelLongitude({required double longitude}){
     hotelLongitude= longitude;
+    notifyListeners();
+  }
+
+  void chageHotelPhotoUrl({required String hotelPhotoUrl}){
+    hotelUrl = hotelPhotoUrl;
+    notifyListeners();
+  }
+
+  void chageHotelLocation({required String location}){
+    hotelLocation = location;
     notifyListeners();
   }
 

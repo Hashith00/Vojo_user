@@ -16,6 +16,7 @@ class RidersBookingPage extends StatefulWidget {
 
   var vehicleDeatils;
 
+
   RidersBookingPage({super.key, required this.vehicleDeatils});
 
   @override
@@ -25,6 +26,10 @@ class RidersBookingPage extends StatefulWidget {
 class _RidersBookingPageState extends State<RidersBookingPage> {
   var rider;
   var docid;
+  late String dirverName;
+  late String dirverLocation;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -65,23 +70,27 @@ class _RidersBookingPageState extends State<RidersBookingPage> {
         ChangeNotifierProvider(create: (context) => RiderDetailsProvider())
       ],
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFF311B92),
-          title: Text('Book Your Ride'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-
-          elevation: 5.0,
-        ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              GestureDetector(
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(5, 10, 10, 20),
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40),
+                      color: Colors.grey.shade200
+                  ),
+                  child: Icon(Icons.arrow_back, color: Colors.black87,),
+
+                ),
+                onTap: (){
+                  Navigator.pop(context);
+                },
+              ),
                Text(
                 '${widget.vehicleDeatils["brand"]} ${widget.vehicleDeatils["model"]}',
                 style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
@@ -98,8 +107,8 @@ class _RidersBookingPageState extends State<RidersBookingPage> {
                 ],
               ),
               const SizedBox(height: 16.0),
-              Image.network(
-                'https://purepng.com/public/uploads/large/purepng.com-ford-mustang-shelby-gt500-carcarvehicletransportford-9615246653649tcqd.png',
+              Image.asset(
+                "assets/images/car_tesla.png",
                 height: 160.0,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -107,7 +116,7 @@ class _RidersBookingPageState extends State<RidersBookingPage> {
               const SizedBox(height: 16.0),
               const Text(
                 'Specifications',
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 16.0),
               Row(
@@ -131,21 +140,42 @@ class _RidersBookingPageState extends State<RidersBookingPage> {
 
                 ],
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 25.0),
               const Text(
                 'Features',
-                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 16.0),
               Column(
                 children: [
                   buildBoxLong('Brand', '${widget.vehicleDeatils["brand"]}'),
+                  const Divider(
+                    height: 10,
+                    thickness: 1,
+                    indent: 20,
+                    endIndent: 0,
+                    color: Colors.grey,
+                  ),
                   buildBoxLong('Color', '${widget.vehicleDeatils["color"]}'),
+                  const Divider(
+                    height: 10,
+                    thickness: 1,
+                    indent: 20,
+                    endIndent: 0,
+                    color: Colors.grey,
+                  ),
                   buildBoxLong('Vehicle Number', '${widget.vehicleDeatils["vehicle_no"]}'),
+                  const Divider(
+                    height: 10,
+                    thickness: 1,
+                    indent: 20,
+                    endIndent: 0,
+                    color: Colors.grey,
+                  ),
                   buildBoxLong('Passengers', '${widget.vehicleDeatils["max_passenger"]}'),
                 ],
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 30.0),
               const Text(
                 'Driver Details',
                 style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
@@ -261,10 +291,6 @@ Widget buildBoxLong(String label, String text) {
     height: 50,
     margin: const EdgeInsets.all(2.0),
     decoration: BoxDecoration(
-      border: Border.all(
-        color: const Color(0xFF311B92),
-        width: 2.0,
-      ),
       borderRadius: BorderRadius.circular(5),
     ),
     child: Row(
@@ -304,10 +330,7 @@ Widget buildBoxShort(String label, String text, IconData iconData) {
     height: 90,
     margin: const EdgeInsets.all(2.0),
     decoration: BoxDecoration(
-      border: Border.all(
-        color: const Color(0xFF311B92),
-        width: 2.0,
-      ),
+
       borderRadius: BorderRadius.circular(5),
     ),
     child: Column(
