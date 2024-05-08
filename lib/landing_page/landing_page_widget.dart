@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:vojo/Conatants/Constans.dart';
+import 'package:vojo/DeletedRidesPage/DeletedRidesPage.dart';
 import 'package:vojo/EditTrip_page/EditTrip_page.dart';
+import 'package:vojo/MyJourneyPage/MyJourneyPage.dart';
+import 'package:vojo/PendingRidersPage/PandingRidesPage.dart';
 import 'package:vojo/PickHotelOrRoderPage/PickHotelOrRiderPage.dart';
 
 import '/auth/firebase_auth/auth_util.dart';
@@ -28,13 +31,46 @@ class LandingPageWidget extends StatefulWidget {
 class _LandingPageWidgetState extends State<LandingPageWidget> {
   final _auth = FirebaseAuth.instance;
   late LandingPageModel _model;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  int totalTrips = 0;
+  int totalPendingTrips = 0;
+  int SuccessfullTrips = 0;
+  int totalAddedtoCanceltrips = 0;
+  Color shifttedColor = primaryColorLight;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  Future<void> getUserStatus()async{
+    var currentUserId = _auth.currentUser!.uid;
+
+    final trips =  await _firestore.collection("temptrip").get();
+    for(var trip in trips.docs){
+      if(trip.data()["user_id"] == currentUserId && trip.data()["is_confirmed"] == true){
+        setState(() {
+          totalTrips += 1;
+        });
+      }else if(trip.data()["user_id"] == currentUserId && trip.data()["is_confirmed"] == false){
+        setState(() {
+          totalPendingTrips += 1;
+          shifttedColor = warningColor;
+        });
+
+      }else if(trip.data()["user_id"] == currentUserId && trip.data()["Remove_Trip_by_Admin"] == false){
+        setState(() {
+          totalAddedtoCanceltrips += 1;
+          shifttedColor = warningColor;
+        });
+      }
+
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    getUserStatus();
     _model = createModel(context, () => LandingPageModel());
+
   }
 
   @override
@@ -102,34 +138,15 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                   color: FlutterFlowTheme.of(context)
                                       .secondaryBackground,
                                   borderRadius: BorderRadius.circular(12.0),
-                                  border: Border.all(
-                                    color: Color(0xFF311B92),
-                                    width: 1.0,
-                                  ),
+
                                 ),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
                                     Row(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                       Row(
-                                         children: [
-                                           Container(
-                                             padding: const EdgeInsetsDirectional
-                                                 .fromSTEB(0.0, 3.0, 0.0, 0.0),
-                                             height: 40,
-                                             width: 40,
-                                             decoration: BoxDecoration(
-                                               borderRadius: BorderRadius.circular(10),
-                                             ),
-                                             child: Image.asset("assets/images/logo.png"),
-                                           ),
-                                           SizedBox(width: 10,),
-                                           Center(child: Text("VOJO", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, fontFamily: primaryFontFamilty),),)
-                                         ],
-                                       ),
                                         Padding(
                                           padding: const EdgeInsetsDirectional
                                               .fromSTEB(0.0, 3.0, 0.0, 0.0),
@@ -141,12 +158,21 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                             onTap: () async {
                                               context.pushNamed('profilePage');
                                             },
-                                            child: Icon(
-                                              Icons.location_history,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryText,
-                                              size: 40.0,
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  height: 50,
+                                                  width: 50,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(50),
+                                                    image: DecorationImage(
+                                                      image: NetworkImage("https://media.licdn.com/dms/image/C4D03AQEeEyYzNtDq7g/profile-displayphoto-shrink_400_400/0/1524234561685?e=2147483647&v=beta&t=CJY6IY9Bsqc2kiES7HZmnMo1_uf11zHc9DQ1tyk7R7Y"),
+                                                      fit: BoxFit.fill,
+
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
@@ -183,6 +209,7 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                               }
                                               final rowUsersRecord =
                                                   snapshot.data!;
+
                                               return Row(
                                                 mainAxisSize: MainAxisSize.max,
                                                 children: [
@@ -209,9 +236,7 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                                                     0.0),
                                                             child: Text(
                                                               'Welcome',
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .labelMedium,
+                                                              style: TextStyle(fontSize: 30, fontFamily: primaryFontFamilty, fontWeight: FontWeight.w300),
                                                             ),
                                                           ),
                                                           Text(
@@ -219,11 +244,9 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                                                 String>(
                                                               rowUsersRecord
                                                                   .displayName,
-                                                              'No',
+                                                              'No Name',
                                                             ),
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .headlineSmall,
+                                                            style: TextStyle(fontSize: 30, fontFamily: primaryFontFamilty, fontWeight: FontWeight.w700)
                                                           ),
                                                         ],
                                                       ),
@@ -251,219 +274,168 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                             horizontal: 20.0, vertical: 10.0),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(8.0),
-                          child: Image.network(
-                            'https://images.unsplash.com/photo-1678496479367-28592d3620a9?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwxNHx8Y2FsbWluZyUyMG5hdHVyZXxlbnwwfHx8fDE3MDA2NTk5ODZ8MA&ixlib=rb-4.0.3&q=80&w=1080',
+                          child: Image.asset(
+                            'assets/images/vojo_travel.png',
                             width: 390.0,
-                            height: 200.0,
+                            height: 250.0,
                             fit: BoxFit.cover,
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
+
                       Align(
                         alignment: AlignmentDirectional(-1.00, 0.00),
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               20.0, 10.0, 0.0, 0.0),
                           child: Text(
-                            'Pending Rides ',
+                            'My Status ',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
-                                  fontFamily: 'Readex Pro',
-                                  fontSize: 22.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                              fontFamily: primaryFontFamilty,
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ),
+                      SizedBox(height: 15,),
                       Container(
-                        margin: EdgeInsets.all(10),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              StreamBuilder<QuerySnapshot>(
-                                stream: _firestore
-                                    .collection("temptrip")
-                                    .snapshots(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
-                                    // Use hasData instead of != null
-                                    final messages = snapshot.data!.docs;
-                                    List<Widget> rides = [];
-
-                                    for (var message in messages) {
-                                      final tripData = message.data() as Map<
-                                          String, dynamic>; // Explicit cast
-                                      //var messageText = messageData["end_date"];
-                                      //messagesList.add(Text('$messageText'));
-                                      String docId = message.id;
-
-                                      final tripCard = Container(
-                                        child: Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              vertical: 8.0, horizontal: 16.0),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                            border: Border.all(
-                                              color: const Color(0xFF311B92),
-                                              width: 2.0,
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey
-                                                    .withOpacity(0.5),
-                                                spreadRadius: 2,
-                                                blurRadius: 5,
-                                                offset: const Offset(0, 3),
-                                              ),
-                                            ],
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.stretch,
-                                            children: [
-                                              ListTile(
-                                                title: Text(
-                                                  "${tripData["start_location"]} to  ${tripData["end_location"]}",
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                subtitle: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          top: 8.0),
-                                                  child: Row(
-                                                    children: [
-                                                      const Icon(Icons.person,
-                                                          size: 16.0),
-                                                      const SizedBox(
-                                                          width: 8.0),
-                                                      Text(
-                                                          "Booked a  ${tripData["travelling_mode"]}"),
-                                                    ],
-                                                  ),
-                                                ),
-                                                trailing: AvatarGlow(
-                                                    glowColor:
-                                                        Color(0xFF311B92),
-                                                    child: Icon(
-                                                      Icons.circle,
-                                                      color: Color(0x1A311B92),
-                                                    )),
-                                                //onTap: onTap,
-                                              ),
-                                              const SizedBox(height: 4.0),
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 16.0),
-                                                child: TextButton(
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            EditTrip(
-                                                          id: docId,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                  style: TextButton.styleFrom(
-                                                    backgroundColor:
-                                                        const Color(0xFF311B92),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            12.0),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
-                                                    ),
-                                                  ),
-                                                  child: const Text(
-                                                    'Edit Booking',
-                                                    style: TextStyle(
-                                                        color: Colors.white),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 1.0),
-                                              Container(
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 16.0),
-                                                child: TextButton(
-                                                  onPressed: () async {
-                                                    deleteTrip(docId: docId);
-                                                  },
-                                                  style: TextButton.styleFrom(
-                                                    backgroundColor:
-                                                        Color(0xFFFFFFFF),
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            12.0),
-                                                    side: BorderSide(
-                                                      color: Color(
-                                                          0xFF311B92), // your color here
-                                                      width: 1,
-                                                    ),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
-                                                    ),
-                                                  ),
-                                                  child: const Text(
-                                                    'Remove Booking',
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF311B92)),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 6.0),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                      //print(category);
-                                      if (tripData["is_confirmed"] == false &&
-                                          (tripData['user_id'] ==
-                                              _auth.currentUser?.uid)) {
-                                        rides.add(tripCard);
-                                      }
-                                    }
-
-                                    return SingleChildScrollView(
-                                      child: Column(
-                                        children: rides,
-                                      ),
-                                    );
-                                  } else if (snapshot.hasError) {
-                                    // Handle the error case
-                                    return Text("Error: ${snapshot.error}");
-                                  } else {
-                                    return CircularProgressIndicator(); // Show a loading indicator
-                                  }
+                        margin: EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyJourneyPage()));
                                 },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: primaryColor,
+                                    borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  height: 130,
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text("Total Trips", style: TextStyle(fontFamily: primaryFontFamilty, color: Colors.white , fontWeight: FontWeight.w300, fontSize: 15),),
+                                          SizedBox(height: 10,),
+                                          Text("$totalTrips", style: TextStyle(fontFamily: primaryFontFamilty, color: Colors.white, fontSize: 56),),
+                                        ],
+                                  ),
+                                ),
                               ),
-                            ],
+                            ),
+                            SizedBox(width: 10,),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => PendingRidesPage()));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: primaryColor),
+                                      borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  height: 130,
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Pending Trips", style: TextStyle(fontFamily: primaryFontFamilty, color: primaryColorLight , fontWeight: FontWeight.w300, fontSize: 15),),
+                                      SizedBox(height: 10,),
+                                      Text("$totalPendingTrips", style: TextStyle(fontFamily: primaryFontFamilty, color: primaryColorLight, fontSize: 56),),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 10,),
+                      Container(
+                        margin: EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyJourneyPage()));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.greenAccent.shade700,
+                                      borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  height: 130,
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Successful Trips", style: TextStyle(fontFamily: primaryFontFamilty, color: Colors.white , fontWeight: FontWeight.w300, fontSize: 15),),
+                                      SizedBox(height: 10,),
+                                      Text("$totalTrips", style: TextStyle(fontFamily: primaryFontFamilty, color: Colors.white, fontSize: 56),),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 10,),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: (){
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => DeletedRidesPage()));
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.orangeAccent.shade700),
+                                      borderRadius: BorderRadius.circular(10)
+                                  ),
+                                  height: 130,
+                                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text("Deleted Trips", style: TextStyle(fontFamily: primaryFontFamilty, color: Colors.orangeAccent.shade700 , fontWeight: FontWeight.w300, fontSize: 15),),
+                                      SizedBox(height: 10,),
+                                      Text("$totalAddedtoCanceltrips", style: TextStyle(fontFamily: primaryFontFamilty, color: Colors.orangeAccent.shade700, fontSize: 56),),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PickHotelOrRider()),
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.fromLTRB(10, 20, 10, 10),
+                          height: 50,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius: BorderRadius.circular(20)
+                          ),
+                          child: Center(
+                            child: Text("Plan My Journey", style: TextStyle(fontFamily: primaryFontFamilty, fontSize: 18, color: Colors.white),),
                           ),
                         ),
                       ),
-                      CreateJourney(hasjourney: tripNote),
+
                     ].addToEnd(SizedBox(height: 72.0)),
                   ),
                 ),

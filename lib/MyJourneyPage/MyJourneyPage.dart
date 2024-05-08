@@ -142,7 +142,7 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
                                     final bookingData = booking.data() as Map<String, dynamic>;
                                     String dateAndTime = (DateTime.parse(bookingData["start_date"].toDate().toString())).toString();
                                     List<String> dateSplitted = dateAndTime.split(" ");
-                                    final bookingWidget = HotelBookingCard(bookingData: bookingData, booking: booking, dateSplitted: dateSplitted);
+                                    final bookingWidget = HotelBookingCard(bookingData: bookingData, booking: booking, dateSplitted: dateSplitted, photoUrl: bookingData["hotelPhotoUrl"],location: bookingData["hotelLocation"],);
                                     if(_auth.currentUser!.uid == bookingData["user_id"]){
                                       bookingWidgets.add(bookingWidget);
                                     }
@@ -238,7 +238,7 @@ class RiderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => SingleTripMapPage(startLat: bookingData["startLocationLatitude"], startLng: bookingData["startLocationLongitude"], endLat: bookingData["endLocationLatitude"], endLng: bookingData["endLocationLongitude"], distance: bookingData["distance"],cost: bookingData["cost"],duration: bookingData["duration"],)));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => SingleTripMapPage(startLat: bookingData["startLocationLatitude"], startLng: bookingData["startLocationLongitude"], endLat: bookingData["endLocationLatitude"], endLng: bookingData["endLocationLongitude"], distance: bookingData["distance"],cost: bookingData["cost"],duration: bookingData["duration"])));
       },
       child: Container(
         padding: EdgeInsets.all(10),
@@ -258,8 +258,7 @@ class RiderCard extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10,),
-            Row(
-
+            Wrap(
               children: [
                 Text("${bookingData["start_location"]} ", style: TextStyle(fontSize: 22, fontFamily: primaryFontFamilty, fontWeight: FontWeight.w500)),
                 SizedBox(width: 40,),
@@ -292,18 +291,22 @@ class HotelBookingCard extends StatelessWidget {
     required this.bookingData,
     required this.booking,
     required this.dateSplitted,
+    required this.photoUrl,
+    required this.location
   });
 
   final Map<String, dynamic> bookingData;
   final QueryDocumentSnapshot<Object?> booking;
   final List<String> dateSplitted;
+  final String photoUrl;
+  final String location;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) => SingleHotelDetailsPage(latitude: bookingData["hotelLat"], longitude: bookingData["hotelLng"], hotelName: bookingData["hotel"], hotelDocId: booking.id)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => SingleHotelDetailsPage(latitude: bookingData["hotelLat"], longitude: bookingData["hotelLng"], hotelName: bookingData["hotel"], hotelDocId: booking.id, hotelId: bookingData["HotelUserId"], startingDate: bookingData["start_date"], endingDate: bookingData['end_date'], photoUrl: photoUrl,)));
       },
       child: Container(
         padding: EdgeInsets.all(10),
@@ -319,7 +322,7 @@ class HotelBookingCard extends StatelessWidget {
           children: [
         ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: Image(image: NetworkImage("https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8aG90ZWxzfGVufDB8fDB8fHww"),
+              child: Image(image: NetworkImage(photoUrl),
               ),
             ),
             SizedBox(height: 10,),
@@ -339,6 +342,8 @@ class HotelBookingCard extends StatelessWidget {
                 )
               ],
             ),
+            SizedBox(height: 3,),
+            Text("$location"),
             SizedBox(height: 3,),
             Row(
               children: [
