@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,7 +18,6 @@ class PickLocationPage extends StatefulWidget {
 
 class _PickLocationPageState extends State<PickLocationPage>
     with SingleTickerProviderStateMixin {
-
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime.now();
   TimeOfDay _startTime = TimeOfDay.now();
@@ -48,7 +46,6 @@ class _PickLocationPageState extends State<PickLocationPage>
         uid = userData['uid'];
         print(uid);
       });
-
     } catch (e) {
       print(e);
     }
@@ -59,21 +56,19 @@ class _PickLocationPageState extends State<PickLocationPage>
     late LatLng pos;
 
     try {
-        Coordinates usercoordinate = await geoCode.forwardGeocoding(
-            address: location);
-        pos = LatLng((usercoordinate.latitude)!.toDouble(),
-            (usercoordinate.longitude)!.toDouble());
-
-      } catch (e) {
-        print(e);
-      }
+      Coordinates usercoordinate =
+          await geoCode.forwardGeocoding(address: location);
+      pos = LatLng((usercoordinate.latitude)!.toDouble(),
+          (usercoordinate.longitude)!.toDouble());
+    } catch (e) {
+      print(e);
+    }
     return pos;
   }
 
   String splitString(string) {
     final splitted = string.split(' ');
     return (splitted[0]);
-
   }
 
   @override
@@ -87,7 +82,6 @@ class _PickLocationPageState extends State<PickLocationPage>
     _endlocationControllerForReturnTrip = TextEditingController();
     _startLocationContollerForOnewayTrip = TextEditingController();
     _endlocationControllerForOnewayTrip = TextEditingController();
-
   }
 
   Future<void> _selectStartDate(BuildContext context) async {
@@ -121,7 +115,6 @@ class _PickLocationPageState extends State<PickLocationPage>
   }
 
   Future<void> _selectStartTime(BuildContext context) async {
-
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: _startTime,
@@ -143,7 +136,6 @@ class _PickLocationPageState extends State<PickLocationPage>
 
   @override
   Widget build(BuildContext context) {
-
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => RiderDetailsProvider())
@@ -171,7 +163,7 @@ class _PickLocationPageState extends State<PickLocationPage>
                   ),
                   const SizedBox(width: 8.0),
                   CircleAvatar(
-                    backgroundColor: Theme.of(context).primaryColor,
+                    backgroundColor: Color(0xFF311B92),
                     child: const Icon(
                       Icons.person,
                       color: Colors.white,
@@ -184,8 +176,42 @@ class _PickLocationPageState extends State<PickLocationPage>
           bottom: TabBar(
             controller: _tabController,
             tabs: const [
-              Tab(text: 'Return Trip'),
-              Tab(text: 'One Way Trip'),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Tab(
+                  child: Row(
+                    children: [
+                      Icon(Icons.change_circle_rounded),
+                      SizedBox(width: 8),
+                      Text(
+                        'Return Trip',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Tab(
+                  child: Row(
+                    children: [
+                      Icon(Icons.directions),
+                      SizedBox(width: 8),
+                      Text(
+                        'One Way Trip',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -207,7 +233,9 @@ class _PickLocationPageState extends State<PickLocationPage>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const Text('Start Date'),
+                          const Text('Start Date',
+                              style: TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.bold)),
                           const SizedBox(width: 16.0),
                           GestureDetector(
                             onTap: () => _selectStartDate(context),
@@ -219,7 +247,8 @@ class _PickLocationPageState extends State<PickLocationPage>
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Text(
                                     '${_startDate.day}/${_startDate.month}/${_startDate.year}',
@@ -241,7 +270,9 @@ class _PickLocationPageState extends State<PickLocationPage>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const Text('End Date'),
+                          const Text('End Date',
+                              style: TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.bold)),
                           const SizedBox(width: 16.0),
                           GestureDetector(
                             onTap: () => _selectEndDate(context),
@@ -253,7 +284,8 @@ class _PickLocationPageState extends State<PickLocationPage>
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Text(
                                     '${_endDate.day}/${_endDate.month}/${_endDate.year}',
@@ -275,7 +307,9 @@ class _PickLocationPageState extends State<PickLocationPage>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const Text('Start Time'),
+                          const Text('Start Time',
+                              style: TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.bold)),
                           const SizedBox(width: 16.0),
                           GestureDetector(
                             onTap: () => _selectStartTime(context),
@@ -287,7 +321,8 @@ class _PickLocationPageState extends State<PickLocationPage>
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Text(
                                     '${_startTime.hour}:${_startTime.minute}',
@@ -310,77 +345,90 @@ class _PickLocationPageState extends State<PickLocationPage>
                         child: Container(
                           padding: const EdgeInsets.all(16.0),
                           decoration: BoxDecoration(
-                            color: Colors.grey, // Set the background color to cyan
-                            borderRadius: BorderRadius.circular(8.0),
+                            color: Color(0xFF311B92),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                'Return Trip',
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 8.0),
                               TextFormField(
-                                onTap: ()async{
-                                  final result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>LocationSearchPage()));
+                                onTap: () async {
+                                  final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              LocationSearchPage()));
                                   setState(() {
-                                    _startLocationContollerForReturnTrip.text = result;
+                                    _startLocationContollerForReturnTrip.text =
+                                        result;
                                     _startLocation = result;
-
                                   });
                                 },
-                                controller: _startLocationContollerForReturnTrip,
+                                controller:
+                                    _startLocationContollerForReturnTrip,
                                 decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.play_circle),
                                   labelText: 'Start Destination',
+                                  labelStyle: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
                                   fillColor: Colors.white,
                                   filled: true,
                                 ),
-                                onChanged: (context) {
-
-                                },
+                                onChanged: (context) {},
                               ),
                               const SizedBox(height: 8.0),
                               TextFormField(
-                                onTap: ()async{
-                                  final result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>LocationSearchPage()));
+                                onTap: () async {
+                                  final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              LocationSearchPage()));
                                   setState(() {
-                                    _intermidatelocationControllerForReturnTrip.text = result;
+                                    _intermidatelocationControllerForReturnTrip
+                                        .text = result;
                                     _intermidatelocation = result;
-
                                   });
                                 },
-                                controller: _intermidatelocationControllerForReturnTrip,
+                                controller:
+                                    _intermidatelocationControllerForReturnTrip,
                                 decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.pause_circle),
                                   labelText: 'Intermediate Destination',
+                                  labelStyle: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
                                   fillColor: Colors.white,
                                   filled: true,
                                 ),
-                                onChanged: (context) {
-
-                                },
+                                onChanged: (context) {},
                               ),
                               const SizedBox(height: 8.0),
                               TextFormField(
-                                onTap: ()async{
-                                  final result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>LocationSearchPage()));
+                                onTap: () async {
+                                  final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              LocationSearchPage()));
                                   setState(() {
-                                    _endlocationControllerForReturnTrip.text = result;
+                                    _endlocationControllerForReturnTrip.text =
+                                        result;
                                     _endlocation = result;
-
                                   });
                                 },
                                 controller: _endlocationControllerForReturnTrip,
                                 decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.stop_circle),
                                   labelText: 'End Destination',
+                                  labelStyle: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
                                   fillColor: Colors.white,
                                   filled: true,
                                 ),
-                                onChanged: (context) {
-                                },
+                                onChanged: (context) {},
                               ),
                             ],
                           ),
@@ -395,67 +443,116 @@ class _PickLocationPageState extends State<PickLocationPage>
                           width: 350.0,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: ()async {
+                            onPressed: () async {
                               setState(() {
                                 _saving = true;
                               });
-                              if(_startDate.compareTo(DateTime.now()) == 1 &&
+                              if (_startDate.compareTo(DateTime.now()) == 1 &&
                                   _endDate.compareTo(DateTime.now()) == 1 &&
                                   _startLocation != "" &&
-                                  _endlocation != "" && _intermidatelocation != ""){
+                                  _endlocation != "" &&
+                                  _intermidatelocation != "") {
                                 print(splitString(_startDate.toString()));
                                 print(splitString(_endDate.toString()));
                                 print((_auth.currentUser?.uid).toString());
 
-                                LatLng startPos = await getLocation(location: _startLocation);
-                                LatLng endPos = await getLocation(location: _endlocation);
-                                LatLng interPos = await getLocation(location: _intermidatelocation);
+                                LatLng startPos =
+                                    await getLocation(location: _startLocation);
+                                LatLng endPos =
+                                    await getLocation(location: _endlocation);
+                                LatLng interPos = await getLocation(
+                                    location: _intermidatelocation);
                                 print(startPos.longitude);
 
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeStartLocationLat(StartCor: startPos.latitude);
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeStartLocationLng(StartCor: startPos.longitude);
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeEndLocationLat(EndCor: endPos.latitude);
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeEndLocationLng(EndCor: endPos.longitude);
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeIntermediateLocationLat(InterCor: interPos.latitude);
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeIntermediateLocationLng(InterCor: interPos.longitude);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeStartLocationLat(
+                                        StartCor: startPos.latitude);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeStartLocationLng(
+                                        StartCor: startPos.longitude);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeEndLocationLat(
+                                        EndCor: endPos.latitude);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeEndLocationLng(
+                                        EndCor: endPos.longitude);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeIntermediateLocationLat(
+                                        InterCor: interPos.latitude);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeIntermediateLocationLng(
+                                        InterCor: interPos.longitude);
 
-
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeStartLocation(start: _startLocation);
-                                Provider.of<RiderDetailsProvider>(context, listen: false).chageEndLocation(end: _endlocation);
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeIntermediateLocation(midLocation: _intermidatelocation);
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeStartDate(startD: splitString(_startDate.toString()));
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeEndDate(endD: splitString(_endDate.toString()));
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeMode(modeOfTheTrip: "two_way");
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeUserId(userID: (_auth.currentUser?.uid).toString());
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeStartLocation(start: _startLocation);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .chageEndLocation(end: _endlocation);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeIntermediateLocation(
+                                        midLocation: _intermidatelocation);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeStartDate(
+                                        startD:
+                                            splitString(_startDate.toString()));
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeEndDate(
+                                        endD: splitString(_endDate.toString()));
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeMode(modeOfTheTrip: "two_way");
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeUserId(
+                                        userID: (_auth.currentUser?.uid)
+                                            .toString());
 
                                 setState(() {
                                   _saving = false;
                                 });
                                 // print(res);
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => TransportModePage()));
-                               // Navigator.pushNamed(context, "/transport");
-                                final SharedPreferences prefs = await SharedPreferences.getInstance();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            TransportModePage()));
+                                // Navigator.pushNamed(context, "/transport");
+                                final SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
                                 await prefs.setString('docId', "res");
-                              }else{
+                              } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: const Text('Enter correct details'),
+                                    content:
+                                        const Text('Enter Correct Details.'),
                                     action: SnackBarAction(
                                       label: 'Undo',
                                       onPressed: () {
                                         // Code to execute.
                                       },
-
                                     ),
                                   ),
                                 );
                               }
-
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFF4B39EF),
+                              backgroundColor: Color(0xFF311B92),
                             ),
-                            child: const Text('Confirm', style: TextStyle(fontSize: 17),),
+                            child: const Text(
+                              'Confirm',
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.white),
+                            ),
                           ),
                         ),
                       ),
@@ -475,7 +572,9 @@ class _PickLocationPageState extends State<PickLocationPage>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const Text('Start Date'),
+                          const Text('Start Date',
+                              style: TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.bold)),
                           const SizedBox(width: 16.0),
                           GestureDetector(
                             onTap: () => _selectStartDate(context),
@@ -487,7 +586,8 @@ class _PickLocationPageState extends State<PickLocationPage>
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Text(
                                     '${_startDate.day}/${_startDate.month}/${_startDate.year}',
@@ -509,7 +609,9 @@ class _PickLocationPageState extends State<PickLocationPage>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const Text('End Date'),
+                          const Text('End Date',
+                              style: TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.bold)),
                           const SizedBox(width: 16.0),
                           GestureDetector(
                             onTap: () => _selectEndDate(context),
@@ -521,7 +623,8 @@ class _PickLocationPageState extends State<PickLocationPage>
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Text(
                                     '${_endDate.day}/${_endDate.month}/${_endDate.year}',
@@ -543,7 +646,9 @@ class _PickLocationPageState extends State<PickLocationPage>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          const Text('Start Time'),
+                          const Text('Start Time',
+                              style: TextStyle(
+                                  fontSize: 16.0, fontWeight: FontWeight.bold)),
                           const SizedBox(width: 16.0),
                           GestureDetector(
                             onTap: () => _selectStartTime(context),
@@ -555,7 +660,8 @@ class _PickLocationPageState extends State<PickLocationPage>
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   Text(
                                     '${_startTime.hour}:${_startTime.minute}',
@@ -578,57 +684,63 @@ class _PickLocationPageState extends State<PickLocationPage>
                         child: Container(
                           padding: const EdgeInsets.all(16.0),
                           decoration: BoxDecoration(
-                            color: Colors.grey, // Set the background color to cyan
-                            borderRadius: BorderRadius.circular(8.0),
+                            color: Color(0xFF311B92),
+                            borderRadius: BorderRadius.circular(10.0),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                'One Way Trip',
-                                style: TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 8.0),
                               TextFormField(
-                                onTap: ()async{
-                                  final result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>LocationSearchPage()));
+                                onTap: () async {
+                                  final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              LocationSearchPage()));
                                   setState(() {
-                                    _startLocationContollerForOnewayTrip.text = result;
+                                    _startLocationContollerForOnewayTrip.text =
+                                        result;
                                     _startLocation = result;
-
                                   });
                                 },
-                                controller: _startLocationContollerForOnewayTrip,
+                                controller:
+                                    _startLocationContollerForOnewayTrip,
                                 decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.play_circle),
                                   labelText: 'Start Destination',
+                                  labelStyle: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
                                   fillColor: Colors.white,
                                   filled: true,
                                 ),
-                                onChanged: (context) {
-
-                                },
+                                onChanged: (context) {},
                               ),
                               const SizedBox(height: 8.0),
                               TextFormField(
-                                onTap: ()async{
-                                  final result = await Navigator.push(context, MaterialPageRoute(builder: (context) =>LocationSearchPage()));
+                                onTap: () async {
+                                  final result = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              LocationSearchPage()));
                                   setState(() {
-                                    _endlocationControllerForOnewayTrip.text = result;
+                                    _endlocationControllerForOnewayTrip.text =
+                                        result;
                                     _endlocation = result;
-
                                   });
                                 },
                                 controller: _endlocationControllerForOnewayTrip,
                                 decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.stop_circle),
                                   labelText: 'End Destination',
+                                  labelStyle: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
                                   fillColor: Colors.white,
                                   filled: true,
                                 ),
-                                onChanged: (context) {
-                                },
+                                onChanged: (context) {},
                               ),
                             ],
                           ),
@@ -642,7 +754,7 @@ class _PickLocationPageState extends State<PickLocationPage>
                           width: 350.0,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () async{
+                            onPressed: () async {
                               setState(() {
                                 _saving = true;
                               });
@@ -653,61 +765,101 @@ class _PickLocationPageState extends State<PickLocationPage>
                                 print(splitString(_startDate.toString()));
                                 print(splitString(_endDate.toString()));
 
-                                LatLng startPos = await getLocation(location: _startLocation);
-                                LatLng endPos = await getLocation(location: _endlocation);
+                                LatLng startPos =
+                                    await getLocation(location: _startLocation);
+                                LatLng endPos =
+                                    await getLocation(location: _endlocation);
 
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeStartLocationLat(StartCor: startPos.latitude);
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeStartLocationLng(StartCor: startPos.longitude);
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeEndLocationLat(EndCor: endPos.latitude);
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeEndLocationLng(EndCor: endPos.longitude);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeStartLocationLat(
+                                        StartCor: startPos.latitude);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeStartLocationLng(
+                                        StartCor: startPos.longitude);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeEndLocationLat(
+                                        EndCor: endPos.latitude);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeEndLocationLng(
+                                        EndCor: endPos.longitude);
 
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeStartLocation(start: _startLocation);
-                                Provider.of<RiderDetailsProvider>(context, listen: false).chageEndLocation(end: _endlocation);
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeStartDate(startD: splitString(_startDate.toString()));
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeEndDate(endD: splitString(_endDate.toString()));
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeMode(modeOfTheTrip: "One way");
-                                Provider.of<RiderDetailsProvider>(context, listen: false).changeUserId(userID: (_auth.currentUser?.uid).toString());
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeStartLocation(start: _startLocation);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .chageEndLocation(end: _endlocation);
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeStartDate(
+                                        startD:
+                                            splitString(_startDate.toString()));
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeEndDate(
+                                        endD: splitString(_endDate.toString()));
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeMode(modeOfTheTrip: "One way");
+                                Provider.of<RiderDetailsProvider>(context,
+                                        listen: false)
+                                    .changeUserId(
+                                        userID: (_auth.currentUser?.uid)
+                                            .toString());
 
-
-                                if(_intermidatelocation != ""){
-                                  Provider.of<RiderDetailsProvider>(context, listen: false).changeIntermediateLocation(midLocation: _intermidatelocation);
+                                if (_intermidatelocation != "") {
+                                  Provider.of<RiderDetailsProvider>(context,
+                                          listen: false)
+                                      .changeIntermediateLocation(
+                                          midLocation: _intermidatelocation);
                                 }
-                                final SharedPreferences prefs = await SharedPreferences.getInstance();
+                                final SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
                                 await prefs.setString('docId', "res");
                                 setState(() {
                                   _saving = false;
                                 });
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => TransportModePage()));
-                               // Navigator.pushNamed(context, "/transport");
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            TransportModePage()));
+                                // Navigator.pushNamed(context, "/transport");
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: const Text('Enter correct details'),
+                                    content:
+                                        const Text('Enter correct details'),
                                     action: SnackBarAction(
                                       label: 'Undo',
                                       onPressed: () {
                                         // Code to execute.
                                       },
-
                                     ),
                                   ),
-
                                 );
                                 //Navigator.pushNamed(context, "/transport");
                               }
                             },
                             style: ElevatedButton.styleFrom(
                               // Change the color
-                              backgroundColor: Color(0xFF4B39EF),
+                              backgroundColor: Color(0xFF311B92),
                             ),
                             child: const Text(
                               'Confirm',
-                              style: TextStyle(fontSize: 17),
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.white),
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 100,),
+                      SizedBox(
+                        height: 100,
+                      ),
                     ],
                   ),
                 ),

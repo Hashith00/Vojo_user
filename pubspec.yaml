@@ -161,6 +161,8 @@ flutter:
     - assets/images/van.png
     - assets/images/cargif.gif
     - assets/images/logo.png
+    - assets/images/taxi.png
+    - assets/images/hotel.png
     - assets/images/
     - assets/videos/
     - assets/audios/
