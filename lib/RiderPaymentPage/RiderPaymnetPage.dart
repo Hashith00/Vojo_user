@@ -8,6 +8,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:vojo/index.dart';
 import 'package:vojo/backend/backend.dart';
 import 'package:dio/dio.dart';
+import 'package:vojo/utils/Payment.dart';
 
 class RiderPaymentPage extends StatefulWidget {
   const RiderPaymentPage({super.key});
@@ -23,25 +24,50 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
    var durationTime;
    bool isCostCalculated = false;
    var intermidiareLocation;
+   var calculatedCost;
+   var response;
+   var returnResponse;
+   var distanceUsingIntermidiate;
+   var downTripTime;
 
 
   getDetails()async{
     try {
-      var response = await Dio().get('https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLongitude}&origins=${Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLongitude}&key=AIzaSyC8XOXvvxImxyxY6dFnOKIMTlbOM3X58Yw');
+      if(Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocation == ""){
+        response = await Dio().get('https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLongitude}&origins=${Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLongitude}&key=AIzaSyC8XOXvvxImxyxY6dFnOKIMTlbOM3X58Yw');
+      }else{
+        print("Hello this si retun");
+        response = await Dio().get('https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocationLongitude}&origins=${Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLongitude}&key=AIzaSyC8XOXvvxImxyxY6dFnOKIMTlbOM3X58Yw');
+        returnResponse = await Dio().get('https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLongitude}&origins=${Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocationLongitude}&key=AIzaSyC8XOXvvxImxyxY6dFnOKIMTlbOM3X58Yw');
+      }
+
       Map<String, dynamic> responseData = response.data;
+      Map<String, dynamic> returnResponseData = returnResponse.data;
+
 
 
       String distanceText = responseData['rows'][0]['elements'][0]['distance']['text'];
       String duration = responseData['rows'][0]['elements'][0]['duration']['text'];
-      var distance2 = responseData['rows'][0]['elements'][0]['duration']['value'];
+      downTripTime = returnResponseData['rows'][0]['elements'][0]['duration']['text'];
+
+      if(Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocation == ""){
+        distanceUsingIntermidiate = responseData['rows'][0]['elements'][0]['duration']['value'];
+      }
+      else{
+        distanceUsingIntermidiate = responseData['rows'][0]['elements'][0]['duration']['value'] + returnResponseData['rows'][0]['elements'][0]['duration']['value'];
+        print(distanceUsingIntermidiate);
+        print("Intermidaite Price");
+      }
       print(distanceText);
       print(duration);
+
 
       setState(() {
         distanceInKM = distanceText;
         durationTime = duration;
-        distance = distance2 / 1000;
-        cost = (distance * 10).toInt();
+        distance = distanceUsingIntermidiate / 100;
+        calculatedCost = PaymentProcess.getThePriceInDollers(distance: distanceUsingIntermidiate / 100, vehicleType: "car", startDate: intermidiareLocation = Provider.of<RiderDetailsProvider>(context, listen: false).startDate, endDate: intermidiareLocation = Provider.of<RiderDetailsProvider>(context, listen: false).endDate);
+        cost = (calculatedCost).toInt();
         isCostCalculated = true;
         intermidiareLocation = Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocation;
       });
@@ -148,17 +174,26 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Distance ", style: TextStyle(fontFamily: primaryFontFamilty, fontSize: 15),),
-                            Text("$distanceInKM ", style: TextStyle(fontFamily: primaryFontFamilty, fontSize: 15),),
+                            Text("$distance km", style: TextStyle(fontFamily: primaryFontFamilty, fontSize: 15),),
                           ],
                         ),
                         SizedBox(height: 10,),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text("Total Trip Time ", style: TextStyle(fontFamily: primaryFontFamilty, fontSize: 15),),
+                            Text("Up Trip Time ", style: TextStyle(fontFamily: primaryFontFamilty, fontSize: 15),),
                             Text("$durationTime ", style: TextStyle(fontFamily: primaryFontFamilty, fontSize: 15),)
                           ],
-                        )
+                        ),
+                        SizedBox(height: 10,),
+                        downTripTime != null ?
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Down Trip Time ", style: TextStyle(fontFamily: primaryFontFamilty, fontSize: 15),),
+                            Text("$downTripTime ", style: TextStyle(fontFamily: primaryFontFamilty, fontSize: 15),)
+                          ],
+                        ) : Container(),
                       ],
                     ),
                   ),
