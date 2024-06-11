@@ -151,9 +151,9 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     final tabs = {
       'landingPage': LandingPageWidget(),
-      'profilePage': ProfilePageWidget(),
       'myJourneyPage' : MyJourneyPage(),
       'PaymentPage' : PlacesSuggestionPage(),
+      'profilePage': ProfilePageWidget(),
 
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
@@ -197,11 +197,6 @@ class _NavBarPageState extends State<NavBarPage> {
                 iconSize: 24.0,
               ),
               GButton(
-                icon: Icons.person,
-                text: 'Profile',
-                iconSize: 24.0,
-              ),
-              GButton(
                 icon: Icons.bookmark_add,
                 text: 'Journey',
                 iconSize: 24.0,
@@ -212,7 +207,11 @@ class _NavBarPageState extends State<NavBarPage> {
                 text: 'Places',
 
                 iconSize: 24.0,
-              )
+              ),GButton(
+                icon: Icons.person,
+                text: 'Profile',
+                iconSize: 24.0,
+              ),
             ],
           ),
         ),

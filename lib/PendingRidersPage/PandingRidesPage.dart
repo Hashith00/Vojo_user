@@ -169,7 +169,7 @@ class _PendingRidesPageState extends State<PendingRidesPage> {
                           //print(category);
                           if (tripData["is_confirmed"] == false &&
                               (tripData['user_id'] ==
-                                  _auth.currentUser?.uid) && tripData["Remove_Trip_by_Admin"] == null) {
+                                  _auth.currentUser?.uid) ) {
                             rides.add(tripCard);
                           }
                         }

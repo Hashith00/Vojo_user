@@ -22,6 +22,7 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
    int cost = 0 ;
    var durationTime;
    bool isCostCalculated = false;
+   var intermidiareLocation;
 
 
   getDetails()async{
@@ -42,6 +43,7 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
         distance = distance2 / 1000;
         cost = (distance * 10).toInt();
         isCostCalculated = true;
+        intermidiareLocation = Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocation;
       });
 
     } catch (e) {
@@ -114,9 +116,20 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
                           children: [
                             Text("Start Location", style: TextStyle(fontFamily: primaryFontFamilty, fontWeight: FontWeight.w600),),
                             Text("${Provider.of<RiderDetailsProvider>(context, listen: false).startLocation}", style: TextStyle(color: Colors.black54),),
+                            intermidiareLocation != null ?
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(height: 10,),
+                                    Text("Intermidiate Location", style: TextStyle(fontFamily: primaryFontFamilty, fontWeight: FontWeight.w600),),
+                                    Text("${Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocation}"),
+                                  ],
+                                ) : Container(),
                             SizedBox(height: 10,),
                             Text("End Location", style: TextStyle(fontFamily: primaryFontFamilty, fontWeight: FontWeight.w600),),
                             Text("${Provider.of<RiderDetailsProvider>(context, listen: false).endLocation}"),
+
                           ],
                         ))
                       ],
