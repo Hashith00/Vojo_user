@@ -239,7 +239,7 @@ class RiderCard extends StatelessWidget {
       },
       child: Container(
         padding: EdgeInsets.all(10),
-        height: 280,
+        height: 350,
         width: 300,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),

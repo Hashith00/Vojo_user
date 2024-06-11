@@ -88,7 +88,7 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white10
                       ),
-                      height: 300,
+                      height: 350,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -106,11 +106,24 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
-                                    children: [
-                                      Icon(Icons.location_on, color: Colors.black,),
-                                      Text('$vicinity', style: TextStyle(fontSize: 15, fontFamily: primaryFontFamilty, fontWeight: FontWeight.w400)),
-                                    ],
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.location_on, color: Colors.black,),
+                                        SizedBox(width: 8), // Add some spacing between the icon and text
+                                        Expanded(
+                                          child: Text(
+                                            '$vicinity',
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontFamily: primaryFontFamilty,
+                                              fontWeight: FontWeight.w400,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   Row(
                                     children: [
@@ -119,7 +132,7 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
                                     ],
                                   ),
                                 ],
-                              ),
+                              )
                             ],
                           ),
 
