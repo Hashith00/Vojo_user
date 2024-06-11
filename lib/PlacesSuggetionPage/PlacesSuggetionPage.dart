@@ -14,42 +14,52 @@ class PlacesSuggestionPage extends StatefulWidget {
 }
 
 class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
-  var res;
-  List<dynamic>? places ;
+  List<dynamic>? places;
   bool isLoaded = false;
   var _loading = true;
-  getNearByLocation()async{
-    print("Hello");
-    try{
-      res = await fectchData("http://10.0.2.2:5000/places?latitude=40.7128&longitude=-74.0060&radius=1000");
-      print(jsonDecode(res));
-      Map<String, dynamic> decodedResponse = jsonDecode(res);
-      places = decodedResponse['results'];
-      setState(() {
-        _loading = false;
-      });
-    }catch(e){
-      print(e);
-    }
-  }
-
-
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getNearByLocation();
   }
 
+  Future<void> getNearByLocation() async {
+    try {
+      var res = await fetchData("http://10.0.2.2:5000/places?latitude=40.7128&longitude=-74.0060&radius=100");
+      Map<String, dynamic> decodedResponse = jsonDecode(res);
+      places = decodedResponse['results'];
+
+      if (places != null) {
+        for (var place in places!) {
+          double latitude = place['geometry']['location']['lat'];
+          double longitude = place['geometry']['location']['lng'];
+          var photoRes = await fetchData("http://10.0.2.2:5000/get_place_photo?latitude=$latitude&longitude=$longitude");
+          var photoData = jsonDecode(photoRes);
+          place['photo_url'] = photoData['photo_url'];
+        }
+      }
+
+      setState(() {
+        _loading = false;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<String> fetchData(String url) async {
+    http.Response response = await http.get(Uri.parse(url));
+    return response.body;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: _loading
           ? Center(child: CircularProgressIndicator())
-          : places != null ?
-      SafeArea(
+          : places != null
+          ? SafeArea(
         child: Column(
           children: [
             Container(
@@ -60,9 +70,7 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
                   Text("Find your", style: TextStyle(fontSize: 35, fontFamily: primaryFontFamilty, fontWeight: FontWeight.w800)),
                   Text("Near By Places", style: TextStyle(fontSize: 35, fontFamily: primaryFontFamilty, fontWeight: FontWeight.w800)),
                   Row(
-                    children: [
-                      
-                    ],
+                    children: [],
                   )
                 ],
               ),
@@ -76,9 +84,10 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
                   String name = place['name'];
                   double latitude = place['geometry']['location']['lat'];
                   double longitude = place['geometry']['location']['lng'];
-                  var ration = place['rating'] ?? 0.00;
+                  var rating = place['rating'] ?? 0.00;
                   String locationType = place["types"][0] ?? 'No location type';
                   String vicinity = place["vicinity"] ?? 'No vicinity';
+                  String photoUrl = place['photo_url'] ?? 'https://via.placeholder.com/400';
 
                   // Display place details
                   return ListTile(
@@ -86,7 +95,7 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
                       margin: EdgeInsets.all(5),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        color: Colors.white10
+                        color: Colors.white10,
                       ),
                       height: 350,
                       child: Column(
@@ -94,13 +103,16 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(10.0),
-                            child: Image(image: NetworkImage("https://img2.chinadaily.com.cn/images/202106/17/60cabadca31024adbdceb190.jpeg"),
+                            child: Image.network(
+                              photoUrl,
+                              height: 200,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(height: 10),
                           Text(name, style: TextStyle(fontSize: 22, fontFamily: primaryFontFamilty, fontWeight: FontWeight.w500)),
-                          //Text('Latitude: $latitude, Longitude: $longitude'),
-                          SizedBox(height: 5,),
+                          SizedBox(height: 5),
                           Wrap(
                             children: [
                               Row(
@@ -109,7 +121,7 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
                                   Expanded(
                                     child: Row(
                                       children: [
-                                        Icon(Icons.location_on, color: Colors.black,),
+                                        Icon(Icons.location_on, color: Colors.black),
                                         SizedBox(width: 8), // Add some spacing between the icon and text
                                         Expanded(
                                           child: Text(
@@ -127,16 +139,14 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
                                   ),
                                   Row(
                                     children: [
-                                      Icon(Icons.star, color: CupertinoColors.systemYellow,),
-                                      Text('$ration'),
+                                      Icon(Icons.star, color: CupertinoColors.systemYellow),
+                                      Text('$rating'),
                                     ],
                                   ),
                                 ],
-                              )
+                              ),
                             ],
                           ),
-
-
                         ],
                       ),
                     ),
@@ -146,8 +156,8 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
             ),
           ],
         ),
-      ) : Container(child: Text('No places found')) ,
-
+      )
+          : Container(child: Text('No places found')),
     );
   }
 
@@ -155,10 +165,4 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
   void dispose() {
     super.dispose();
   }
-}
-
-
-fectchData(String url)async{
-  http.Response responce =await http.get(Uri.parse(url));
-  return responce.body;
 }
