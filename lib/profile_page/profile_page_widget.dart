@@ -17,6 +17,7 @@ import 'package:provider/provider.dart';
 import 'profile_page_model.dart';
 export 'profile_page_model.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:file_picker/file_picker.dart';
 
 class ProfilePageWidget extends StatefulWidget {
   const ProfilePageWidget({Key? key}) : super(key: key);
