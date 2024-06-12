@@ -36,6 +36,8 @@ import 'pick_location_page/pick_location_page.dart';
 import 'flutter_flow/nav/nav.dart';
 import 'index.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -47,9 +49,43 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   usePathUrlStrategy();
   await initFirebase();
-  //await LocalNotifications.init();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  AwesomeNotifications().initialize(
+    // set the icon to null if you want to use the default app icon
+      'resource://drawable/ic_launcher',
+      [
+        NotificationChannel(
+            channelGroupKey: 'basic_channel_group',
+            channelKey: 'basic_channel',
+            channelName: 'Basic notifications',
+            channelDescription: 'Notification channel for basic tests',
+            defaultColor: Color(0xFF9D50DD),
+            ledColor: Colors.white)
+      ],
+      // Channel groups are only visual and are not required
+      channelGroups: [
+        NotificationChannelGroup(
+            channelGroupKey: 'basic_channel_group',
+            channelGroupName: 'Basic group')
+      ],
+      debug: true
+  );
 
   runApp(MyApp());
+}
+
+// Top Level named handler which background/terminated messages will call
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  // Handle the message
+  AwesomeNotifications().createNotification(
+    content: NotificationContent(
+      id: 10,
+      channelKey: 'main_channel',
+      title: message.notification?.title ?? 'Notification',
+      body: message.notification?.body ?? 'You have a new message',
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -74,6 +110,38 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+
+    FirebaseMessaging.instance.requestPermission();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: 10,
+          channelKey: 'main_channel',
+          title: message.notification?.title ?? 'Notification',
+          body: message.notification?.body ?? 'You have a new message',
+        ),
+      );
+    });
+
+    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+      if (message != null) {
+        AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: 10,
+            channelKey: 'main_channel',
+            title: message.notification?.title ?? 'Notification',
+            body: message.notification?.body ?? 'You have a new message',
+          ),
+        );
+      }
+    });
+    FirebaseMessaging.instance.subscribeToTopic('data_changes');
+
     super.initState();
 
     _appStateNotifier = AppStateNotifier.instance;
@@ -151,9 +219,9 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     final tabs = {
       'landingPage': LandingPageWidget(),
-      'profilePage': ProfilePageWidget(),
       'myJourneyPage' : MyJourneyPage(),
       'PaymentPage' : PlacesSuggestionPage(),
+      'profilePage': ProfilePageWidget(),
 
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
@@ -197,11 +265,6 @@ class _NavBarPageState extends State<NavBarPage> {
                 iconSize: 24.0,
               ),
               GButton(
-                icon: Icons.person,
-                text: 'Profile',
-                iconSize: 24.0,
-              ),
-              GButton(
                 icon: Icons.bookmark_add,
                 text: 'Journey',
                 iconSize: 24.0,
@@ -212,11 +275,76 @@ class _NavBarPageState extends State<NavBarPage> {
                 text: 'Places',
 
                 iconSize: 24.0,
-              )
+              ),GButton(
+                icon: Icons.person,
+                text: 'Profile',
+                iconSize: 24.0,
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class NotificationService{
+  static final NotificationService _notificationService = NotificationService._internal();
+
+  factory NotificationService(){
+    return _notificationService;
+  }
+  NotificationService._internal();
+
+  Future<void> initAwesomeNotification()async{
+    AwesomeNotifications().initialize(
+      'resource://drawable/ic_launcher',
+      [
+        NotificationChannel(
+          channelKey: 'main_channel',
+          channelName: 'main_channel',
+          channelDescription: 'main_channel notifications',
+          enableLights: true,
+          importance: NotificationImportance.Max,
+        )
+      ],
+    );
+  }
+  Future<void> requestPermission() async{
+    AwesomeNotifications().isNotificationAllowed().then((allowed){
+      if(!allowed){
+        AwesomeNotifications().requestPermissionToSendNotifications();
+
+      }
+    });
+
+  }
+  Future<void> showNotification(int id,String channelKey,String title,String body) async{
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+        id: id,
+        channelKey: channelKey,
+        title: title,
+        body: body,
+      ),
+    );
+  }
+
+  Future<void> showScheduledNotification(int id, String channelKey, String title, String body, int interval) async {
+    String localTZ = await AwesomeNotifications().getLocalTimeZoneIdentifier();
+
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+          id: id,
+          channelKey: channelKey,
+          title: title,
+          body: body,
+        ),
+        schedule: NotificationInterval(
+          interval: interval,
+          timeZone: localTZ,
+          repeats: false,
+        )
     );
   }
 }

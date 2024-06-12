@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../auth/firebase_auth/auth_util.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'schema/util/firestore_util.dart';
 
@@ -249,6 +249,7 @@ Future updateUserDocument({String? email}) async {
 
 // Creating Firebase instances
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final FirebaseAuth _auth = FirebaseAuth.instance;
 final CollectionReference _Collection = _firestore.collection('trips');
 final CollectionReference _CollectionTip = _firestore.collection('temptrip');
 final CollectionReference _CollectionBooking = _firestore.collection("bookings");
@@ -319,7 +320,7 @@ Future<Response> UpdateTripStatustoConfiremed({
 }
 
 
-// Add Travelling Mode
+// Update Travelling Mode of the user
 updateTravellingMode({
   required String travallingMode,
   required String docId,
@@ -439,6 +440,7 @@ addTrip({
   return response;
   }
 
+  // Deleting s booking
 Future<Response> deleteBooking({
   required String docId,
 }) async {
@@ -460,7 +462,7 @@ Future<Response> deleteBooking({
   return response;
 }
 
-
+// Getting trip details
 getTripDetails({required String docId})async{
   CollectionReference trips = _firestore.collection('temptrip');
   DocumentSnapshot snapshot = await trips.doc(docId).get();
@@ -497,6 +499,8 @@ updateTripStartDate({required String docId, required String date})async{
 
 }
 
+
+ // Updating trip details
 updateTripEndDate({required String docId, required String date})async{
   DocumentReference documentReferencer =
   _CollectionTip.doc(docId);
@@ -515,6 +519,9 @@ updateTripEndDate({required String docId, required String date})async{
   return response;
 
 }
+
+
+// Updating trips start location in updateTrip page
 updateTripStartLocation({required String docId, required String startLocation})async{
   DocumentReference documentReferencer =
   _CollectionTip.doc(docId);
@@ -533,6 +540,8 @@ updateTripStartLocation({required String docId, required String startLocation})a
   return response;
 
 }
+
+// Updating trips end location in updateTrip page
 updateTripEndLocation({required String docId, required String endLocation})async{
   DocumentReference documentReferencer =
   _CollectionTip.doc(docId);
@@ -604,77 +613,22 @@ CreateBooking({
   return response ;
 }
 
+saveTokenToDatabase() async {
+    final currentUserId = _auth.currentUser!.uid;
+  String? token = await FirebaseMessaging.instance.getToken();
+  print(token);
+  String userId = currentUserId;
+  print("Uid is : $currentUserId");
+  try{
+    var responce = await FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'fcmToken': token,
+    });
+  }catch(e){
+    print(e);
+  }
+
+  print("hello");
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Testing Functions
-Future<Response> updateEmployeeTesting({
-  required String name,
-  required String position,
-  required String contactno,
-  required String docId,
-  DocumentReference? documentReferencer
-
-}) async {
-  Response response = Response();
-
-
-  Map<String, dynamic> data = <String, dynamic>{
-    "employee_name": name,
-    "position": position,
-    "contact_no" : contactno
-  };
-
-  await documentReferencer!
-      .update(data)
-      .whenComplete(() {
-    response.code = 200;
-    response.message = "Sucessfully updated Employee";
-  })
-      .catchError((e) {
-    response.code = 500;
-    response.message = e;
-  });
-
-  return response;
 }
 
-
-// Add Travelling Mode
-Future<Response> updateTravellingModeTest({
-  required String travallingMode,
-  required String docId,
-  DocumentReference? documentReferencer
-}) async {
-  Response response = Response();
-
-  Map<String, dynamic> data = <String, dynamic>{
-    "travelling_mode": travallingMode,
-  };
-
-  await documentReferencer!
-      .update(data)
-      .whenComplete(() {
-    response.code = 200;
-    response.message = "Sucessfully updated Trip Travelling Mode";
-  })
-      .catchError((e) {
-    response.code = 500;
-    response.message = e;
-  });
-
-  return response;
-}

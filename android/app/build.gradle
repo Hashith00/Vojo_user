@@ -35,6 +35,11 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     compileSdkVersion 34
+    defaultConfig {
+        minSdkVersion 21
+        targetSdkVersion 34
+
+    }
     
 
     sourceSets {
@@ -88,6 +93,7 @@ flutter {
 }
 
 dependencies {
+//    classpath 'com.android.tools.build:gradle:7.3.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 //    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }

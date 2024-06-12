@@ -44,20 +44,15 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
       default:
         return Container(height: 50, width: 50, child: Image.asset("assets/images/car.png"));
     }
-    return Text("");
   }
   List<String> locations = [];
 
 
 
-  // Initialized the state
+  // Initialized the widget state
   @override
   void initState() {
     super.initState();
-
-    //getLocation();
-
-
   }
 
   @override
@@ -107,7 +102,7 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
                             ),
                             Container(
                               margin: EdgeInsets.fromLTRB(10, 10, 20, 20),
-                              child: Column(
+                              child: const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text("Unlocking ", style: TextStyle(fontSize: 35, fontWeight: FontWeight.w400, fontFamily: primaryFontFamilty)),
@@ -226,6 +221,8 @@ class _MyJourneyPageState extends State<MyJourneyPage> {
   }
 }
 
+
+
 class RiderCard extends StatelessWidget {
   const RiderCard({
     super.key,
@@ -242,7 +239,7 @@ class RiderCard extends StatelessWidget {
       },
       child: Container(
         padding: EdgeInsets.all(10),
-        height: 280,
+        height: 350,
         width: 300,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
@@ -342,13 +339,13 @@ class HotelBookingCard extends StatelessWidget {
                 )
               ],
             ),
-            SizedBox(height: 3,),
+            const SizedBox(height: 3,),
             Text("$location"),
-            SizedBox(height: 3,),
+            const SizedBox(height: 3,),
             Row(
               children: [
-                Icon(Icons.calendar_month, color: Colors.red,),
-                SizedBox(width: 10,),
+                const Icon(Icons.calendar_month, color: Colors.red,),
+                const SizedBox(width: 10,),
                 Text("${dateSplitted[0]}")
               ],
             ),
