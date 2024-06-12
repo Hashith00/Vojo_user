@@ -6,6 +6,7 @@ import 'package:vojo/StateManagment/StateManagment.dart';
 import 'package:vojo/index.dart';
 import 'package:vojo/rider_details_page/rider_details_page.dart';
 import 'package:provider/provider.dart';
+import 'package:vojo/rider_list_page/rider_list_model.dart';
 
 class RidersListPage extends StatefulWidget {
 
@@ -18,15 +19,27 @@ class _RidersListPageState extends State<RidersListPage> {
 
   var category;
   int totalAvailableCars = 0;
+
+  Future<void> getVehicleCount(type)async{
+    var totalCars = await RiderListModel.numberofVehicles(type: type);
+    setState(() {
+      totalAvailableCars = totalCars;
+    });
+    print(totalAvailableCars);
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
     getvehicletype ()async{
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       //print("${prefs.getString('transportMode')} is the transpotation mode");
       category = prefs.getString('transportMode');
+      getVehicleCount(category);
     }
+
     getvehicletype();
 
 
@@ -107,7 +120,7 @@ class _RidersListPageState extends State<RidersListPage> {
                     ),
                     SizedBox(height: 2.0),
                     Text(
-                      '2 vehicles found',
+                      '$totalAvailableCars vehicles found',
                       style: TextStyle(
                         fontSize: 24.0,
                         color: Colors.grey,
@@ -254,7 +267,6 @@ class _RidersListPageState extends State<RidersListPage> {
                               print(category);
                               if(vehicleData["categoty"] == "$category"){
                                 card.add(carCard);
-
 
                               }
 
