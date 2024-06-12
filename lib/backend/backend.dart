@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../auth/firebase_auth/auth_util.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
 import '../flutter_flow/flutter_flow_util.dart';
 import 'schema/util/firestore_util.dart';
 
@@ -249,6 +249,7 @@ Future updateUserDocument({String? email}) async {
 
 // Creating Firebase instances
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final FirebaseAuth _auth = FirebaseAuth.instance;
 final CollectionReference _Collection = _firestore.collection('trips');
 final CollectionReference _CollectionTip = _firestore.collection('temptrip');
 final CollectionReference _CollectionBooking = _firestore.collection("bookings");
@@ -610,5 +611,24 @@ CreateBooking({
   String documentId = documentReferencer.id;
 
   return response ;
+}
+
+saveTokenToDatabase() async {
+    final currentUserId = _auth.currentUser!.uid;
+  String? token = await FirebaseMessaging.instance.getToken();
+  print(token);
+  String userId = currentUserId;
+  print("Uid is : $currentUserId");
+  try{
+    var responce = await FirebaseFirestore.instance.collection('users').doc(userId).update({
+      'fcmToken': token,
+    });
+  }catch(e){
+    print(e);
+  }
+
+  print("hello");
+
+
 }
 
