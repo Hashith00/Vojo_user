@@ -25,7 +25,6 @@ class _RidersListPageState extends State<RidersListPage> {
     setState(() {
       totalAvailableCars = totalCars;
     });
-    print(totalAvailableCars);
   }
 
   @override

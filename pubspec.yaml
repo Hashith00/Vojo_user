@@ -31,7 +31,7 @@ dependencies:
   cloud_firestore_platform_interface: 5.15.0
   cloud_firestore_web: 3.6.0
   dropdown_button2: 2.0.0
-  file_picker: 5.2.6
+  file_picker: ^7.0.2
   firebase_auth: 4.6.2
   firebase_auth_platform_interface: 6.15.2
   firebase_auth_web: 5.5.2
