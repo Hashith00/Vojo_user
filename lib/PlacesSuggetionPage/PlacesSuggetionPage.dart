@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:geolocator/geolocator.dart';
 import 'package:vojo/Conatants/Constans.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -16,17 +16,30 @@ class PlacesSuggestionPage extends StatefulWidget {
 class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
   List<dynamic>? places;
   bool isLoaded = false;
+  var _currentPosition;
   var _loading = true;
 
   @override
   void initState() {
     super.initState();
+    requestLocationPermission();
     getNearByLocation();
   }
 
+
+
   Future<void> getNearByLocation() async {
     try {
-      var res = await fetchData("http://flask.hashith.online/express/places?latitude=40.7128&longitude=-74.0060&radius=100");
+      Geolocator
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.best, forceAndroidLocationManager: true)
+          .then((Position position) {
+        setState(() {
+          _currentPosition = position;
+        });
+      }).catchError((e) {
+        print(e);
+      });
+      var res = await fetchData("http://flask.hashith.online/express/places?latitude=${_currentPosition?.latitude}&longitude=${_currentPosition?.longitude}.0060&radius=1000");
       Map<String, dynamic> decodedResponse = jsonDecode(res);
       places = decodedResponse['results'];
 
@@ -52,6 +65,8 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
     http.Response response = await http.get(Uri.parse(url));
     return response.body;
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -161,8 +176,27 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
     );
   }
 
+
   @override
   void dispose() {
     super.dispose();
+  }
+}
+
+
+
+void requestLocationPermission() async {
+  LocationPermission permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+    // Permissions are denied or denied forever, let's request it!
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {
+      print("Location permissions are still denied");
+    } else if (permission == LocationPermission.deniedForever) {
+      print("Location permissions are permanently denied");
+    } else {
+      // Permissions are granted (either can be whileInUse, always, restricted).
+      print("Location permissions are granted after requesting");
+    }
   }
 }

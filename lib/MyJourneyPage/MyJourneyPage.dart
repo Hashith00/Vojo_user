@@ -320,6 +320,9 @@ class HotelBookingCard extends StatelessWidget {
         ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
               child: Image(image: NetworkImage(photoUrl),
+                height: 150,
+                width: double.infinity,
+
               ),
             ),
             SizedBox(height: 10,),
