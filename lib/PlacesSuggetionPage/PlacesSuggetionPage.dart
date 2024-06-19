@@ -26,7 +26,7 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
 
   Future<void> getNearByLocation() async {
     try {
-      var res = await fetchData("http://10.0.2.2:5000/places?latitude=40.7128&longitude=-74.0060&radius=100");
+      var res = await fetchData("http://flask.hashith.online/express/places?latitude=40.7128&longitude=-74.0060&radius=100");
       Map<String, dynamic> decodedResponse = jsonDecode(res);
       places = decodedResponse['results'];
 
@@ -34,7 +34,7 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
         for (var place in places!) {
           double latitude = place['geometry']['location']['lat'];
           double longitude = place['geometry']['location']['lng'];
-          var photoRes = await fetchData("http://10.0.2.2:5000/get_place_photo?latitude=$latitude&longitude=$longitude");
+          var photoRes = await fetchData("http://flask.hashith.online/express/get_place_photo?latitude=$latitude&longitude=$longitude");
           var photoData = jsonDecode(photoRes);
           place['photo_url'] = photoData['photo_url'];
         }
