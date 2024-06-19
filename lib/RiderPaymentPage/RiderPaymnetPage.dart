@@ -29,61 +29,91 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
    var returnResponse;
    var distanceUsingIntermidiate;
    var downTripTime;
+   bool isPayButtonClicked = false;
 
 
-  getDetails()async{
-    try {
-      if(Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocation == ""){
-        response = await Dio().get('https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLongitude}&origins=${Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLongitude}&key=AIzaSyC8XOXvvxImxyxY6dFnOKIMTlbOM3X58Yw');
-      }else{
-        print("Hello this si retun");
-        response = await Dio().get('https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocationLongitude}&origins=${Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLongitude}&key=AIzaSyC8XOXvvxImxyxY6dFnOKIMTlbOM3X58Yw');
-        returnResponse = await Dio().get('https://maps.googleapis.com/maps/api/distancematrix/json?destinations=${Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLongitude}&origins=${Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocationLatitude},${Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocationLongitude}&key=AIzaSyC8XOXvvxImxyxY6dFnOKIMTlbOM3X58Yw');
-      }
+   Future<void> getDetails() async {
+     try {
+       final provider = Provider.of<RiderDetailsProvider>(context, listen: false);
+       final dio = Dio();
 
-      Map<String, dynamic> responseData = response.data;
-      Map<String, dynamic> returnResponseData = returnResponse.data;
+       var response;
+       var returnResponse;
 
+       if (provider.intermediateLocation.isEmpty) {
+         response = await dio.get(
+           'https://maps.googleapis.com/maps/api/distancematrix/json',
+           queryParameters: {
+             'destinations': '${provider.endLocationLatitude},${provider.endLocationLongitude}',
+             'origins': '${provider.startLocationLatitude},${provider.startLocationLongitude}',
+             'key': 'AIzaSyC8XOXvvxImxyxY6dFnOKIMTlbOM3X58Yw',
+           },
+         );
+       } else {
+         response = await dio.get(
+           'https://maps.googleapis.com/maps/api/distancematrix/json',
+           queryParameters: {
+             'destinations': '${provider.intermediateLocationLatitude},${provider.intermediateLocationLongitude}',
+             'origins': '${provider.startLocationLatitude},${provider.startLocationLongitude}',
+             'key': 'AIzaSyC8XOXvvxImxyxY6dFnOKIMTlbOM3X58Yw',
+           },
+         );
 
+         returnResponse = await dio.get(
+           'https://maps.googleapis.com/maps/api/distancematrix/json',
+           queryParameters: {
+             'destinations': '${provider.endLocationLatitude},${provider.endLocationLongitude}',
+             'origins': '${provider.intermediateLocationLatitude},${provider.intermediateLocationLongitude}',
+             'key': 'AIzaSyC8XOXvvxImxyxY6dFnOKIMTlbOM3X58Yw',
+           },
+         );
+       }
 
-      String distanceText = responseData['rows'][0]['elements'][0]['distance']['text'];
-      String duration = responseData['rows'][0]['elements'][0]['duration']['text'];
-      downTripTime = returnResponseData['rows'][0]['elements'][0]['duration']['text'];
+       if (response.statusCode == 200 && (returnResponse == null || returnResponse.statusCode == 200)) {
+         final responseData = response.data;
+         final returnResponseData = returnResponse?.data;
 
-      if(Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocation == ""){
-        distanceUsingIntermidiate = responseData['rows'][0]['elements'][0]['duration']['value'];
-      }
-      else{
-        distanceUsingIntermidiate = responseData['rows'][0]['elements'][0]['duration']['value'] + returnResponseData['rows'][0]['elements'][0]['duration']['value'];
-        print(distanceUsingIntermidiate);
-        print("Intermidaite Price");
-      }
-      print(distanceText);
-      print(duration);
+         String distanceText = responseData['rows'][0]['elements'][0]['distance']['text'];
+         String duration = responseData['rows'][0]['elements'][0]['duration']['text'];
+         String downTripTime = returnResponseData != null ? returnResponseData['rows'][0]['elements'][0]['duration']['text'] : "";
 
+         int distanceUsingIntermediate;
+         if (provider.intermediateLocation.isEmpty) {
+           distanceUsingIntermediate = responseData['rows'][0]['elements'][0]['duration']['value'];
+         } else {
+           distanceUsingIntermediate = responseData['rows'][0]['elements'][0]['duration']['value'] + returnResponseData['rows'][0]['elements'][0]['duration']['value'];
+         }
 
-      setState(() {
-        distanceInKM = distanceText;
-        durationTime = duration;
-        distance = distanceUsingIntermidiate / 100;
-        calculatedCost = PaymentProcess.getThePriceInDollers(distance: distanceUsingIntermidiate / 100, vehicleType: "car", startDate: intermidiareLocation = Provider.of<RiderDetailsProvider>(context, listen: false).startDate, endDate: intermidiareLocation = Provider.of<RiderDetailsProvider>(context, listen: false).endDate);
-        cost = (calculatedCost).toInt();
-        isCostCalculated = true;
-        intermidiareLocation = Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocation;
-      });
-
-    } catch (e) {
-      print(e);
-    }
-
-  }
+         setState(() {
+           distanceInKM = distanceText;
+           durationTime = duration;
+           distance = distanceUsingIntermediate / 1000; // Assuming 'distance' is in meters
+           calculatedCost = PaymentProcess.getThePriceInDollers(
+               distance: distanceUsingIntermediate / 1000,
+               vehicleType: "car",
+               startDate: provider.startDate,
+               endDate: provider.endDate
+           );
+           cost = calculatedCost.toInt();
+           isCostCalculated = true;
+           intermidiareLocation = provider.intermediateLocation;
+         });
+       } else {
+         print("Error: ${response.statusCode} ${response.statusMessage}");
+         if (returnResponse != null) {
+           print("Error: ${returnResponse.statusCode} ${returnResponse.statusMessage}");
+         }
+       }
+     } catch (e) {
+       print(e);
+     }
+   }
 
   @override
   void initState() {
     super.initState();
     getDetails();
-    setState(() {
-    });
+
 
   }
   
@@ -142,7 +172,7 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
                           children: [
                             Text("Start Location", style: TextStyle(fontFamily: primaryFontFamilty, fontWeight: FontWeight.w600),),
                             Text("${Provider.of<RiderDetailsProvider>(context, listen: false).startLocation}", style: TextStyle(color: Colors.black54),),
-                            intermidiareLocation != null ?
+                            intermidiareLocation != "" ?
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -236,6 +266,9 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
                   SizedBox(height: 80,),
                   GestureDetector(
                     onTap: ()async{
+                      setState(() {
+                        isPayButtonClicked = true;
+                      });
                       bool nn =await RiderPaymentModel.MakeStripePayment(cost*100);
                       if(nn){
                         var responce = await addTrip(uid: Provider.of<RiderDetailsProvider>(context, listen: false).userId, type: Provider.of<RiderDetailsProvider>(context, listen: false).mode, startDate: Provider.of<RiderDetailsProvider>(context, listen: false).startDate, endDate: Provider.of<RiderDetailsProvider>(context, listen: false).endDate, startLocation: Provider.of<RiderDetailsProvider>(context, listen: false).startLocation, endLocation: Provider.of<RiderDetailsProvider>(context, listen: false).endLocation, riderId: Provider.of<RiderDetailsProvider>(context, listen: false).riderId, travellingMode:Provider.of<RiderDetailsProvider>(context, listen: false).vehicle , cost: cost, distance: distance, startLocationLatitude: Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLatitude, startLocationLongitude: Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLongitude, endLocationLatitude: Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLatitude, endLocationLongitude: Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLongitude, duration: durationTime, intermidiateLocation: Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocation, intermediateLocationLatitude: Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocationLatitude, intermediateLocationLongitude: Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocationLongitude);
@@ -257,7 +290,7 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
                       }
 
                     },
-                    child: Container(
+                    child: isPayButtonClicked == false ? Container(
                       height: 50,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
@@ -265,6 +298,15 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
                       ),
 
                       child: Center(child: Text("Confirm & Pay $cost USD", style: TextStyle(color: Colors.white),),),
+                    ) :
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color(0x30311B92),
+                      ),
+
+                      child: Center(child: Text("Paying ...", style: TextStyle(color: Colors.white),),),
                     ),
                   )
 

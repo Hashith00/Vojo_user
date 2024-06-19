@@ -16,6 +16,7 @@ class HotelPayment extends StatefulWidget {
 
 class _HotelPaymentState extends State<HotelPayment> {
   late double price;
+  bool isPayButtonClicked = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -132,6 +133,9 @@ class _HotelPaymentState extends State<HotelPayment> {
                   SizedBox(height: 250,),
                     GestureDetector(
                       onTap: ()async{
+                        setState(() {
+                          isPayButtonClicked = true;
+                        });
                         bool nn =await HotelPaymentModle.MakeStrpePayment(Provider.of<HotelDetailsProvider>(context, listen: false).Price.round());
                         if(nn){
                           var res = await CreateBooking(uid: Provider.of<HotelDetailsProvider>(context, listen: false).userId, startDate: Provider.of<HotelDetailsProvider>(context, listen: false).startDate, endDate: Provider.of<HotelDetailsProvider>(context, listen: false).endDate, hotelName: Provider.of<HotelDetailsProvider>(context, listen: false).hotelName, hotelUserId: Provider.of<HotelDetailsProvider>(context, listen: false).hotelUserId, numberOfRooms: Provider.of<HotelDetailsProvider>(context, listen: false).numberOfRooms,locationLat: Provider.of<HotelDetailsProvider>(context, listen: false).hotelLatitude, locationLng: Provider.of<HotelDetailsProvider>(context, listen: false).hotelLongitude, price: (Provider.of<HotelDetailsProvider>(context, listen: false).Price)/100, hotelPhotoUrl: Provider.of<HotelDetailsProvider>(context, listen: false).hotelUrl!,hotelLocation: Provider.of<HotelDetailsProvider>(context, listen: false).hotelLocation);
@@ -155,7 +159,7 @@ class _HotelPaymentState extends State<HotelPayment> {
                         print(nn);
 
                       },
-                      child: Container(
+                      child: isPayButtonClicked == false ? Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: primaryColor,
@@ -164,6 +168,16 @@ class _HotelPaymentState extends State<HotelPayment> {
                         width: double.infinity,
 
                         child: Center(child: Text("Pay \$${context.watch<HotelDetailsProvider>().Price/100 }", style: TextStyle(color: Colors.white, fontFamily: primaryFontFamilty, fontSize: 18),)),
+                      ) :
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Color(0x76311B92),
+                        ),
+                        height: 50,
+                        width: double.infinity,
+
+                        child: Center(child: Text("Paying ...", style: TextStyle(color: Colors.white, fontFamily: primaryFontFamilty, fontSize: 18),)),
                       ),
                     )
                   ],
@@ -177,6 +191,7 @@ class _HotelPaymentState extends State<HotelPayment> {
   }
 }
 
+//
 class DootedLineWidget extends StatelessWidget {
   final double width;
   const DootedLineWidget({

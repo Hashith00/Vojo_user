@@ -36,10 +36,10 @@ class _HoteldetailspageState extends State<Hoteldetailspage> {
   void getHotelUser()async{
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
     final employees =  await _firestore.collection("serviceUser").get();
-    for(var massage in employees.docs){
-      if(massage.data()["uid"] == widget.hotelData["hotelUserId"]){
+    for(var user in employees.docs){
+      if(user.data()["uid"] == widget.hotelData["hotelUserId"]){
         setState(() {
-          hoteluser = massage.data();
+          hoteluser = user.data();
         });
 
         break;
@@ -55,9 +55,10 @@ class _HoteldetailspageState extends State<Hoteldetailspage> {
     getHotelUser();
     hotelDeatils = widget.hotelData;
     _auth = FirebaseAuth.instance;
+    print("Price ${hotelDeatils['price']}");
     setState(() {
-      price = hotelDeatils["price"];
-      basePrice = hotelDeatils["price"]; // This variable is used to determined the base price of a hotel room.
+      price = (hotelDeatils["price"] as num).toDouble();
+      basePrice = (hotelDeatils["price"] as num).toDouble();
     });
 
   }
@@ -233,7 +234,7 @@ class _HoteldetailspageState extends State<Hoteldetailspage> {
                                     Provider.of<HotelDetailsProvider>(context, listen: false).chageHotelLocation(location:  hotelDeatils['location']);
 
 
-                                    context.read<HotelDetailsProvider>().changePrice(HotelPrice: price*100);
+                                    Provider.of<HotelDetailsProvider>(context, listen: false).changePrice(HotelPrice: price*100);
                                     Navigator.push(context, MaterialPageRoute(builder: (context) => HotelPayment()));
                                   },
                                   child: Container(
