@@ -29,6 +29,7 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
    var returnResponse;
    var distanceUsingIntermidiate;
    var downTripTime;
+   bool isPayButtonClicked = false;
 
 
    Future<void> getDetails() async {
@@ -265,6 +266,9 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
                   SizedBox(height: 80,),
                   GestureDetector(
                     onTap: ()async{
+                      setState(() {
+                        isPayButtonClicked = true;
+                      });
                       bool nn =await RiderPaymentModel.MakeStripePayment(cost*100);
                       if(nn){
                         var responce = await addTrip(uid: Provider.of<RiderDetailsProvider>(context, listen: false).userId, type: Provider.of<RiderDetailsProvider>(context, listen: false).mode, startDate: Provider.of<RiderDetailsProvider>(context, listen: false).startDate, endDate: Provider.of<RiderDetailsProvider>(context, listen: false).endDate, startLocation: Provider.of<RiderDetailsProvider>(context, listen: false).startLocation, endLocation: Provider.of<RiderDetailsProvider>(context, listen: false).endLocation, riderId: Provider.of<RiderDetailsProvider>(context, listen: false).riderId, travellingMode:Provider.of<RiderDetailsProvider>(context, listen: false).vehicle , cost: cost, distance: distance, startLocationLatitude: Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLatitude, startLocationLongitude: Provider.of<RiderDetailsProvider>(context, listen: false).startLocationLongitude, endLocationLatitude: Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLatitude, endLocationLongitude: Provider.of<RiderDetailsProvider>(context, listen: false).endLocationLongitude, duration: durationTime, intermidiateLocation: Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocation, intermediateLocationLatitude: Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocationLatitude, intermediateLocationLongitude: Provider.of<RiderDetailsProvider>(context, listen: false).intermediateLocationLongitude);
@@ -286,7 +290,7 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
                       }
 
                     },
-                    child: Container(
+                    child: isPayButtonClicked == false ? Container(
                       height: 50,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
@@ -294,6 +298,15 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
                       ),
 
                       child: Center(child: Text("Confirm & Pay $cost USD", style: TextStyle(color: Colors.white),),),
+                    ) :
+                    Container(
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color(0x30311B92),
+                      ),
+
+                      child: Center(child: Text("Paying ...", style: TextStyle(color: Colors.white),),),
                     ),
                   )
 
