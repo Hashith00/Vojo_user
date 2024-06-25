@@ -87,9 +87,9 @@ class _RiderPaymentPageState extends State<RiderPaymentPage> {
          setState(() {
            distanceInKM = distanceText;
            durationTime = duration;
-           distance = distanceUsingIntermediate / 1000; // Assuming 'distance' is in meters
+           distance = distanceUsingIntermediate / 100; // Assuming 'distance' is in meters
            calculatedCost = PaymentProcess.getThePriceInDollers(
-               distance: distanceUsingIntermediate / 1000,
+               distance: distanceUsingIntermediate / 100,
                vehicleType: "car",
                startDate: provider.startDate,
                endDate: provider.endDate
