@@ -85,6 +85,10 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget>
 
       // Get the download URL
       String downloadURL = await ref.getDownloadURL();
+      if(downloadURL != null){
+        var responce = await updateUserProfilePicture(docId: currentUserId, profilePic: downloadURL);
+        print(responce);
+      }
       setState(() {
         _downloadURL = downloadURL;
       });
