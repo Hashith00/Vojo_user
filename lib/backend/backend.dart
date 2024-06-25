@@ -250,6 +250,7 @@ Future updateUserDocument({String? email}) async {
 // Creating Firebase instances
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final FirebaseAuth _auth = FirebaseAuth.instance;
+final CollectionReference _collectionUser = _firestore.collection("users");
 final CollectionReference _Collection = _firestore.collection('trips');
 final CollectionReference _CollectionTip = _firestore.collection('temptrip');
 final CollectionReference _CollectionBooking = _firestore.collection("bookings");
@@ -629,6 +630,27 @@ saveTokenToDatabase() async {
 
   print("hello");
 
+
+}
+
+
+// Updating trips start location in updateTrip page
+updateUserProfilePicture({required String docId, required String profilePic})async{
+  DocumentReference documentReferencer =
+  _collectionUser.doc(docId);
+
+  Map<String, dynamic> data = <String, dynamic>{
+    "pictureId": profilePic,
+  };
+
+  Response response = Response();
+
+  var res = await documentReferencer.update(data).then((value) => {
+    response.code = 200,
+    response.message = "Update the profile picture"
+  });
+
+  return response;
 
 }
 
