@@ -1,5 +1,12 @@
+import 'dart:io';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vojo/ChatPage/ChatPage.dart';
 import 'package:vojo/backend/backend.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:path/path.dart';
 
 import '../main.dart';
 import '/auth/firebase_auth/auth_util.dart';
@@ -30,6 +37,63 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget>
     with TickerProviderStateMixin {
   late ProfilePageModel _model;
 
+  // Image uploading
+  firebase_storage.FirebaseStorage storage =
+      firebase_storage.FirebaseStorage.instance;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  var currentUserId;
+  File? _photo;
+  String? _downloadURL;
+  final ImagePicker _picker = ImagePicker();
+
+  Future imgFromGallery() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _photo = File(pickedFile.path);
+        uploadFile();
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future imgFromCamera() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      if (pickedFile != null) {
+        _photo = File(pickedFile.path);
+        uploadFile();
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future uploadFile() async {
+    if (_photo == null) return;
+    final fileName = basename(_photo!.path);
+    final destination = 'files/$currentUserId/profilePhoto/$fileName';
+
+    try {
+      final ref = firebase_storage.FirebaseStorage.instance
+          .ref(destination)
+          .child('file/');
+      await ref.putFile(_photo!);
+
+      // Get the download URL
+      String downloadURL = await ref.getDownloadURL();
+      setState(() {
+        _downloadURL = downloadURL;
+      });
+
+    } catch (e) {
+      print('error occured');
+    }
+  }
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = {
@@ -58,7 +122,8 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget>
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ProfilePageModel());
+    currentUserId = _auth.currentUser!.uid;
+    // _model = createModel(context, () => ProfilePageModel());
 
     setupAnimations(
       animationsMap.values.where((anim) =>
@@ -70,8 +135,7 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget>
 
   @override
   void dispose() {
-    _model.dispose();
-
+    // _model.dispose();
     super.dispose();
   }
 
@@ -87,9 +151,9 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget>
     }
 
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+      // onTap: () => _model.unfocusNode.canRequestFocus
+      //     ? FocusScope.of(context).requestFocus(_model.unfocusNode)
+      //     : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
@@ -110,7 +174,7 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget>
                         fit: BoxFit.cover,
                         image: CachedNetworkImageProvider(
                           'https://images.unsplash.com/photo-1434394354979-a235cd36269d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fG1vdW50YWluc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60',
-                        ),
+                        )
                       ),
                     ),
                   ),
@@ -119,31 +183,43 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget>
                     child: Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 0.0, 16.0),
-                      child: Container(
-                        width: 90.0,
-                        height: 90.0,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).accent2,
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: FlutterFlowTheme.of(context).secondary,
-                            width: 2.0,
+                      child: GestureDetector(
+                        onTap: () {
+                          _showPicker(context);
+                        },
+                        child: Container(
+                          width: 90.0,
+                          height: 90.0,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context).accent2,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: FlutterFlowTheme.of(context).secondary,
+                              width: 2.0,
+                            ),
                           ),
-                        ),
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              4.0, 4.0, 4.0, 4.0),
-                          child: AuthUserStreamWidget(
-                            builder: (context) => ClipRRect(
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: CachedNetworkImage(
-                                fadeInDuration: Duration(milliseconds: 500),
-                                fadeOutDuration: Duration(milliseconds: 500),
-                                imageUrl:
-                                    "https://images.unsplash.com/photo-1434394354979-a235cd36269d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fG1vdW50YWluc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60",
-                                width: 100.0,
-                                height: 100.0,
-                                fit: BoxFit.cover,
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                4.0, 4.0, 4.0, 4.0),
+                            child: AuthUserStreamWidget(
+                              builder: (context) => ClipRRect(
+                                borderRadius: BorderRadius.circular(50.0),
+                                child: _downloadURL == null ? CachedNetworkImage(
+                                  fadeInDuration: Duration(milliseconds: 500),
+                                  fadeOutDuration: Duration(milliseconds: 500),
+                                  imageUrl:
+                                      "https://images.unsplash.com/photo-1434394354979-a235cd36269d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTJ8fG1vdW50YWluc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=900&q=60",
+                                  width: 100.0,
+                                  height: 100.0,
+                                  fit: BoxFit.cover,
+                                ) : CachedNetworkImage(
+                                  fadeInDuration: Duration(milliseconds: 500),
+                                  fadeOutDuration: Duration(milliseconds: 500),
+                                  imageUrl: _downloadURL!,
+                                  width: 100.0,
+                                  height: 100.0,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
@@ -454,4 +530,34 @@ class _ProfilePageWidgetState extends State<ProfilePageWidget>
       ),
     );
   }
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Gallery'),
+                      onTap: () {
+                        imgFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      imgFromCamera();
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
 }
+
