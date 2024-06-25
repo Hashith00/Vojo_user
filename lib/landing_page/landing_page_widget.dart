@@ -37,11 +37,13 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
   int SuccessfullTrips = 0;
   int totalAddedtoCanceltrips = 0;
   Color shifttedColor = primaryColorLight;
+  var currentUserId;
+  var profilePictureURL;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<void> getUserStatus()async{
-    var currentUserId = _auth.currentUser!.uid;
+     currentUserId = _auth.currentUser!.uid;
 
     final trips =  await _firestore.collection("temptrip").get();
     for(var trip in trips.docs){
@@ -63,6 +65,12 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
       }
 
     }
+  }
+  Future<void> getCuurentUserImage()async{
+    var url = await getUserProfilePicture(userId: currentUserId);
+    setState(() {
+      profilePictureURL = url;
+    });
   }
 
   @override
@@ -147,7 +155,36 @@ class _LandingPageWidgetState extends State<LandingPageWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
+                                        profilePictureURL != null ?
                                         Padding(
+                                          padding: const EdgeInsetsDirectional
+                                              .fromSTEB(0.0, 3.0, 0.0, 0.0),
+                                          child: InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            onTap: () async {
+                                              context.pushNamed('profilePage');
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  height: 50,
+                                                  width: 50,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius.circular(50),
+                                                    image: DecorationImage(
+                                                      image: NetworkImage(profilePictureURL),
+                                                      fit: BoxFit.fill,
+
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ) : Padding(
                                           padding: const EdgeInsetsDirectional
                                               .fromSTEB(0.0, 3.0, 0.0, 0.0),
                                           child: InkWell(

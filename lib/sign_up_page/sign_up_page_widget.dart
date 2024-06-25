@@ -507,7 +507,10 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                                       options: [
                                         'Sri Lanka',
                                         'Canada',
-                                        'Australia'
+                                        'Australia',
+                                        'US',
+                                        'Netherlands',
+                                        'england'
                                       ],
                                       onChanged: (val) => setState(
                                           () => _model.countryValue = val),

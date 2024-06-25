@@ -640,7 +640,7 @@ updateUserProfilePicture({required String docId, required String profilePic})asy
   _collectionUser.doc(docId);
 
   Map<String, dynamic> data = <String, dynamic>{
-    "pictureId": profilePic,
+    "pictureUrl": profilePic,
   };
 
   Response response = Response();
@@ -651,6 +651,16 @@ updateUserProfilePicture({required String docId, required String profilePic})asy
   });
 
   return response;
+
+}
+
+getUserProfilePicture({required String userId})async{
+  CollectionReference trips = _firestore.collection('users');
+  DocumentSnapshot snapshot = await trips.doc(userId).get();
+  var userData = snapshot.data() as Map<String, dynamic>;
+  if(userData['pictureUrl'] != null){
+    return userData['pictureUrl'];
+  }
 
 }
 
