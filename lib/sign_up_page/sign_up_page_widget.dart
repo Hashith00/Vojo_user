@@ -87,6 +87,9 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
     _model.passwordFocusNode ??= FocusNode();
   }
 
+  TextEditingController addressNameController = new TextEditingController();
+  TextEditingController phoneNumberController = new TextEditingController();
+
   @override
   void dispose() {
     _model.dispose();
@@ -358,8 +361,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                                     child: Container(
                                       width: double.infinity,
                                       child: TextFormField(
-                                        controller:
-                                            _model.phoneNumberController,
+                                        controller:phoneNumberController,
                                         focusNode: _model.phoneNumberFocusNode,
                                         autofocus: true,
                                         autofillHints: [
@@ -431,7 +433,7 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                                     child: Container(
                                       width: double.infinity,
                                       child: TextFormField(
-                                        controller: _model.addressController,
+                                        controller: addressNameController,
                                         focusNode: _model.addressFocusNode,
                                         autofocus: true,
                                         autofillHints: [
@@ -656,15 +658,8 @@ class _SignUpPageWidgetState extends State<SignUpPageWidget>
                                               displayName:
                                                   _model.naController.text,
                                               location: _model.countryValue,
-                                              phoneNumber: (_model
-                                                          .phoneNumberFocusNode
-                                                          ?.hasFocus ??
-                                                      false)
-                                                  .toString(),
-                                              address: (_model.addressFocusNode
-                                                          ?.hasFocus ??
-                                                      false)
-                                                  .toString(),
+                                              phoneNumber: phoneNumberController.text,
+                                              address: addressNameController.text,
                                             ));
 
                                         context.goNamedAuth(

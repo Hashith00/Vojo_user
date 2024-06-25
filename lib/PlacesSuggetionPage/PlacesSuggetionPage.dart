@@ -39,7 +39,7 @@ class _PlacesSuggestionPageState extends State<PlacesSuggestionPage> {
       }).catchError((e) {
         print(e);
       });
-      var res = await fetchData("http://flask.hashith.online/express/places?latitude=${_currentPosition?.latitude}&longitude=${_currentPosition?.longitude}.0060&radius=1000");
+      var res = await fetchData("http://flask.hashith.online/express/places?latitude=${_currentPosition?.latitude}&longitude=${_currentPosition?.longitude}&radius=5000");
       Map<String, dynamic> decodedResponse = jsonDecode(res);
       places = decodedResponse['results'];
 
